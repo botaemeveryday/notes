@@ -1,0 +1,624 @@
+{
+  "vaultName": "Our treasure",
+  "lastExport": 1746263150495,
+  "pluginVersion": "1.8.01",
+  "validBodyClasses": "publish css-settings-manager theme-light show-inline-title show-ribbon code-styler code-styler-style-inline code-styler-gutter-highlight heading-ligatures body-ligatures ordinary-ol callout-border-gradient",
+  "useCustomHeadContent": true,
+  "useCustomFavicon": false,
+  "files": [
+    "01 Учёба/00 ОП/02.05/Template Specialization. Smart Ptr 02.05.md",
+    "01 Учёба/00 ОП/02.12/Контейнеры. STL 02.12.md",
+    "01 Учёба/00 ОП/02.12/Лекция 02.12 Кристина.md",
+    "01 Учёба/00 ОП/02.12/Лекция 02.12 Лиза.md",
+    "01 Учёба/00 ОП/02.12/Лекция 02.12 Никита.md",
+    "01 Учёба/00 ОП/02.19/Лекция 02.19 Лиза.md",
+    "01 Учёба/00 ОП/02.19/Лекция 02.19 Никита.md",
+    "01 Учёба/00 ОП/02.19/Функциональные объекты 02.19.md",
+    "01 Учёба/00 ОП/02.26/Лекция 02.26 Никита.md",
+    "01 Учёба/00 ОП/02.26/Лекция 02.26 AI.md",
+    "01 Учёба/00 ОП/02.26/Лекция 02.26 AI 2.md",
+    "01 Учёба/00 ОП/02.26/Allocator 02.26.md",
+    "01 Учёба/00 ОП/03.05/Лекция 03.05 Лиза.md",
+    "01 Учёба/00 ОП/03.05/Лекция 03.05 Никита.md",
+    "01 Учёба/00 ОП/03.05/Error Handling 03.05.md",
+    "01 Учёба/00 ОП/03.12/Exceptions 03.12.md",
+    "01 Учёба/00 ОП/03.19/Лекция 03.19 Лиза.md",
+    "01 Учёба/00 ОП/03.19/Лекция 03.19 Никита.md",
+    "01 Учёба/00 ОП/03.19/Lambda 03.19.md",
+    "01 Учёба/00 ОП/03.26/Лекция 03.26 Лиза.md",
+    "01 Учёба/00 ОП/03.26/std function 03.26.md",
+    "01 Учёба/00 ОП/04.02/04.02 Лиза.md",
+    "01 Учёба/00 ОП/04.02/04.02 Никита.md",
+    "01 Учёба/00 ОП/04.02/Casts 04.02.md",
+    "01 Учёба/00 ОП/04.09/04.09 Лиза.md",
+    "01 Учёба/00 ОП/04.09/04.09 Никита.md",
+    "01 Учёба/00 ОП/04.09/Merge.md",
+    "01 Учёба/00 ОП/04.16/04.16 Лиза.md",
+    "01 Учёба/00 ОП/04.16/04.16 Никита.md",
+    "01 Учёба/00 ОП/04.16/Merge.md",
+    "01 Учёба/00 ОП/04.23/04.23 Лиза.md",
+    "01 Учёба/00 ОП/04.23/04.23 Никита.md",
+    "01 Учёба/00 ОП/04.23/Merge.md",
+    "01 Учёба/01 Дискретная математика/дм коллоквиум.md",
+    "01 Учёба/01 Дискретная математика/КА.md",
+    "01 Учёба/01 Дискретная математика/Коллоквиум 3.md",
+    "01 Учёба/01 Дискретная математика/Коллоквиум 4.md",
+    "01 Учёба/02 Алгосы/Коллоквиум 4.md",
+    "01 Учёба/02 Алгосы/Основные алгоритмы на графах (конспект Кормена).md",
+    "01 Учёба/02 Алгосы/Паросочетания.md",
+    "01 Учёба/02 Алгосы/Расстояния (Кормен).md",
+    "01 Учёба/02 Алгосы/Хешшшшш.md",
+    "01 Учёба/03 Высшая математика/Коллоквиум 2 (верная версия).md",
+    "01 Учёба/03 Высшая математика/Коллоквиум 2 семестр.md",
+    "01 Учёба/04 Математический анализ/Коллоквиум 2 семестр.md",
+    "01 Учёба/WebPage.md",
+    "lib/fonts/94f2f163d4b698242fef.otf",
+    "lib/fonts/72505e6a122c6acd5471.woff2",
+    "lib/fonts/2d5198822ab091ce4305.woff2",
+    "lib/fonts/c8ba52b05a9ef10f4758.woff2",
+    "lib/fonts/cb10ffd7684cd9836a05.woff2",
+    "lib/fonts/b5f0f109bc88052d4000.woff2",
+    "lib/fonts/cbe0ae49c52c920fd563.woff2",
+    "lib/fonts/535a6cf662596b3bd6a6.woff2",
+    "lib/fonts/70cc7ff27245e82ad414.ttf",
+    "lib/fonts/454577c22304619db035.ttf",
+    "lib/fonts/52ac8f3034507f1d9e53.ttf",
+    "lib/fonts/05b618077343fbbd92b7.ttf",
+    "lib/fonts/4bb6ac751d1c5478ff3a.woff2",
+    "lib/media/6155340132a851f6089e.svg",
+    "lib/fonts/MathJax_Zero.woff",
+    "lib/fonts/MathJax_Main-Regular.woff",
+    "lib/fonts/MathJax_Main-Bold.woff",
+    "lib/fonts/MathJax_Math-Italic.woff",
+    "lib/fonts/MathJax_Main-Italic.woff",
+    "lib/fonts/MathJax_Math-BoldItalic.woff",
+    "lib/fonts/MathJax_Size1-Regular.woff",
+    "lib/fonts/MathJax_Size2-Regular.woff",
+    "lib/fonts/MathJax_Size3-Regular.woff",
+    "lib/fonts/MathJax_Size4-Regular.woff",
+    "lib/fonts/MathJax_AMS-Regular.woff",
+    "lib/fonts/MathJax_Calligraphic-Regular.woff",
+    "lib/fonts/MathJax_Calligraphic-Bold.woff",
+    "lib/fonts/MathJax_Fraktur-Regular.woff",
+    "lib/fonts/MathJax_Fraktur-Bold.woff",
+    "lib/fonts/MathJax_SansSerif-Regular.woff",
+    "lib/fonts/MathJax_SansSerif-Bold.woff",
+    "lib/fonts/MathJax_SansSerif-Italic.woff",
+    "lib/fonts/MathJax_Script-Regular.woff",
+    "lib/fonts/MathJax_Typewriter-Regular.woff",
+    "lib/fonts/MathJax_Vector-Regular.woff",
+    "lib/fonts/MathJax_Vector-Bold.woff"
+  ],
+  "mainDependencies": [
+    "lib/fonts/94f2f163d4b698242fef.otf",
+    "lib/fonts/72505e6a122c6acd5471.woff2",
+    "lib/fonts/2d5198822ab091ce4305.woff2",
+    "lib/fonts/c8ba52b05a9ef10f4758.woff2",
+    "lib/fonts/cb10ffd7684cd9836a05.woff2",
+    "lib/fonts/b5f0f109bc88052d4000.woff2",
+    "lib/fonts/cbe0ae49c52c920fd563.woff2",
+    "lib/fonts/535a6cf662596b3bd6a6.woff2",
+    "lib/fonts/70cc7ff27245e82ad414.ttf",
+    "lib/fonts/454577c22304619db035.ttf",
+    "lib/fonts/52ac8f3034507f1d9e53.ttf",
+    "lib/fonts/05b618077343fbbd92b7.ttf",
+    "lib/fonts/4bb6ac751d1c5478ff3a.woff2",
+    "lib/media/6155340132a851f6089e.svg",
+    "lib/fonts/MathJax_Zero.woff",
+    "lib/fonts/MathJax_Main-Regular.woff",
+    "lib/fonts/MathJax_Main-Bold.woff",
+    "lib/fonts/MathJax_Math-Italic.woff",
+    "lib/fonts/MathJax_Main-Italic.woff",
+    "lib/fonts/MathJax_Math-BoldItalic.woff",
+    "lib/fonts/MathJax_Size1-Regular.woff",
+    "lib/fonts/MathJax_Size2-Regular.woff",
+    "lib/fonts/MathJax_Size3-Regular.woff",
+    "lib/fonts/MathJax_Size4-Regular.woff",
+    "lib/fonts/MathJax_AMS-Regular.woff",
+    "lib/fonts/MathJax_Calligraphic-Regular.woff",
+    "lib/fonts/MathJax_Calligraphic-Bold.woff",
+    "lib/fonts/MathJax_Fraktur-Regular.woff",
+    "lib/fonts/MathJax_Fraktur-Bold.woff",
+    "lib/fonts/MathJax_SansSerif-Regular.woff",
+    "lib/fonts/MathJax_SansSerif-Bold.woff",
+    "lib/fonts/MathJax_SansSerif-Italic.woff",
+    "lib/fonts/MathJax_Script-Regular.woff",
+    "lib/fonts/MathJax_Typewriter-Regular.woff",
+    "lib/fonts/MathJax_Vector-Regular.woff",
+    "lib/fonts/MathJax_Vector-Bold.woff"
+  ],
+  "fileInfo": {
+    "01 Учёба/00 ОП/02.05/Template Specialization. Smart Ptr 02.05.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 6981,
+      "exportedPath": "01 Учёба/00 ОП/02.05/Template Specialization. Smart Ptr 02.05.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.12/Контейнеры. STL 02.12.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 13760,
+      "exportedPath": "01 Учёба/00 ОП/02.12/Контейнеры. STL 02.12.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.19/Функциональные объекты 02.19.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 10997,
+      "exportedPath": "01 Учёба/00 ОП/02.19/Функциональные объекты 02.19.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.26/Allocator 02.26.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 7344,
+      "exportedPath": "01 Учёба/00 ОП/02.26/Allocator 02.26.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.05/Error Handling 03.05.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 11641,
+      "exportedPath": "01 Учёба/00 ОП/03.05/Error Handling 03.05.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.12/Exceptions 03.12.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 13941,
+      "exportedPath": "01 Учёба/00 ОП/03.12/Exceptions 03.12.html",
+      "dependencies": []
+    },
+    "lib/fonts/94f2f163d4b698242fef.otf": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 66800,
+      "exportedPath": "lib/fonts/94f2f163d4b698242fef.otf",
+      "dependencies": []
+    },
+    "lib/fonts/72505e6a122c6acd5471.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 104232,
+      "exportedPath": "lib/fonts/72505e6a122c6acd5471.woff2",
+      "dependencies": []
+    },
+    "lib/fonts/2d5198822ab091ce4305.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 104332,
+      "exportedPath": "lib/fonts/2d5198822ab091ce4305.woff2",
+      "dependencies": []
+    },
+    "lib/fonts/c8ba52b05a9ef10f4758.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 98868,
+      "exportedPath": "lib/fonts/c8ba52b05a9ef10f4758.woff2",
+      "dependencies": []
+    },
+    "lib/fonts/cb10ffd7684cd9836a05.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 106876,
+      "exportedPath": "lib/fonts/cb10ffd7684cd9836a05.woff2",
+      "dependencies": []
+    },
+    "lib/fonts/b5f0f109bc88052d4000.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 105804,
+      "exportedPath": "lib/fonts/b5f0f109bc88052d4000.woff2",
+      "dependencies": []
+    },
+    "lib/fonts/cbe0ae49c52c920fd563.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 106108,
+      "exportedPath": "lib/fonts/cbe0ae49c52c920fd563.woff2",
+      "dependencies": []
+    },
+    "lib/fonts/535a6cf662596b3bd6a6.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 111708,
+      "exportedPath": "lib/fonts/535a6cf662596b3bd6a6.woff2",
+      "dependencies": []
+    },
+    "lib/fonts/70cc7ff27245e82ad414.ttf": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 192740,
+      "exportedPath": "lib/fonts/70cc7ff27245e82ad414.ttf",
+      "dependencies": []
+    },
+    "lib/fonts/454577c22304619db035.ttf": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 161376,
+      "exportedPath": "lib/fonts/454577c22304619db035.ttf",
+      "dependencies": []
+    },
+    "lib/fonts/52ac8f3034507f1d9e53.ttf": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 191568,
+      "exportedPath": "lib/fonts/52ac8f3034507f1d9e53.ttf",
+      "dependencies": []
+    },
+    "lib/fonts/05b618077343fbbd92b7.ttf": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 155288,
+      "exportedPath": "lib/fonts/05b618077343fbbd92b7.ttf",
+      "dependencies": []
+    },
+    "lib/fonts/4bb6ac751d1c5478ff3a.woff2": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 7876,
+      "exportedPath": "lib/fonts/4bb6ac751d1c5478ff3a.woff2",
+      "dependencies": []
+    },
+    "lib/media/6155340132a851f6089e.svg": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 315,
+      "exportedPath": "lib/media/6155340132a851f6089e.svg",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Zero.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 1368,
+      "exportedPath": "lib/fonts/MathJax_Zero.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Main-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 34160,
+      "exportedPath": "lib/fonts/MathJax_Main-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Main-Bold.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 34464,
+      "exportedPath": "lib/fonts/MathJax_Main-Bold.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Math-Italic.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 19360,
+      "exportedPath": "lib/fonts/MathJax_Math-Italic.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Main-Italic.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 20832,
+      "exportedPath": "lib/fonts/MathJax_Main-Italic.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Math-BoldItalic.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 19776,
+      "exportedPath": "lib/fonts/MathJax_Math-BoldItalic.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Size1-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 5792,
+      "exportedPath": "lib/fonts/MathJax_Size1-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Size2-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 5464,
+      "exportedPath": "lib/fonts/MathJax_Size2-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Size3-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 3244,
+      "exportedPath": "lib/fonts/MathJax_Size3-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Size4-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 5148,
+      "exportedPath": "lib/fonts/MathJax_Size4-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_AMS-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 40808,
+      "exportedPath": "lib/fonts/MathJax_AMS-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Calligraphic-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 9600,
+      "exportedPath": "lib/fonts/MathJax_Calligraphic-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Calligraphic-Bold.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 9908,
+      "exportedPath": "lib/fonts/MathJax_Calligraphic-Bold.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Fraktur-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 21480,
+      "exportedPath": "lib/fonts/MathJax_Fraktur-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Fraktur-Bold.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 22340,
+      "exportedPath": "lib/fonts/MathJax_Fraktur-Bold.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_SansSerif-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 12660,
+      "exportedPath": "lib/fonts/MathJax_SansSerif-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_SansSerif-Bold.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 15944,
+      "exportedPath": "lib/fonts/MathJax_SansSerif-Bold.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_SansSerif-Italic.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 14628,
+      "exportedPath": "lib/fonts/MathJax_SansSerif-Italic.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Script-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 11852,
+      "exportedPath": "lib/fonts/MathJax_Script-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Typewriter-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 17604,
+      "exportedPath": "lib/fonts/MathJax_Typewriter-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Vector-Regular.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 1136,
+      "exportedPath": "lib/fonts/MathJax_Vector-Regular.woff",
+      "dependencies": []
+    },
+    "lib/fonts/MathJax_Vector-Bold.woff": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 1116,
+      "exportedPath": "lib/fonts/MathJax_Vector-Bold.woff",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.12/Лекция 02.12 Кристина.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 12977,
+      "exportedPath": "01 Учёба/00 ОП/02.12/Лекция 02.12 Кристина.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.12/Лекция 02.12 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 7522,
+      "exportedPath": "01 Учёба/00 ОП/02.12/Лекция 02.12 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.12/Лекция 02.12 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 3535,
+      "exportedPath": "01 Учёба/00 ОП/02.12/Лекция 02.12 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.19/Лекция 02.19 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 7771,
+      "exportedPath": "01 Учёба/00 ОП/02.19/Лекция 02.19 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.19/Лекция 02.19 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 5693,
+      "exportedPath": "01 Учёба/00 ОП/02.19/Лекция 02.19 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.26/Лекция 02.26 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 3592,
+      "exportedPath": "01 Учёба/00 ОП/02.26/Лекция 02.26 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.26/Лекция 02.26 AI.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 10587,
+      "exportedPath": "01 Учёба/00 ОП/02.26/Лекция 02.26 AI.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/02.26/Лекция 02.26 AI 2.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 47785,
+      "exportedPath": "01 Учёба/00 ОП/02.26/Лекция 02.26 AI 2.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.05/Лекция 03.05 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 9443,
+      "exportedPath": "01 Учёба/00 ОП/03.05/Лекция 03.05 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.05/Лекция 03.05 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 4706,
+      "exportedPath": "01 Учёба/00 ОП/03.05/Лекция 03.05 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.19/Лекция 03.19 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 6595,
+      "exportedPath": "01 Учёба/00 ОП/03.19/Лекция 03.19 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.19/Лекция 03.19 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 478,
+      "exportedPath": "01 Учёба/00 ОП/03.19/Лекция 03.19 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.19/Lambda 03.19.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 6239,
+      "exportedPath": "01 Учёба/00 ОП/03.19/Lambda 03.19.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.26/Лекция 03.26 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 6892,
+      "exportedPath": "01 Учёба/00 ОП/03.26/Лекция 03.26 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/03.26/std function 03.26.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 7348,
+      "exportedPath": "01 Учёба/00 ОП/03.26/std function 03.26.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.02/04.02 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 7385,
+      "exportedPath": "01 Учёба/00 ОП/04.02/04.02 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.02/04.02 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 2198,
+      "exportedPath": "01 Учёба/00 ОП/04.02/04.02 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.02/Casts 04.02.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 5392,
+      "exportedPath": "01 Учёба/00 ОП/04.02/Casts 04.02.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.09/04.09 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 6068,
+      "exportedPath": "01 Учёба/00 ОП/04.09/04.09 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.09/04.09 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 2607,
+      "exportedPath": "01 Учёба/00 ОП/04.09/04.09 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.09/Merge.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 11,
+      "exportedPath": "01 Учёба/00 ОП/04.09/Merge.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.16/04.16 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 4239,
+      "exportedPath": "01 Учёба/00 ОП/04.16/04.16 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.16/04.16 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 537,
+      "exportedPath": "01 Учёба/00 ОП/04.16/04.16 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.16/Merge.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 11,
+      "exportedPath": "01 Учёба/00 ОП/04.16/Merge.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.23/04.23 Лиза.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 5084,
+      "exportedPath": "01 Учёба/00 ОП/04.23/04.23 Лиза.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.23/04.23 Никита.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 2255,
+      "exportedPath": "01 Учёба/00 ОП/04.23/04.23 Никита.html",
+      "dependencies": []
+    },
+    "01 Учёба/00 ОП/04.23/Merge.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 0,
+      "exportedPath": "01 Учёба/00 ОП/04.23/Merge.html",
+      "dependencies": []
+    },
+    "01 Учёба/01 Дискретная математика/дм коллоквиум.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 0,
+      "exportedPath": "01 Учёба/01 Дискретная математика/дм коллоквиум.html",
+      "dependencies": []
+    },
+    "01 Учёба/01 Дискретная математика/КА.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 3187,
+      "exportedPath": "01 Учёба/01 Дискретная математика/КА.html",
+      "dependencies": []
+    },
+    "01 Учёба/01 Дискретная математика/Коллоквиум 3.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 24695,
+      "exportedPath": "01 Учёба/01 Дискретная математика/Коллоквиум 3.html",
+      "dependencies": []
+    },
+    "01 Учёба/01 Дискретная математика/Коллоквиум 4.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 8350,
+      "exportedPath": "01 Учёба/01 Дискретная математика/Коллоквиум 4.html",
+      "dependencies": []
+    },
+    "01 Учёба/02 Алгосы/Коллоквиум 4.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 2055,
+      "exportedPath": "01 Учёба/02 Алгосы/Коллоквиум 4.html",
+      "dependencies": []
+    },
+    "01 Учёба/02 Алгосы/Основные алгоритмы на графах (конспект Кормена).md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 5722,
+      "exportedPath": "01 Учёба/02 Алгосы/Основные алгоритмы на графах (конспект Кормена).html",
+      "dependencies": []
+    },
+    "01 Учёба/02 Алгосы/Паросочетания.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 3318,
+      "exportedPath": "01 Учёба/02 Алгосы/Паросочетания.html",
+      "dependencies": []
+    },
+    "01 Учёба/02 Алгосы/Расстояния (Кормен).md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 369,
+      "exportedPath": "01 Учёба/02 Алгосы/Расстояния (Кормен).html",
+      "dependencies": []
+    },
+    "01 Учёба/02 Алгосы/Хешшшшш.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 18950,
+      "exportedPath": "01 Учёба/02 Алгосы/Хешшшшш.html",
+      "dependencies": []
+    },
+    "01 Учёба/03 Высшая математика/Коллоквиум 2 (верная версия).md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 38184,
+      "exportedPath": "01 Учёба/03 Высшая математика/Коллоквиум 2 (верная версия).html",
+      "dependencies": []
+    },
+    "01 Учёба/03 Высшая математика/Коллоквиум 2 семестр.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 19648,
+      "exportedPath": "01 Учёба/03 Высшая математика/Коллоквиум 2 семестр.html",
+      "dependencies": []
+    },
+    "01 Учёба/04 Математический анализ/Коллоквиум 2 семестр.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 36840,
+      "exportedPath": "01 Учёба/04 Математический анализ/Коллоквиум 2 семестр.html",
+      "dependencies": []
+    },
+    "01 Учёба/WebPage.md": {
+      "modifiedTime": 1746263150495,
+      "sourceSize": 11,
+      "exportedPath": "01 Учёба/WebPage.html",
+      "dependencies": []
+    }
+  }
+}
