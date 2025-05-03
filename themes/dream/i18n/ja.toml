@@ -1,0 +1,50 @@
+[home]
+other = "Home"
+
+[backToHome]
+other = "Back to home"
+
+[flip]
+other = "Flip it!"
+
+[about]
+other = "About"
+
+[archives]
+other = "アーカイブ"
+
+[allTags]
+other = "タグ一覧"
+
+[tag]
+one = "1タグ"
+other = "{{ .Count }}タグ"
+
+[allCategories]
+other = "カテゴリー一覧"
+
+[category]
+one = "1カテゴリー"
+other = "{{ .Count }}カテゴリー"
+
+[article]
+one = "1記事"
+other = "{{ .Count }}記事"
+
+[socialLinks]
+other = "SNS"
+
+[minuteRead]
+other = "分で読めます"
+
+[updatedAt]
+other = "更新日時"
+
+[prevPage]
+other = "前へ"
+
+[nextPage]
+other = "次へ"
+
+[search]
+other = "検索"

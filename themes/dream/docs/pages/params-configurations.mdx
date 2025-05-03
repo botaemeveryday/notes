@@ -1,0 +1,382 @@
+import { Callout } from 'nextra/components'
+
+# Params Configurations
+
+This doc introduces all the parameters that can be configured in the `[params]`.
+
+## Example
+
+```toml
+[params]
+# zenMode = true
+
+lightTheme = "emerald"
+darkTheme = "forest"
+
+# backgroundImage = "img/global-background.jpg"
+# backgroundImageDark = ""
+
+images = ["img/global-background.jpg"]
+
+author = "g1eny0ung"
+description = "g1eny0ung 的生活记录～"
+avatar = "img/personal/avatar.jpg"
+headerTitle = "g1eny0ung's Blog"
+motto = "与其感慨路难行，不如马上出发。"
+
+# footerBottomText = ""
+
+rss = true
+
+utterancesRepo = "g1eny0ung/g1eny0ung.github.io"
+
+# valine = true
+# LEANCLOUD_APP_ID = ""
+# LEANCLOUD_APP_KEY = ""
+
+# waline = true
+# walineServer = ""
+
+email = "g1enyy0ung@gmail.com"
+
+siteStartYear = 2016
+
+favicon = "favicon.ico"
+
+# Syntax highlighting
+customSyntaxHighlighting = true
+
+# options
+stickyNav = true
+# reorderNavItems = ["about", "search", "rss", "posts", "categories", "tags"]
+# collapseNavItems = ["posts", "categories", "tags"]
+# noDefaultSummaryCover = true
+showTableOfContents = true
+showSummaryCoverInPost = true
+imageZoomableInPost = true
+showPrevNextPost = true
+# reorderShares = ["x", "facebook", "whatsapp"]
+
+[params.advanced]
+# customCSS = ["css/custom.css"]
+# customJS = []
+
+[params.experimental]
+jsDate = true
+jsDateFormat = "yyyy年MM月dd日"
+```
+
+## Basic
+
+### zenMode
+
+Zen mode is a simple layout that allows you to concentrate on reading and writing.
+It uses a simple and clean interface rather than the default masonry layout.
+
+👉 View [Zen Mode](zen-mode.md) for more details.
+
+### Light and Dark Mode
+
+> Required.
+
+You can first add these two parameters to the `[params]`, they are default themes for light and dark mode.
+
+```toml
+lightTheme = "emerald"
+darkTheme = "forest"
+```
+
+For using other themes, view [Light and Dark Mode](light-and-dark-mode.md) for more details.
+
+### backgroundImage
+
+Define a global background image.
+
+### backgroundImageDark
+
+Define a global background image in dark mode.
+
+### images
+
+View https://gohugo.io/templates/internal/#open-graph for more details.
+
+Use the first one of site images as the fallback image for Open Graph.
+
+### author
+
+The author field will be used as:
+
+- `<meta name="author" content="g1eny0ung" />`
+- In the summary of post cards
+
+### description
+
+The description field will be used as `<meta name="description" content="g1eny0ung 的生活记录～" />`
+
+### avatar
+
+Your personal avatar.
+
+### headerTitle
+
+The global title of the website.
+
+### motto
+
+A motto that will be displayed below the `headerTitle`. This field is optional.
+
+### footerBottomText
+
+Used to display text at the bottom of the site footer, below the `siteStartYear` field. This field supports HTML.
+
+<Callout type="info">
+If this field is not specified, the default text will be displayed as:
+
+`🌱 Powered by Hugo with theme Dream.`
+
+</Callout>
+
+### rss
+
+Enable RSS.
+
+### utterancesRepo
+
+Utterances is a lightweight comments widget built on GitHub Issues.
+By setting `utterancesRepo`, each post will have a comment section powered by GitHub Issues.
+
+View https://utteranc.es for more details.
+
+### valine
+
+Valine is a fast, simple & efficient LeanCloud based no backend comment system.
+You can view https://valine.js.org/en/index.html for more details.
+
+To make it work, you still need to set these two parameters:
+
+```toml
+[params]
+LEANCLOUD_APP_ID = ""
+LEANCLOUD_APP_KEY = ""
+```
+
+To customize Valine, you can create a partial file named `valine.html` in the `layouts/partials` folder.
+Here is an [example](https://github.com/g1eny0ung/blog/blob/master/layouts/partials/valine.html).
+
+<Callout type="info">
+You still need to set the `valine` parameter to `true` to enable Valine when using a custom partial file.
+
+Other related parameters will be ingored.
+</Callout>
+
+### waline
+
+Waline is a simple comment system with backend support fork from Valine.
+You can view https://waline.js.org/en/ for more details.
+
+To enable Waline, you need to set the `waline` parameter to `true` and
+set the `walineServer` parameter to your Waline server address:
+
+```toml
+waline = true
+walineServer = "https://your-waline-server.com"
+```
+
+If you want to customize Waline,
+you can create a partial file named `waline.html` in the `layouts/partials` folder.
+Here is an [example](https://github.com/g1eny0ung/blog/blob/master/layouts/partials/waline.html).
+
+<Callout type="info">
+You still need to set the `waline` parameter to `true` to enable Waline when using a custom partial file.
+
+Other related parameters will be ingored.
+</Callout>
+
+### twikoo
+
+Twikoo is a **simple**, **safe**, **free** comment system.
+You can view https://twikoo.js.org/en/ for more details.
+
+To enable Twikoo, you need to set the `params.twikoo.enabled` parameter to `true` and set the following 3 parameters according to the [official manual](https://twikoo.js.org/en/quick-start.html):
+
+```toml
+[params.twikoo]
+enabled = true
+envID = ""
+region = ""
+lang = ""
+```
+
+If you want to customize Twikoo,
+you can create a partial file named `twikoo.html` in the `layouts/partials` folder.
+Here is an [example](https://github.com/g1eny0ung/blog/blob/master/layouts/partials/twikoo.html).
+
+<Callout type="info">
+You still need to set the `params.twikoo.enabled` parameter to `true` to enable Twikoo when using a custom partial file.
+
+Other related parameters will be ingored.
+</Callout>
+
+### siteStartYear
+
+Set the start year of your site, it will be displayed as **siteStartYear - currentYear (eg: 2016 - 2020)** in the
+site footer.
+
+### favicon
+
+Custom the [favicon](https://en.wikipedia.org/wiki/Favicon) of your site, place it in the `static` folder.
+
+<Callout type="info">
+You can also specify the favicon in text format (starting with `<link`), for example:
+
+```html
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🌱</text></svg>"></link>
+```
+</Callout>
+
+### customSyntaxHighlighting
+
+View [Syntax highlighting](syntax-highlighting.mdx) for more details.
+
+### stickyNav
+
+Make navbar sticky when scrolling.
+
+### reorderNavItems
+
+Reorder the navigation items.
+
+This parameter is **an array of strings**, the default value is:
+
+```toml
+reorderNavItems = ["about", "search", "rss", "posts", "categories", "tags"]
+```
+
+<Callout type="info">
+  The names of these default items are fixed, and they are the navigation items provided by the Dream theme by default.
+</Callout>
+
+<Callout type="info">
+This parameter also allows you to remove the default navigation items.
+For example, if you don't want to show the `rss` item, you can set the value as:
+
+`reorderNavItems = ["about", "search", "posts", "categories", "tags"]`
+
+</Callout>
+
+For reordering custom navigation items, see [Custom Navbar Items](custom-nav-items.mdx).
+
+### collapseNavItems
+
+<Callout>
+  In mobile, this parameter will not take effect because all navigation items will be collapsed into a dropdown menu.
+</Callout>
+
+Collapse specific navigation items to a dropdown menu.
+
+For example, if you want to collapse the `posts`, `categories`, and `tags` items, you can set the value as:
+
+```toml
+collapseNavItems = ["posts", "categories", "tags"]
+```
+
+For collapsing custom navigation items, see [Custom Navbar Items](custom-nav-items.md).
+
+### noDefaultSummaryCover
+
+If you are not specify the `cover` field in the front matter of your posts,
+a default cover image will be displayed in the summary cards.
+
+If you don't want this behavior, you can set this param to `true`.
+
+### showTableOfContents
+
+Show the table of contents on the single post page.
+
+### showSummaryCoverInPost
+
+Show the summary cover image at the top of the single post page.
+
+### imageZoomableInPost
+
+Make images zoomable in the single post page. This feature uses [medium-zoom](https://github.com/francoischalifour/medium-zoom) under the hood.
+
+<Callout type="info">
+For advanced usage, you may want to customize the medium-zoom options. Dream allows you to
+create a partial file named `medium-zoom.html` in the `layouts/partials` folder to replace the
+default behavior. For example, you can put the following code in the `medium-zoom.html` file:
+
+```html
+<script type="module">
+  import mediumZoom from 'https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/+esm';
+  mediumZoom('#dream-single-post-content img', {
+    // Put your custom options here.
+  }) // #dream-single-post-content is the id of the post content.
+
+  // You can also further control the logic of zooming images.
+  // Like zooming lazy-loaded images.
+</script>
+```
+</Callout>
+
+### showPrevNextPost
+
+Show previous and next post links in the single post page.
+
+### reorderShares
+
+Same as [reorderNavItems](#reorderNavItems), reorder the share buttons in the single post page.
+
+This parameter is **an array of strings**, the default value is:
+
+```toml
+reorderShares = ["x", "facebook", "whatsapp"]
+```
+
+<Callout type="info">
+This parameter also allows you to remove the default share items.
+For example, if you don't want to show the `whatsapp` item, you can set the value as:
+
+`reorderShares = ["x", "facebook"]`
+</Callout>
+
+## Advanced
+
+<Callout>
+  Generally, the following advanced parameters are not necessary to be set. Their main purpose is to further customize
+  the entire theme.
+</Callout>
+
+### customCSS
+
+Add your custom CSS files **after** the theme CSS files.
+
+For example, create a folder named `css` under `static`, then add `custom.css` into it.
+
+View [Custom Theme](custom.md#css) for more details.
+
+### customJS
+
+Like `customCSS`, add your custom JS files **after** the theme JS files.
+
+View [Custom Theme](custom.md#js) for more details.
+
+## Experimental
+
+<Callout type="warning">
+  The experimental parameters are often not perfect. They have advantages as well as certain disadvantages.
+</Callout>
+
+### jsDate
+
+Use [Luxon](https://moment.github.io/luxon/index.html) to replace the Hugo built-in [.Format](https://gohugo.io/methods/time/format/) function. This allows you to define the time format more flexibly.
+
+You may not want to use this param if you want the final date is generated at compile time. After setting this param, all dates will output as an [RFC3339](https://en.wikipedia.org/wiki/ISO_8601) format and all rest format operations will be executed after the page is loaded.
+
+For how to define the format, see below.
+
+### jsDateFormat
+
+Refer to this page (https://moment.github.io/luxon/docs/manual/formatting.html) to define your date format.
+
+For example, `yyyy-MM-dd` represents a date format like `2021-04-17`.

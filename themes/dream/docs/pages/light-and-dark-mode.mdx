@@ -1,0 +1,26 @@
+import { Callout } from 'nextra/components'
+
+# Light and Dark Mode
+
+From Dream v3, it uses daisyUI to provide some out-of-box [themes](https://daisyui.com/docs/themes/) to use in light and dark mode.
+
+There are two steps to customize the light and dark mode:
+
+1. Specify themes for light and dark mode in the `hugo.toml`:
+
+   ```toml
+   lightTheme = "emerald"
+   darkTheme = "forest"
+   ```
+
+1. And then, open `src/input.css` in the root directory of Dream, specify the themes you want to use:
+
+   ```css
+   @plugin "daisyui" {
+     themes: emerald --default, forest --prefersdark;
+   }
+   ```
+
+   <Callout>You must install dependencies (`pnpm i`) before compiling the CSS.</Callout>
+
+   Then run `npm run css` or `pnpm css` to compile the CSS.
