@@ -1,8 +1,13 @@
 .DS_Store
+.history
 
 node_modules
 package-lock.json
 yarn.lock
+
+public
+resources
+.hugo_build.lock
 
 docs/.next
 docs/out
