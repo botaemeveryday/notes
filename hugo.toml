@@ -1,49 +1,25 @@
-baseURL = "botaemeveryday.github.io"
-languageCode = 'en-us'
+baseURL = "http://notes.botaemeveryday.io/"
+languageCode = 'ru-ru'
 title = 'notakeith'
 theme = "dream"
+
+defaultContentLanguage = "ru"
+hasCJKLanguage = true  
 
 [markup.goldmark.renderer]
   unsafe = true 
 
 [params]
-# zenMode = true
-
-# backgroundImage = "img/global-background.jpg"
-# backgroundImageDark = ""
-  
 author = "notakeith"
 description = "botaemeveryday Конспектики"
-avatar = "images/avatar.jpg"
+avatar = "/images/avatar.jpg"
 headerTitle = "botaemeveryday"
 motto = "Конспектики с любовью"
  
-# footerBottomText = ""
- 
-# valine = true
-# LEANCLOUD_APP_ID = ""
-# LEANCLOUD_APP_KEY = ""
- 
-# waline = true
-# walineServer = ""
- 
-# email = "g1enyy0ung@gmail.com"
- 
-# siteStartYear = 2016
- 
 favicon = "favicon.ico"
  
-# Syntax highlighting
-# customSyntaxHighlighting = true
- 
-# options
-stickyNav = true
-# reorderNavItems = ["about", "search", "rss", "posts", "categories", "tags"]
-# collapseNavItems = ["posts", "categories", "tags"]
-# noDefaultSummaryCover = true
+stickyNav = false
 showTableOfContents = true
 showSummaryCoverInPost = true
 imageZoomableInPost = true
 showPrevNextPost = true
-# reorderShares = ["x", "facebook", "whatsapp"]
- 
