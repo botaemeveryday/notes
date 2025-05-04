@@ -12,7 +12,7 @@ hasCJKLanguage = true
 [params]
 author = "notakeith"
 description = "botaemeveryday Конспектики"
-avatar = "/images/avatar.jpg"
+avatar = "images/avatar.jpg"
 headerTitle = "botaemeveryday"
 motto = "Конспектики с любовью"
  
