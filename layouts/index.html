@@ -9,6 +9,17 @@
 {{ end }}
 </div>
 {{ else }}
+<!-- <div class="container tagcloud" style="padding: 0 16px;">
+{{ if ne (len $.Site.Taxonomies.tags) 0 }}
+    {{ range $name, $taxonomy := $.Site.Taxonomies.tags }}
+      {{ $tagCount := len $taxonomy.Pages }}
+        <a href="{{ "/tags/" | relURL }}{{ $name | urlize }}" 
+        class="badge h-6 no-underline hover:badge-primary" style="font-size: 1rem;">
+          {{ $name }}<sup style="font-size: x-small">{{ $tagCount }}</sup>
+        </a>
+    {{ end }}
+{{ end }}
+</div> -->
 <div class="dream-grid opacity-0">
   {{ range $paginator.Pages }}
     <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">

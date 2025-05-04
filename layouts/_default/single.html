@@ -51,7 +51,7 @@
           {{ range $index, $tag := . }} {{ with $.Site.GetPage (printf "/%s/%s"
           $taxonomy $tag) -}}
           <a href="{{ .Permalink }}" class="badge h-6 no-underline hover:badge-primary">
-            {{ replace $tag "-" " " | title }}
+            {{ replace $tag "-" " " | title }} 
           </a>
           {{- end -}} {{- end -}}
         </div>
