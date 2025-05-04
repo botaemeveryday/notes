@@ -1,0 +1,56 @@
+[home]
+other = "Главная"
+
+[backToHome]
+other = "На главную"
+
+[flip]
+other = "Повернуть!"
+
+[archives]
+other = "Архивы"
+
+[allTags]
+other = "Все теги"
+
+[tag]
+one = "1 тег"
+few = "{{ .Count }} тега"
+many = "{{ .Count }} тегов"
+other = "{{ .Count }} тегов"
+
+[allCategories]
+other = "Все категории"
+
+[category]
+one = "1 категория"
+few = "{{ .Count }} категории"
+many = "{{ .Count }} категорий"
+other = "{{ .Count }} категорий"
+
+[article]
+one = "1 статья"
+few = "{{ .Count }} статьи"
+many = "{{ .Count }} статей"
+other = "{{ .Count }} статей"
+
+[socialLinks]
+other = "Социальные сети"
+
+[minuteRead]
+one = " минута чтения"
+few = " минуты чтения"
+many = " минут чтения"
+other = " минут чтения"
+
+[updatedAt]
+other = "Обновлено"
+
+[prevPage]
+other = "Предыдущая"
+
+[nextPage]
+other = "Следующая"
+
+[search]
+other = "Поиск"

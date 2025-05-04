@@ -1,0 +1,27 @@
+name = "Dream"
+license = "MIT"
+licenselink = "https://github.com/g1eny0ung/hugo-theme-dream/blob/master/LICENSE"
+description = "🌱 A Hugo theme named Dream"
+
+homepage = "https://g1en.site/hugo-theme-dream"
+
+demoSite = "https://g1en.site"
+
+tags = ["blog", "responsive", "light", "dark", "personal", "creative"]
+features = [
+  "Creative",
+  "Masonry Layout",
+  "Flippable About Page",
+  "Zen Mode",
+  "Google Analytics",
+  "Disqus",
+  "Utterances",
+  "Search",
+  "Syntax Highlighting",
+  "Decap CMS",
+  "Customizable",
+]
+
+[author]
+name = "Yue Yang"
+homepage = "https://github.com/g1eny0ung"

@@ -1,0 +1,17 @@
+<ul class="menu menu-horizontal flex-wrap w-full px-0 [&_ion-icon]:text-lg">
+  {{ if site.Params.email }}
+  <li>
+    <a href="mailto:{{ site.Params.email }}" title="Email">
+      <ion-icon name="mail"></ion-icon>
+    </a>
+  </li>
+  {{ end }}
+
+  {{ range site.Data.socials.socials }}
+  <li>
+    <a href="{{ .href }}" target="{{ .target }}" title="{{ .title }}">
+      <ion-icon name="{{ .icon }}"></ion-icon>
+    </a>
+  </li>
+  {{ end }}
+</ul>

@@ -1,0 +1,25 @@
+<div class="flex items-center">
+  {{ if .Params.avatar }}
+  <div class="avatar mr-1">
+    <div class="w-8 rounded-full">
+      <img class="my-0!" src="{{ .Params.avatar }}" alt="{{ .Params.author }}" />
+    </div>
+  </div>
+  {{ else }}
+  <span>@</span>
+  {{ end }}
+
+  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+  {{ if .Params.author }}
+    {{ if and .Params.authorlink (eq .template "single") }}
+      <a itemprop="url" href="{{ .Params.authorlink }}" target="_blank">
+        <span itemprop="name">{{ .Params.author }}</span>
+      </a>
+    {{ else }}
+      <span itemprop="name">{{ .Params.author }}</span>
+    {{ end }}
+  {{ else }}
+    <span itemprop="name">{{ site.Params.author }}</span>
+  {{ end }}
+  </span>
+</div>

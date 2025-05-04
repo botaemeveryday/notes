@@ -1,0 +1,49 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'notakeith'
+theme = "dream"
+
+[markup.goldmark.renderer]
+  unsafe = true 
+
+[params]
+# zenMode = true
+
+# backgroundImage = "img/global-background.jpg"
+# backgroundImageDark = ""
+  
+author = "notakeith"
+description = "botaemeveryday Конспектики"
+avatar = "/images/avatar.jpg"
+headerTitle = "botaemeveryday"
+motto = "Конспектики с любовью"
+ 
+# footerBottomText = ""
+ 
+# valine = true
+# LEANCLOUD_APP_ID = ""
+# LEANCLOUD_APP_KEY = ""
+ 
+# waline = true
+# walineServer = ""
+ 
+# email = "g1enyy0ung@gmail.com"
+ 
+# siteStartYear = 2016
+ 
+favicon = "favicon.ico"
+ 
+# Syntax highlighting
+# customSyntaxHighlighting = true
+ 
+# options
+stickyNav = true
+# reorderNavItems = ["about", "search", "rss", "posts", "categories", "tags"]
+# collapseNavItems = ["posts", "categories", "tags"]
+# noDefaultSummaryCover = true
+showTableOfContents = true
+showSummaryCoverInPost = true
+imageZoomableInPost = true
+showPrevNextPost = true
+# reorderShares = ["x", "facebook", "whatsapp"]
+ 

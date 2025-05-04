@@ -1,0 +1,48 @@
+[home]
+other = "Pàgina inicial"
+
+[backToHome]
+other = "Tornar a la pàgina d'inici"
+
+[flip]
+other = "Capgirar!"
+
+[archives]
+other = "Arxiu"
+
+[allTags]
+other = "Totes les etiquetes"
+
+[tag]
+one = "1 etiqueta"
+other = "{{ .Count }} etiquetes"
+
+[allCategories]
+other = "Totes les categories"
+
+[category]
+one = "1 categoria"
+other = "{{ .Count }} categories"
+
+[article]
+one = "1 article"
+other = "{{ .Count }} articles"
+
+[socialLinks]
+other = "Enllaços de xarxes socials"
+
+[minuteRead]
+one = " minut de lectura"
+other = " minuts de lectura"
+
+[updatedAt]
+other = "Actualització a"
+
+[prevPage]
+other = "Pàgina anterior"
+
+[nextPage]
+other = "Pàgina següent"
+
+[search]
+other = "Buscar"

@@ -1,0 +1,44 @@
+{{ define "title" }}
+{{- .Title -}}
+{{ end }}
+
+{{ define "main"}}
+
+<div class="mt-8 lg:mt-12 px-4">
+  <div class="mx-auto prose dark:prose-invert">
+    <h1 class="text-3xl">
+      {{ default (T "archives") .Title }}
+    </h1>
+    {{ if .Content }}
+    <p class="text-sm">{{ .Content }}</p>
+    {{ end }}
+  </div>
+
+  <div class="max-w-[65ch] mx-auto mt-8 lg:mt-12">
+    <ul class="timeline timeline-vertical">
+      {{ $groupLayout := default "2006" .Params.groupLayout }}
+      {{ range .Pages.GroupByDate $groupLayout }}
+      <li class="[--timeline-col-start:64px]">
+        <hr class="dark:bg-base-content" />
+        <div class="timeline-start justify-self-start!">
+          <div class="text-lg font-semibold">{{ .Key }}</div>
+        </div>
+        <div class="timeline-middle flex items-center mx-8 my-2">
+          <ion-icon name="time"></ion-icon>
+        </div>
+        <div class="timeline-end timeline-box dark:border-base-content/60 prose dark:prose-invert my-8 text-sm">
+          <ul>
+            {{ range .Pages }}
+            <li>
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+        <hr class="dark:bg-base-content" />
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+</div>
+{{ end }}

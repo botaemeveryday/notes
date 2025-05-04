@@ -1,0 +1,25 @@
+{
+  "name": "hugo-theme-dream",
+  "version": "3.0.0",
+  "description": "A Hugo theme named Dream.",
+  "repository": "https://github.com/g1eny0ung/hugo-theme-dream.git",
+  "author": "Yue Yang <g1enyy0ung@gmail.com> (https://g1en.site)",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "css": "tailwindcss -i ./src/input.css -o ./assets/css/output.css",
+    "js": "babel src --out-dir assets --presets=@babel/preset-env --no-comments",
+    "build": "npm run css && npm run js",
+    "watch": "conc \"npm:css -- -w\" \"npm:js -- -w\""
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.7",
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@tailwindcss/cli": "^4.0.14",
+    "@tailwindcss/typography": "^0.5.16",
+    "concurrently": "^9.1.2",
+    "daisyui": "^5.0.4",
+    "tailwindcss": "^4.0.14"
+  }
+}

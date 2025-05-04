@@ -1,0 +1,9 @@
+[submodule "my-obsidian-site/themes/ananke"]
+	path = my-obsidian-site/themes/ananke
+	url = https://github.com/theNewDynamic/gohugo-theme-ananke.git
+[submodule "my-obsidian-site/themes/hextra"]
+	path = my-obsidian-site/themes/hextra
+	url = https://github.com/imfing/hextra.git
+[submodule "my-obsidian-site/themes/dream"]
+	path = my-obsidian-site/themes/dream
+	url = https://github.com/g1eny0ung/hugo-theme-dream.git
