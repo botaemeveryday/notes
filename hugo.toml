@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = "http://notes.botaemeveryday.io/"
 languageCode = 'en-us'
 title = 'notakeith'
 theme = "dream"
