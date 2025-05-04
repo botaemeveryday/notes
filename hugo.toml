@@ -1,6 +1,6 @@
 baseURL = "http://notes.botaemeveryday.io/"
 languageCode = 'ru-ru'
-title = 'notakeith'
+title = 'notakeith & salt-caramel'
 theme = "dream"
 
 defaultContentLanguage = "ru"
@@ -10,7 +10,7 @@ hasCJKLanguage = true
   unsafe = true 
 
 [params]
-author = "notakeith"
+author = "notakeith & salt-caramel"
 description = "botaemeveryday Конспектики"
 avatar = "images/avatar.jpg"
 headerTitle = "botaemeveryday"
