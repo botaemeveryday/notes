@@ -56,6 +56,12 @@ jobs:
           hugo \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: Verify build
+        run: |
+          [ -f public/index.html ] || exit 1
+          grep -q "<body" public/index.html || (echo "Index.html пустой!"; exit 1)
+          echo "Содержимое index.html:"
+          cat public/index.html      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
