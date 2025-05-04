@@ -1,5 +1,5 @@
 ---
-title: std::function 
+title: MyFunction
 date: 2025-03-26
 cover: images/cover.png
 tags:

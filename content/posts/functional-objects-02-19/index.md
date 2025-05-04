@@ -1,5 +1,5 @@
 ---
-title: Функциональные объекты (and something more)
+title: Функциональные объекты
 date: 2025-02-19
 cover: images/cover.png
 tags:

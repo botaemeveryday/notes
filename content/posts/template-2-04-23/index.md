@@ -1,5 +1,5 @@
 ---
-title: Template 2
+title: Templates (еще глубже!)
 date: 2025-04-23
 cover: images/cover.png
 tags:
