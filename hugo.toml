@@ -9,6 +9,18 @@ hasCJKLanguage = true
 [markup.goldmark.renderer]
   unsafe = true 
 
+customSyntaxHighlighting = true
+
+[markup]
+[markup.highlight]
+codeFences = true
+style = 'monokailight'
+tabWidth = 4
+hl_inline = false
+lineNoStart = 1
+lineNos = false
+lineNumbersInTable = true
+
 [params]
 author = "notakeith & salt-caramel"
 description = "botaemeveryday Конспектики"
