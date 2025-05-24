@@ -5,70 +5,66 @@ cover: images/cover.png
 tags:
   - Материалы ОП
 nolastmod: true
-draft: true
+draft: false
 ---
 
 
 **Материалы ОП**
 
 <!--more-->
-
-I was sitting in my room the other day and thinking about how much we had covered, and I thought I would recap what we’ve learned so far and what lies ahead of us.
+На днях я сидел в своей комнате и размышлял о том, сколько всего мы прошли, и подумал, что стоит подвести итоги того, что мы узнали до сих пор, и что нас ждет впереди.
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_recap.png)
 
-Up until now we’ve learned:
+До сих пор мы узнали:
 
-How to break sentences into tokens. The process is called lexical analysis and the part of the interpreter that does it is called a lexical analyzer, lexer, scanner, or tokenizer. We’ve learned how to write our own lexer from the ground up without using regular expressions or any other tools like Lex.
-How to recognize a phrase in the stream of tokens. The process of recognizing a phrase in the stream of tokens or, to put it differently, the process of finding structure in the stream of tokens is called parsing or syntax analysis. The part of an interpreter or compiler that performs that job is called a parser or syntax analyzer.
-How to represent a programming language’s syntax rules with syntax diagrams, which are a graphical representation of a programming language’s syntax rules. Syntax diagrams visually show us which statements are allowed in our programming language and which are not.
-How to use another widely used notation for specifying the syntax of a programming language. It’s called context-free grammars (grammars, for short) or BNF (Backus-Naur Form).
-How to map a grammar to code and how to write a recursive-descent parser.
-How to write a really basic interpreter.
-How associativity and precedence of operators work and how to construct a grammar using a precedence table.
-How to build an Abstract Syntax Tree (AST) of a parsed sentence and how to represent the whole source program in Pascal as one big AST.
-How to walk an AST and how to implement our interpreter as an AST node visitor.
-With all that knowledge and experience under our belt, we’ve built an interpreter that can scan, parse, and build an AST and interpret, by walking the AST, our very first complete Pascal program. Ladies and gentlemen, I honestly think if you’ve reached this far, you deserve a pat on the back. But don’t let it go to your head. Keep going. Even though we’ve covered a lot of ground, there are even more exciting parts coming our way.
+Как разбивать предложения на токены. Этот процесс называется лексическим анализом, а часть интерпретатора, которая это делает, называется лексическим анализатором, лексером, сканером или токенизатором. Мы научились писать свой собственный лексер с нуля, не используя регулярные выражения или какие-либо другие инструменты, такие как Lex.
+Как распознать фразу в потоке токенов. Процесс распознавания фразы в потоке токенов или, другими словами, процесс поиска структуры в потоке токенов называется парсингом или синтаксическим анализом. Часть интерпретатора или компилятора, которая выполняет эту работу, называется парсером или синтаксическим анализатором.
+Как представлять синтаксические правила языка программирования с помощью синтаксических диаграмм, которые являются графическим представлением синтаксических правил языка программирования. Синтаксические диаграммы визуально показывают нам, какие операторы разрешены в нашем языке программирования, а какие нет.
+Как использовать еще одно широко используемое обозначение для указания синтаксиса языка программирования. Оно называется контекстно-свободными грамматиками (грамматиками, сокращенно) или БНФ (форма Бэкуса-Наура).
+Как сопоставить грамматику с кодом и как написать рекурсивный нисходящий парсер.
+Как написать действительно простой интерпретатор.
+Как работает ассоциативность и приоритет операторов и как построить грамматику, используя таблицу приоритетов.
+Как построить абстрактное синтаксическое дерево (AST) разобранного предложения и как представить всю исходную программу на Pascal в виде одного большого AST.
+Как обходить AST и как реализовать наш интерпретатор в виде посетителя узлов AST.
+Обладая всеми этими знаниями и опытом, мы построили интерпретатор, который может сканировать, разбирать и строить AST и интерпретировать, обходя AST, нашу самую первую полную программу на Pascal. Дамы и господа, я искренне считаю, что если вы дошли до этого места, вы заслуживаете похвалы. Но не позволяйте этому вскружить вам голову. Продолжайте идти. Несмотря на то, что мы прошли большой путь, нас ждут еще более захватывающие части.
 
+Со всем, что мы прошли до сих пор, мы почти готовы приступить к таким темам, как:
 
-
-With everything we’ve covered so far, we are almost ready to tackle topics like:
-
-Nested procedures and functions
-Procedure and function calls
-Semantic analysis (type checking, making sure variables are declared before they are used, and basically checking if a program makes sense)
-Control flow elements (like IF statements)
-Aggregate data types (Records)
-More built-in types
-Source-level debugger
-Miscellanea (All the other goodness not mentioned above :)
-But before we cover those topics, we need to build a solid foundation and infrastructure.
+Вложенные процедуры и функции
+Вызовы процедур и функций
+Семантический анализ (проверка типов, проверка того, что переменные объявлены до их использования, и, в основном, проверка того, имеет ли программа смысл)
+Элементы управления потоком (например, операторы IF)
+Агрегатные типы данных (записи)
+Больше встроенных типов
+Отладчик на уровне исходного кода
+Разное (Все остальные прелести, не упомянутые выше :)
+Но прежде чем мы рассмотрим эти темы, нам нужно построить прочный фундамент и инфраструктуру.
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_foundation.png)
 
-This is where we start diving deeper into the super important topic of symbols, symbol tables, and scopes. The topic itself will span several articles. It’s that important and you’ll see why. Okay, let’s start building that foundation and infrastructure, then, shall we?
+Здесь мы начинаем углубляться в суперважную тему символов, таблиц символов и областей видимости. Сама тема охватит несколько статей. Это настолько важно, и вы увидите почему. Хорошо, давайте начнем строить этот фундамент и инфраструктуру, тогда, не так ли?
 
+Во-первых, давайте поговорим о символах и о том, почему нам нужно их отслеживать. Что такое символ? Для наших целей мы неформально определим символ как идентификатор некоторой программной сущности, такой как переменная, подпрограмма или встроенный тип. Чтобы символы были полезны, они должны иметь как минимум следующую информацию о программных сущностях, которые они идентифицируют:
 
-First, let’s talk about symbols and why we need to track them. What is a symbol? For our purposes, we’ll informally define symbol as an identifier of some program entity like a variable, subroutine, or built-in type. For symbols to be useful they need to have at least the following information about the program entities they identify:
+Имя (например, 'x', 'y', 'number')
+Категория (Это переменная, подпрограмма или встроенный тип?)
+Тип (INTEGER, REAL)
+Сегодня мы займемся символами переменных и символами встроенных типов, потому что мы уже использовали переменные и типы раньше. Кстати, "встроенный" тип означает просто тип, который не был определен вами и доступен вам прямо из коробки, например, типы INTEGER и REAL, которые вы видели и использовали раньше.
 
-Name (for example, ‘x’, ‘y’, ‘number’)
-Category (Is it a variable, subroutine, or built-in type?)
-Type (INTEGER, REAL)
-Today we’ll tackle variable symbols and built-in type symbols because we’ve already used variables and types before. By the way, the “built-in” type just means a type that hasn’t been defined by you and is available for you right out of the box, like INTEGER and REAL types that you’ve seen and used before.
-
-Let’s take a look at the following Pascal program, specifically at the variable declaration part. You can see in the picture below that there are four symbols in that section: two variable symbols (x and y) and two built-in type symbols (INTEGER and REAL).
+Давайте взглянем на следующую программу на Pascal, особенно на часть объявления переменных. На рисунке ниже вы можете видеть, что в этом разделе есть четыре символа: два символа переменных (x и y) и два символа встроенных типов (INTEGER и REAL).
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_prog_symbols.png)
 
-How can we represent symbols in code? Let’s create a base Symbol class in Python:
+Как мы можем представить символы в коде? Давайте создадим базовый класс Symbol в Python:
 
 class Symbol(object):
     def __init__(self, name, type=None):
         self.name = name
         self.type = type
-As you can see, the class takes the name parameter and an optional type parameter (not all symbols may have a type associated with them). What about the category of a symbol? We’ll encode the category of a symbol in the class name itself, which means we’ll create separate classes to represent different symbol categories.
+Как видите, класс принимает параметр name и необязательный параметр type (не все символы могут иметь связанный с ними тип). А как насчет категории символа? Мы закодируем категорию символа в самом имени класса, что означает, что мы создадим отдельные классы для представления различных категорий символов.
 
-Let’s start with basic built-in types. We’ve seen two built-in types so far, when we declared variables: INTEGER and REAL. How do we represent a built-in type symbol in code? Here is one option:
+Начнем с основных встроенных типов. Мы видели два встроенных типа до сих пор, когда объявляли переменные: INTEGER и REAL. Как мы представляем символ встроенного типа в коде? Вот один из вариантов:
 
 class BuiltinTypeSymbol(Symbol):
     def __init__(self, name):
@@ -78,9 +74,9 @@ class BuiltinTypeSymbol(Symbol):
         return self.name
 
     __repr__ = __str__
-The class inherits from the Symbol class and the constructor requires only a name of the type. The category is encoded in the class name, and the type parameter from the base class for a built-in type symbol is None. The double underscore or dunder (as in “Double UNDERscore”) methods __str__ and __repr__ are special Python methods and we’ve defined them to have a nice formatted message when you print a symbol object.
+Класс наследуется от класса Symbol, и конструктор требует только имя типа. Категория закодирована в имени класса, а параметр type из базового класса для символа встроенного типа равен None. Двойное подчеркивание или dunder (как в "Double UNDERscore") методы __str__ и __repr__ являются специальными методами Python, и мы определили их для получения красивого отформатированного сообщения при печати объекта символа.
 
-Download the interpreter file and save it as spi.py; launch a python shell from the same directory where you saved the spi.py file, and play with the class we’ve just defined interactively:
+Загрузите файл интерпретатора и сохраните его как spi.py; запустите оболочку python из того же каталога, где вы сохранили файл spi.py, и поиграйте с классом, который мы только что определили, в интерактивном режиме:
 
 $ python
 >>> from spi import BuiltinTypeSymbol
@@ -91,7 +87,7 @@ INTEGER
 >>> real_type
 REAL
 
-How can we represent a variable symbol? Let’s create a VarSymbol class:
+Как мы можем представить символ переменной? Давайте создадим класс VarSymbol:
 
 class VarSymbol(Symbol):
     def __init__(self, name, type):
@@ -101,9 +97,9 @@ class VarSymbol(Symbol):
         return '<{name}:{type}>'.format(name=self.name, type=self.type)
 
     __repr__ = __str__
-In the class we made both the name and the type parameters required parameters and the class name VarSymbol clearly indicates that an instance of the class will identify a variable symbol (the category is variable.)
+В классе мы сделали параметры name и type обязательными, а имя класса VarSymbol четко указывает на то, что экземпляр класса будет идентифицировать символ переменной (категория - переменная).
 
-Back to the interactive python shell to see how we can manually construct instances for our variable symbols now that we know how to construct BuiltinTypeSymbol class instances:
+Вернемся к интерактивной оболочке python, чтобы увидеть, как мы можем вручную создавать экземпляры для наших символов переменных, теперь, когда мы знаем, как создавать экземпляры класса BuiltinTypeSymbol:
 
 $ python
 >>> from spi import BuiltinTypeSymbol, VarSymbol
@@ -116,30 +112,29 @@ $ python
 >>> var_y_symbol = VarSymbol('y', real_type)
 >>> var_y_symbol
 <y:REAL>
-As you can see, we first create an instance of a built-in type symbol and then pass it as a parameter to VarSymbol‘s constructor.
+Как видите, сначала мы создаем экземпляр символа встроенного типа, а затем передаем его в качестве параметра конструктору VarSymbol.
 
-Here is the hierarchy of symbols we’ve defined in visual form:
+Вот иерархия символов, которые мы определили, в визуальной форме:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_symbol_hierarchy.png)
 
-So far so good, but we haven’t answered the question yet as to why we even need to track those symbols in the first place.
+Пока все хорошо, но мы еще не ответили на вопрос, зачем нам вообще отслеживать эти символы.
 
-Here are some of the reasons:
+Вот некоторые из причин:
 
-To make sure that when we assign a value to a variable the types are correct (type checking)
-To make sure that a variable is declared before it is used
-Take a look at the following incorrect Pascal program, for example:
+Чтобы убедиться, что при присвоении значения переменной типы правильные (проверка типов)
+Чтобы убедиться, что переменная объявлена до ее использования
+Взгляните на следующую неправильную программу на Pascal, например:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_symtracking.png)
 
-There are two problems with the program above (you can compile it with fpc to see it for yourself):
+В приведенной выше программе есть две проблемы (вы можете скомпилировать ее с помощью fpc, чтобы убедиться в этом):
 
-In the expression “x := 2 + y;” we assigned a decimal value to the variable “x” that was declared as integer. That wouldn’t compile because the types are incompatible.
-In the assignment statement “x := a;” we referenced the variable “a” that wasn’t declared - wrong!
-To be able to identify cases like that even before interpreting/evaluating the source code of the program at run-time, we need to track program symbols. And where do we store the symbols that we track? I think you’ve guessed it right - in the symbol table!
+В выражении "x := 2 + y;" мы присвоили десятичное значение переменной "x", которая была объявлена как целое число. Это не скомпилируется, потому что типы несовместимы.
+В операторе присваивания "x := a;" мы сослались на переменную "a", которая не была объявлена - неправильно!
+Чтобы иметь возможность выявлять такие случаи еще до интерпретации/вычисления исходного кода программы во время выполнения, нам необходимо отслеживать символы программы. И где мы храним символы, которые мы отслеживаем? Я думаю, вы правильно догадались - в таблице символов!
 
-
-What is a symbol table? A symbol table is an abstract data type (ADT) for tracking various symbols in source code. Today we’re going to implement our symbol table as a separate class with some helper methods:
+Что такое таблица символов? Таблица символов - это абстрактный тип данных (ADT) для отслеживания различных символов в исходном коде. Сегодня мы собираемся реализовать нашу таблицу символов как отдельный класс с некоторыми вспомогательными методами:
 
 class SymbolTable(object):
     def __init__(self):
@@ -162,11 +157,11 @@ class SymbolTable(object):
         symbol = self._symbols.get(name)
         # 'symbol' is either an instance of the Symbol class or 'None'
         return symbol
-There are two main operations that we will be performing with the symbol table: storing symbols and looking them up by name: hence, we need two helper methods - define and lookup.
+Есть две основные операции, которые мы будем выполнять с таблицей символов: хранение символов и поиск их по имени: следовательно, нам нужны два вспомогательных метода - define и lookup.
 
-The method define takes a symbol as a parameter and stores it internally in its _symbols ordered dictionary using the symbol’s name as a key and the symbol instance as a value. The method lookup takes a symbol name as a parameter and returns a symbol if it finds it or “None” if it doesn’t.
+Метод define принимает символ в качестве параметра и сохраняет его внутри в своем упорядоченном словаре _symbols, используя имя символа в качестве ключа, а экземпляр символа - в качестве значения. Метод lookup принимает имя символа в качестве параметра и возвращает символ, если он его находит, или "None", если нет.
 
-Let’s manually populate our symbol table for the same Pascal program we’ve used just recently where we were manually creating variable and built-in type symbols:
+Давайте вручную заполним нашу таблицу символов для той же программы на Pascal, которую мы использовали совсем недавно, где мы вручную создавали символы переменных и встроенных типов:
 
 PROGRAM Part11;
 VAR
@@ -176,7 +171,7 @@ VAR
 BEGIN
 
 END.
-Launch a Python shell again and follow along:
+Запустите оболочку Python снова и следуйте инструкциям:
 
 $ python
 >>> from spi import SymbolTable, BuiltinTypeSymbol, VarSymbol
@@ -205,13 +200,13 @@ Define: <y:REAL>
 >>> symtab
 Symbols: [INTEGER, <x:INTEGER>, REAL, <y:REAL>]
 
-If you looked at the contents of the _symbols dictionary it would look something like this:
+Если бы вы посмотрели на содержимое словаря _symbols, он выглядел бы примерно так:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_symtab.png)
 
-How do we automate the process of building the symbol table? We’ll just write another node visitor that walks the AST built by our parser! This is another example of how useful it is to have an intermediary form like AST. Instead of extending our parser to deal with the symbol table, we separate concerns and write a new node visitor class. Nice and clean. :)
+Как мы автоматизируем процесс построения таблицы символов? Мы просто напишем еще один посетитель узлов, который обходит AST, построенный нашим парсером! Это еще один пример того, насколько полезно иметь промежуточную форму, такую как AST. Вместо того, чтобы расширять наш парсер для работы с таблицей символов, мы разделяем задачи и пишем новый класс посетителя узлов. Хорошо и чисто. :)
 
-Before doing that, though, let’s extend our SymbolTable class to initialize the built-in types when the symbol table instance is created. Here is the full source code for today’s SymbolTable class:
+Прежде чем это сделать, давайте расширим наш класс SymbolTable, чтобы инициализировать встроенные типы при создании экземпляра таблицы символов. Вот полный исходный код для сегодняшнего класса SymbolTable:
 
 class SymbolTable(object):
     def __init__(self):
@@ -240,7 +235,7 @@ class SymbolTable(object):
         # 'symbol' is either an instance of the Symbol class or 'None'
         return symbol
 
-Now onto the SymbolTableBuilder AST node visitor:
+Теперь перейдем к посетителю узлов AST SymbolTableBuilder:
 
 class SymbolTableBuilder(NodeVisitor):
     def __init__(self):
@@ -278,7 +273,7 @@ class SymbolTableBuilder(NodeVisitor):
         var_symbol = VarSymbol(var_name, type_symbol)
         self.symtab.define(var_symbol)
 
-You’ve seen most of those methods before in the Interpreter class, but the visit_VarDecl method deserves some special attention. Here it is again:
+Вы видели большинство этих методов раньше в классе Interpreter, но метод visit_VarDecl заслуживает особого внимания. Вот он снова:
 
 def visit_VarDecl(self, node):
     type_name = node.type_node.value
@@ -286,10 +281,9 @@ def visit_VarDecl(self, node):
     var_name = node.var_node.value
     var_symbol = VarSymbol(var_name, type_symbol)
     self.symtab.define(var_symbol)
-This method is responsible for visiting (walking) a VarDecl AST node and storing the corresponding symbol in the symbol table. First, the method looks up the built-in type symbol by name in the symbol table, then it creates an instance of the VarSymbol class and stores (defines) it in the symbol table.
+Этот метод отвечает за посещение (обход) узла VarDecl AST и сохранение соответствующего символа в таблице символов. Сначала метод ищет символ встроенного типа по имени в таблице символов, затем создает экземпляр класса VarSymbol и сохраняет (определяет) его в таблице символов.
 
-
-Let’s take our SymbolTableBuilder AST walker for a test drive and see it in action:
+Давайте протестируем наш обходчик AST SymbolTableBuilder и посмотрим его в действии:
 
 $ python
 >>> from spi import Lexer, Parser, SymbolTableBuilder
@@ -314,14 +308,13 @@ Lookup: INTEGER
 Define: <x:INTEGER>
 Lookup: REAL
 Define: <y:REAL>
->>> # Let’s examine the contents of our symbol table
+>>> # Давайте изучим содержимое нашей таблицы символов
 …
 >>> symtab_builder.symtab
 Symbols: [INTEGER, REAL, <x:INTEGER>, <y:REAL>]
-In the interactive session above, you can see the sequence of “Define: …” and “Lookup: …” messages that indicate the order in which symbols are defined and looked up in the symbol table. The last command in the session prints the contents of the symbol table and you can see that it’s exactly the same as the contents of the symbol table that we’ve built manually before. The magic of AST node visitors is that they pretty much do all the work for you. :)
+В интерактивном сеансе выше вы можете видеть последовательность сообщений "Define: ..." и "Lookup: ...", которые указывают порядок, в котором символы определяются и ищутся в таблице символов. Последняя команда в сеансе печатает содержимое таблицы символов, и вы можете видеть, что оно точно такое же, как содержимое таблицы символов, которую мы построили вручную раньше. Магия посетителей узлов AST заключается в том, что они в значительной степени делают всю работу за вас. :)
 
-
-We can already put our symbol table and symbol table builder to good use: we can use them to verify that variables are declared before they are used in assignments and expressions. All we need to do is just extend the visitor with two more methods: visit_Assign and visit_Var:
+Мы уже можем использовать нашу таблицу символов и построитель таблицы символов с пользой: мы можем использовать их для проверки того, что переменные объявлены до того, как они используются в присваиваниях и выражениях. Все, что нам нужно сделать, это просто расширить посетителя еще двумя методами: visit_Assign и visit_Var:
 
 def visit_Assign(self, node):
     var_name = node.left.value
@@ -337,10 +330,9 @@ def visit_Var(self, node):
 
     if var_symbol is None:
         raise NameError(repr(var_name))
-These methods will raise a NameError exception if they cannot find the symbol in the symbol table.
+Эти методы вызовут исключение NameError, если они не смогут найти символ в таблице символов.
 
-
-Take a look at the following program, where we reference the variable “b” that hasn’t been declared yet:
+Взгляните на следующую программу, где мы ссылаемся на переменную "b", которая еще не была объявлена:
 
 PROGRAM NameError1;
 VAR
@@ -349,7 +341,7 @@ VAR
 BEGIN
    a := 2 + b;
 END.
-Let’s see what happens if we construct an AST for the program and pass it to our symbol table builder to visit:
+Давайте посмотрим, что произойдет, если мы построим AST для программы и передадим его нашему построителю таблицы символов для посещения:
 
 $ python
 >>> from spi import Lexer, Parser, SymbolTableBuilder
@@ -378,10 +370,9 @@ Traceback (most recent call last):
   File "spi.py", line 674, in visit_Var
     raise NameError(repr(var_name))
 NameError: 'b'
-Exactly what we were expecting!
+Именно то, что мы ожидали!
 
-
-Here is another error case where we try to assign a value to a variable that hasn’t been defined yet, in this case the variable ‘a’:
+Вот еще один случай ошибки, когда мы пытаемся присвоить значение переменной, которая еще не была определена, в данном случае переменной 'a':
 
 PROGRAM NameError2;
 VAR
@@ -391,7 +382,7 @@ BEGIN
    b := 1;
    a := b + 2;
 END.
-Meanwhile, in the Python shell:
+Тем временем в оболочке Python:
 
 >>> from spi import Lexer, Parser, SymbolTableBuilder
 >>> text = """
@@ -420,9 +411,9 @@ Traceback (most recent call last):
   File "spi.py", line 665, in visit_Assign
     raise NameError(repr(var_name))
 NameError: 'a'
-Great, our new visitor caught this problem too!
+Отлично, наш новый посетитель поймал и эту проблему!
 
-I would like to emphasize the point that all those checks that our SymbolTableBuilder AST visitor makes are made before the run-time, so before our interpreter actually evaluates the source program. To drive the point home if we were to interpret the following program:
+Я хотел бы подчеркнуть тот факт, что все эти проверки, которые выполняет наш посетитель AST SymbolTableBuilder, выполняются до времени выполнения, то есть до того, как наш интерпретатор фактически вычисляет исходную программу. Чтобы донести эту мысль до конца, если бы мы интерпретировали следующую программу:
 
 PROGRAM Part11;
 VAR
@@ -430,21 +421,19 @@ VAR
 BEGIN
    x := 2;
 END.
-The contents of the symbol table and the run-time GLOBAL_MEMORY right before the program exited would look something like this:
+Содержимое таблицы символов и глобальной памяти во время выполнения непосредственно перед выходом из программы выглядело бы примерно так:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_symtab_vs_globmem.png)
 
-Do you see the difference? Can you see that the symbol table doesn’t hold the value 2 for variable “x”? That’s solely the interpreter’s job now.
+Вы видите разницу? Видите ли вы, что таблица символов не содержит значение 2 для переменной "x"? Это теперь исключительно работа интерпретатора.
 
-
-Remember the picture from Part 9 where the Symbol Table was used as global memory?
+Помните картинку из части 9, где таблица символов использовалась как глобальная память?
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part9_ast_st02.png)
 
-No more! We effectively got rid of the hack where symbol table did double duty as global memory.
+Больше нет! Мы эффективно избавились от хака, когда таблица символов выполняла двойную работу в качестве глобальной памяти.
 
-
-Let’s put it all together and test our new interpreter with the following program:
+Давайте соберем все вместе и протестируем наш новый интерпретатор со следующей программой:
 
 PROGRAM Part11;
 VAR
@@ -459,7 +448,7 @@ BEGIN {Part11}
    y := 20 / 7 + 3.14
 END.  {Part11}
 
-Save the program as part11.pas and fire up the interpreter:
+Сохраните программу как part11.pas и запустите интерпретатор:
 
 $ python spi.py part11.pas
 Define: INTEGER
@@ -480,25 +469,24 @@ Lookup: a
 Lookup: number
 Lookup: y
 
-Symbol Table contents:
+Содержимое таблицы символов:
 Symbols: [INTEGER, REAL, <number:INTEGER>, <a:INTEGER>, <b:INTEGER>, <y:REAL>]
 
-Run-time GLOBAL_MEMORY contents:
+Содержимое GLOBAL_MEMORY во время выполнения:
 a = 2
 b = 25
 number = 2
 y = 5.99714285714
 
-I’d like to draw your attention again to the fact that the Interpreter class has nothing to do with building the symbol table and it relies on the SymbolTableBuilder to make sure that the variables in the source code are properly declared before they are used by the Interpreter.
+Я хотел бы снова обратить ваше внимание на тот факт, что класс Interpreter не имеет ничего общего с построением таблицы символов, и он полагается на SymbolTableBuilder, чтобы убедиться, что переменные в исходном коде правильно объявлены до того, как они будут использованы Interpreter.
 
+Проверьте свое понимание
 
-Check your understanding
-
-What is a symbol?
-Why do we need to track symbols?
-What is a symbol table?
-What is the difference between defining a symbol and resolving/looking up the symbol?
-Given the following small Pascal program, what would be the contents of the symbol table, the global memory (the GLOBAL_MEMORY dictionary that is part of the Interpreter)?
+Что такое символ?
+Зачем нам нужно отслеживать символы?
+Что такое таблица символов?
+В чем разница между определением символа и разрешением/поиском символа?
+Учитывая следующую небольшую программу на Pascal, каким будет содержимое таблицы символов, глобальной памяти (словарь GLOBAL_MEMORY, который является частью Interpreter)?
 PROGRAM Part11;
 VAR
    x, y : INTEGER;
@@ -507,14 +495,13 @@ BEGIN
    y := 3 + x;
 END.
 
-That’s all for today. In the next article, I’ll talk about scopes and we’ll get our hands dirty with parsing nested procedures. Stay tuned and see you soon! And remember that no matter what, “Keep going!”
+На этом все на сегодня. В следующей статье я расскажу об областях видимости, и мы запачкаем руки разбором вложенных процедур. Оставайтесь с нами и до скорой встречи! И помните, что несмотря ни на что, "Продолжайте идти!"
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_keep_going.png)
 
-P.S. My explanation of the topic of symbols and symbol table management is heavily influenced by the book Language Implementation Patterns by Terence Parr. It’s a terrific book. I think it has the clearest explanation of the topic I’ve ever seen and it also covers class scopes, a subject that I’m not going to cover in the series because we will not be discussing object-oriented Pascal.
+P.S. Мое объяснение темы символов и управления таблицей символов в значительной степени основано на книге Language Implementation Patterns Теренса Парра. Это потрясающая книга. Я думаю, что в ней самое четкое объяснение этой темы, которое я когда-либо видел, и она также охватывает области видимости классов, тему, которую я не собираюсь рассматривать в этой серии, потому что мы не будем обсуждать объектно-ориентированный Pascal.
 
-P.P.S.: If you can’t wait and want to start digging into compilers, I highly recommend the freely available classic by Jack Crenshaw “Let’s Build a Compiler.”
-
+P.P.S.: Если вам не терпится начать копаться в компиляторах, я настоятельно рекомендую классическую книгу Джека Креншоу "Давайте построим компилятор", которая находится в свободном доступе.
 
 
 ### Литература
