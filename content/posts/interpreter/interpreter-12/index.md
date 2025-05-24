@@ -1,34 +1,35 @@
 ---
-title: Давайте построим простой интерпретатор. Часть 13
+title: Давайте построим простой интерпретатор. Часть 12
 date: 2025-05-08
 cover: images/cover.png
 tags:
   - Материалы ОП
 nolastmod: true
-draft: true
+draft: false
 ---
 
 
 **Материалы ОП**
 
 <!--more-->
+“Не бойтесь идти медленно, бойтесь только стоять на месте.” - Китайская пословица.
+Здравствуйте и добро пожаловать обратно!
 
-“Be not afraid of going slowly; be afraid only of standing still.” - Chinese proverb.
-Hello, and welcome back!
-
-Today we are going to take a few more baby steps and learn how to parse Pascal procedure declarations.
+Сегодня мы сделаем еще несколько маленьких шагов и научимся разбирать объявления процедур Pascal.
 
 ![alt text](https://ruslanspivak.com/lsbasi-part12/lsbasi_part12_babysteps.png)
 
-What is a procedure declaration? A procedure declaration is a language construct that defines an identifier (a procedure name) and associates it with a block of Pascal code.
+Что такое объявление процедуры? Объявление процедуры - это языковая конструкция, которая определяет идентификатор (имя процедуры) и связывает его с блоком кода Pascal.
 
-Before we dive in, a few words about Pascal procedures and their declarations:
+Прежде чем мы углубимся, несколько слов о процедурах Pascal и их объявлениях:
 
-Pascal procedures don’t have return statements. They exit when they reach the end of their corresponding block.
-Pascal procedures can be nested within each other.
-For simplicity reasons, procedure declarations in this article won’t have any formal parameters. But, don’t worry, we’ll cover that later in the series.
-This is our test program for today:
+*   Процедуры Pascal не имеют операторов return. Они завершаются, когда достигают конца соответствующего блока.
+*   Процедуры Pascal могут быть вложены друг в друга.
+*   Для простоты объявления процедур в этой статье не будут иметь формальных параметров. Но не волнуйтесь, мы рассмотрим это позже в серии.
 
+Вот наша тестовая программа на сегодня:
+
+```pascal
 PROGRAM Part12;
 VAR
    a : INTEGER;
@@ -52,26 +53,27 @@ END;  {P1}
 BEGIN {Part12}
    a := 10;
 END.  {Part12}
-As you can see above, we have defined two procedures (P1 and P2) and P2 is nested within P1. In the code above, I used comments with a procedure’s name to clearly indicate where the body of every procedure begins and where it ends.
+```
 
-Our objective for today is pretty clear: learn how to parse a code like that.
+Как вы видите выше, мы определили две процедуры (P1 и P2), и P2 вложена в P1. В коде выше я использовал комментарии с именем процедуры, чтобы четко указать, где начинается и где заканчивается тело каждой процедуры.
 
+Наша цель на сегодня довольно ясна: научиться разбирать код, подобный этому.
 
+Прежде всего, нам нужно внести некоторые изменения в нашу грамматику, чтобы добавить объявления процедур. Что ж, давайте просто сделаем это!
 
-First, we need to make some changes to our grammar to add procedure declarations. Well, let’s just do that!
-
-Here is the updated declarations grammar rule:
+Вот обновленное правило грамматики объявлений:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part12/lsbasi_part12_grammar.png)
 
-The procedure declaration sub-rule consists of the reserved keyword PROCEDURE followed by an identifier (a procedure name), followed by a semicolon, which in turn is followed by a block rule, which is terminated by a semicolon. Whoa! This is a case where I think the picture is actually worth however many words I just put in the previous sentence! :)
+Подправило объявления процедуры состоит из зарезервированного ключевого слова PROCEDURE, за которым следует идентификатор (имя процедуры), за которым следует точка с запятой, за которой, в свою очередь, следует правило блока, которое завершается точкой с запятой. Ух ты! Это тот случай, когда я думаю, что картинка на самом деле стоит тех слов, которые я только что вложил в предыдущее предложение! :)
 
-Here is the updated syntax diagram for the declarations rule:
+Вот обновленная синтаксическая диаграмма для правила объявлений:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part12/lsbasi_part12_syntaxdiagram.png)
 
-From the grammar and the diagram above you can see that you can have as many procedure declarations on the same level as you want. For example, in the code snippet below we define two procedure declarations, P1 and P1A, on the same level:
+Из грамматики и диаграммы выше видно, что у вас может быть сколько угодно объявлений процедур на одном уровне. Например, в фрагменте кода ниже мы определяем два объявления процедур, P1 и P1A, на одном уровне:
 
+```pascal
 PROGRAM Test;
 VAR
    a : INTEGER;
@@ -89,20 +91,25 @@ END;  {P1A}
 BEGIN {Test}
    a := 10;
 END.  {Test}
-The diagram and the grammar rule above also indicate that procedure declarations can be nested because the procedure declaration sub-rule references the block rule which contains the declarations rule, which in turn contains the procedure declaration sub-rule. As a reminder, here is the syntax diagram and the grammar for the block rule from Part10:
+```
+
+Диаграмма и правило грамматики выше также указывают на то, что объявления процедур могут быть вложенными, потому что подправило объявления процедуры ссылается на правило блока, которое содержит правило объявлений, которое, в свою очередь, содержит подправило объявления процедуры. Напоминаем, вот синтаксическая диаграмма и грамматика для правила блока из Части 10:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part12/lsbasi_part12_block_rule_from_part10.png)
 
+Хорошо, теперь давайте сосредоточимся на компонентах интерпретатора, которые необходимо обновить для поддержки объявлений процедур:
 
-Okay, now let’s focus on the interpreter components that need to be updated to support procedure declarations:
+Обновление лексера
 
-Updating the Lexer
+Все, что нам нужно сделать, это добавить новый токен с именем PROCEDURE:
 
-All we need to do is add a new token named PROCEDURE:
-
+```
 PROCEDURE = 'PROCEDURE'
-And add ‘PROCEDURE’ to the reserved keywords. Here is the complete mapping of reserved keywords to tokens:
+```
 
+И добавить 'PROCEDURE' в зарезервированные ключевые слова. Вот полное сопоставление зарезервированных ключевых слов с токенами:
+
+```python
 RESERVED_KEYWORDS = {
     'PROGRAM': Token('PROGRAM', 'PROGRAM'),
     'VAR': Token('VAR', 'VAR'),
@@ -113,23 +120,29 @@ RESERVED_KEYWORDS = {
     'END': Token('END', 'END'),
     'PROCEDURE': Token('PROCEDURE', 'PROCEDURE'),
 }
+```
 
-Updating the Parser
+Обновление парсера
 
-Here is a summary of the parser changes:
+Вот краткое изложение изменений парсера:
 
-New ProcedureDecl AST node
-Update to the parser’s declarations method to support procedure declarations
-Let’s go over the changes.
+*   Новый узел AST ProcedureDecl
+*   Обновление метода объявлений парсера для поддержки объявлений процедур
 
-The ProcedureDecl AST node represents a procedure declaration. The class constructor takes as parameters the name of the procedure and the AST node of the block of code that the procedure’s name refers to.
+Давайте рассмотрим изменения.
 
+Узел AST ProcedureDecl представляет объявление процедуры. Конструктор класса принимает в качестве параметров имя процедуры и узел AST блока кода, на который ссылается имя процедуры.
+
+```python
 class ProcedureDecl(AST):
     def __init__(self, proc_name, block_node):
         self.proc_name = proc_name
         self.block_node = block_node
-Here is the updated declarations method of the Parser class
+```
 
+Вот обновленный метод объявлений класса Parser
+
+```python
 def declarations(self):
     """declarations : VAR (variable_declaration SEMI)+
                     | (PROCEDURE ID SEMI block SEMI)*
@@ -155,27 +168,30 @@ def declarations(self):
         self.eat(SEMI)
 
     return declarations
-Hopefully, the code above is pretty self-explanatory. It follows the grammar/syntax diagram for procedure declarations that you’ve seen earlier in the article.
+```
 
+Надеюсь, код выше довольно понятен. Он следует грамматике/синтаксической диаграмме для объявлений процедур, которую вы видели ранее в статье.
 
-Updating the SymbolTable builder
+Обновление построителя SymbolTable
 
-Because we’re not ready yet to handle nested procedure scopes, we’ll simply add an empty visit_ProcedureDecl method to the SymbolTreeBuilder AST visitor class. We’ll fill it out in the next article.
+Поскольку мы еще не готовы обрабатывать вложенные области процедур, мы просто добавим пустой метод visit_ProcedureDecl в класс посетителя AST SymbolTreeBuilder. Мы заполним его в следующей статье.
 
+```python
 def visit_ProcedureDecl(self, node):
     pass
+```
 
-Updating the Interpreter
+Обновление интерпретатора
 
-We also need to add an empty visit_ProcedureDecl method to the Interpreter class, which will cause our interpreter to silently ignore all our procedure declarations.
+Нам также необходимо добавить пустой метод visit_ProcedureDecl в класс Interpreter, который заставит наш интерпретатор молча игнорировать все наши объявления процедур.
 
-So far, so good.
+Пока все хорошо.
 
+Теперь, когда мы внесли все необходимые изменения, давайте посмотрим, как выглядит абстрактное синтаксическое дерево с новыми узлами ProcedureDecl.
 
-Now that we’ve made all the necessary changes, let’s see what the Abstract Syntax Tree looks like with the new ProcedureDecl nodes.
+Вот наша программа Pascal снова (вы можете скачать ее прямо из GitHub):
 
-Here is our Pascal program again (you can download it directly from GitHub):
-
+```pascal
 PROGRAM Part12;
 VAR
    a : INTEGER;
@@ -199,17 +215,21 @@ END;  {P1}
 BEGIN {Part12}
    a := 10;
 END.  {Part12}
+```
 
-Let’s generate an AST and visualize it with the genastdot.py utility:
+Давайте сгенерируем AST и визуализируем его с помощью утилиты genastdot.py:
 
+```bash
 $ python genastdot.py part12.pas > ast.dot && dot -Tpng -o ast.png ast.dot
+```
 
 ![alt text](https://ruslanspivak.com/lsbasi-part12/lsbasi_part12_procdecl_ast.png)
 
-In the picture above you can see two ProcedureDecl nodes: ProcDecl:P1 and ProcDecl:P2 that correspond to procedures P1 and P2. Mission accomplished. :)
+На рисунке выше вы можете увидеть два узла ProcedureDecl: ProcDecl:P1 и ProcDecl:P2, которые соответствуют процедурам P1 и P2. Миссия выполнена. :)
 
-As a last item for today, let’s quickly check that our updated interpreter works as before when a Pascal program has procedure declarations in it. Download the interpreter and the test program if you haven’t done so yet, and run it on the command line. Your output should look similar to this:
+В качестве последнего пункта на сегодня давайте быстро проверим, что наш обновленный интерпретатор работает как и раньше, когда программа Pascal содержит объявления процедур. Загрузите интерпретатор и тестовую программу, если вы еще этого не сделали, и запустите ее в командной строке. Ваш вывод должен выглядеть примерно так:
 
+```bash
 $ python spi.py part12.pas
 Define: INTEGER
 Define: REAL
@@ -222,8 +242,9 @@ Symbols: [INTEGER, REAL, <a:INTEGER>]
 
 Run-time GLOBAL_MEMORY contents:
 a = 10
+```
 
-Okay, with all that knowledge and experience under our belt, we’re ready to tackle the topic of nested scopes that we need to understand in order to be able to analyze nested procedures and prepare ourselves to handle procedure and function calls. And that’s exactly what we are going to do in the next article: dive deep into nested scopes. So don’t forget to bring your swimming gear next time! Stay tuned and see you soon!
+Хорошо, со всеми этими знаниями и опытом, мы готовы заняться темой вложенных областей, которые нам нужно понять, чтобы иметь возможность анализировать вложенные процедуры и подготовиться к обработке вызовов процедур и функций. И это именно то, что мы собираемся сделать в следующей статье: глубоко погрузиться во вложенные области. Так что не забудьте взять с собой плавательное снаряжение в следующий раз! Оставайтесь с нами и до скорой встречи!
 
 ### Литература
 

@@ -5,7 +5,7 @@ cover: images/cover.png
 tags:
   - Материалы ОП
 nolastmod: true
-draft: true
+draft: false
 ---
 
 
@@ -13,14 +13,15 @@ draft: true
 
 <!--more-->
 
-Today we will continue closing the gap between where we are right now and where we want to be: a fully functional interpreter for a subset of Pascal programming language.
+Сегодня мы продолжим сокращать разрыв между тем, где мы находимся сейчас, и тем, где хотим быть: полностью функциональным интерпретатором для подмножества языка программирования Pascal.
 
 ![alt text](https://ruslanspivak.com/lsbasi-part10/lsbasi_part10_intro.png)
 
-In this article we will update our interpreter to parse and interpret our very first complete Pascal program. The program can also be compiled by the Free Pascal compiler, fpc.
+В этой статье мы обновим наш интерпретатор, чтобы он мог разбирать и интерпретировать нашу самую первую полную программу на Pascal. Программа также может быть скомпилирована компилятором Free Pascal, fpc.
 
-Here is the program itself:
+Вот сама программа:
 
+```pas
 PROGRAM Part10;
 VAR
    number     : INTEGER;
@@ -43,8 +44,10 @@ BEGIN {Part10}
    { writeln('x = ', x); }
    { writeln('y = ', y); }
 END.  {Part10}
-Before we start digging into the details, download the source code of the interpreter from GitHub and the Pascal source code above, and try it on the command line:
+```
+Прежде чем мы начнем углубляться в детали, скачайте исходный код интерпретатора с GitHub и исходный код Pascal, указанный выше, и попробуйте его в командной строке:
 
+```bash
 $ python spi.py part10.pas
 a = 2
 b = 25
@@ -52,9 +55,11 @@ c = 27
 number = 2
 x = 11
 y = 5.99714285714
+```
 
-If I remove the comments around the writeln statements in the part10.pas file, compile the source code with fpc and then run the produced executable, this is what I get on my laptop:
+Если я удалю комментарии вокруг операторов writeln в файле part10.pas, скомпилирую исходный код с помощью fpc, а затем запущу полученный исполняемый файл, вот что я получу на своем ноутбуке:
 
+```bash
 $ fpc part10.pas
 $ ./part10
 a = 2
@@ -63,67 +68,75 @@ c = 27
 number = 2
 x = 11
 y =  5.99714285714286E+000
+```
 
-Okay, let’s see what we’re going cover today:
+Итак, давайте посмотрим, что мы сегодня рассмотрим:
 
-We will learn how to parse and interpret the Pascal PROGRAM header
-We will learn how to parse Pascal variable declarations
-We will update our interpreter to use the DIV keyword for integer division and a forward slash / for float division
-We will add support for Pascal comments
+*   Мы узнаем, как анализировать и интерпретировать заголовок Pascal PROGRAM
+*   Мы узнаем, как анализировать объявления переменных Pascal
+*   Мы обновим наш интерпретатор, чтобы использовать ключевое слово DIV для целочисленного деления и косую черту / для деления с плавающей точкой
+*   Мы добавим поддержку комментариев Pascal
 
-Let’s dive in and look at the grammar changes first. Today we will add some new rules and update some of the existing rules.  
+Давайте углубимся и сначала посмотрим на изменения в грамматике. Сегодня мы добавим несколько новых правил и обновим некоторые из существующих.
 
 ![alt text](https://ruslanspivak.com/lsbasi-part10/lsbasi_part10_grammar1.png)
 ![alt text](https://ruslanspivak.com/lsbasi-part10/lsbasi_part10_grammar2.png)
 
-The program definition grammar rule is updated to include the PROGRAM reserved keyword, the program name, and a block that ends with a dot. Here is an example of a complete Pascal program:
+Правило грамматики определения программы обновлено и включает зарезервированное ключевое слово PROGRAM, имя программы и блок, который заканчивается точкой. Вот пример полной программы на Pascal:
 
+```pas
 PROGRAM Part10;
 BEGIN
 END.
-The block rule combines a declarations rule and a compound_statement rule. We’ll also use the rule later in the series when we add procedure declarations. Here is an example of a block:
+```
+Правило блока объединяет правило declarations и правило compound_statement. Мы также будем использовать это правило позже в серии, когда добавим объявления процедур. Вот пример блока:
 
+```pas
 VAR
    number : INTEGER;
 
 BEGIN
 END
-Here is another example:
-
+```
+Вот еще один пример:
+```pas
 BEGIN
 END
-Pascal declarations have several parts and each part is optional. In this article, we’ll cover the variable declaration part only. The declarations rule has either a variable declaration sub-rule or it’s empty.
+```
+Объявления Pascal состоят из нескольких частей, и каждая часть является необязательной. В этой статье мы рассмотрим только часть объявления переменных. Правило declarations имеет либо подправило объявления переменных, либо оно пустое.
 
-Pascal is a statically typed language, which means that every variable needs a variable declaration that explicitly specifies its type. In Pascal, variables must be declared before they are used. This is achieved by declaring variables in the program variable declaration section using the VAR reserved keyword. You can define variables like this:
-
+Pascal — это язык со статической типизацией, что означает, что каждой переменной требуется объявление переменной, которое явно указывает ее тип. В Pascal переменные должны быть объявлены до их использования. Это достигается путем объявления переменных в разделе объявления переменных программы с использованием зарезервированного ключевого слова VAR. Вы можете определить переменные следующим образом:
+```pas
 VAR
    number     : INTEGER;
    a, b, c, x : INTEGER;
    y          : REAL;
-The type_spec rule is for handling INTEGER and REAL types and is used in variable declarations. In the example below
-
+```
+Правило type_spec предназначено для обработки типов INTEGER и REAL и используется в объявлениях переменных. В примере ниже
+```pas
 VAR
    a : INTEGER;
    b : REAL;
-the variable “a” is declared with the type INTEGER and the variable “b” is declared with the type REAL (float). In this article we won’t enforce type checking, but we will add type checking later in the series.
+```
+переменная «a» объявлена с типом INTEGER, а переменная «b» объявлена с типом REAL (float). В этой статье мы не будем применять проверку типов, но мы добавим проверку типов позже в серии.
 
-The term rule is updated to use the DIV keyword for integer division and a forward slash / for float division.
+Правило term обновлено для использования ключевого слова DIV для целочисленного деления и косой черты / для деления с плавающей точкой.
 
-Before, dividing 20 by 7 using a forward slash would produce an INTEGER 2:
+Раньше деление 20 на 7 с использованием косой черты давало целое число 2:
 
 20 / 7 = 2
-Now, dividing 20 by 7 using a forward slash will produce a REAL (floating point number) 2.85714285714 :
+Теперь деление 20 на 7 с использованием косой черты даст REAL (число с плавающей точкой) 2.85714285714:
 
 20 / 7 = 2.85714285714
-From now on, to get an INTEGER instead of a REAL, you need to use the DIV keyword:
+Отныне, чтобы получить INTEGER вместо REAL, вам нужно использовать ключевое слово DIV:
 
 20 DIV 7 = 2
-The factor rule is updated to handle both integer and real (float) constants. I also removed the INTEGER sub-rule because the constants will be represented by INTEGER_CONST and REAL_CONST tokens and the INTEGER token will be used to represent the integer type. In the example below the lexer will generate an INTEGER_CONST token for 20 and 7 and a REAL_CONST token for 3.14 :
+Правило factor обновлено для обработки как целочисленных, так и вещественных (float) констант. Я также удалил подправило INTEGER, потому что константы будут представлены токенами INTEGER_CONST и REAL_CONST, а токен INTEGER будет использоваться для представления целочисленного типа. В примере ниже лексер сгенерирует токен INTEGER_CONST для 20 и 7 и токен REAL_CONST для 3.14:
 
 y := 20 / 7 + 3.14;
 
-Here is our complete grammar for today:
-
+Вот наша полная грамматика на сегодня:
+```plaintext
     program : PROGRAM variable SEMI block DOT
 
     block : declarations compound_statement
@@ -160,36 +173,39 @@ Here is our complete grammar for today:
            | variable
 
     variable: ID
-In the rest of the article we’ll go through the same drill we went through last time:
+```
+В остальной части статьи мы пройдем тот же путь, что и в прошлый раз:
 
-Update the lexer
-Update the parser
-Update the interpreter
+*   Обновим лексер
+*   Обновим парсер
+*   Обновим интерпретатор
 
-Updating the Lexer
+Обновление лексера
 
-Here is a summary of the lexer changes:
+Вот краткое изложение изменений в лексере:
 
-New tokens
-New and updated reserved keywords
-New skip_comment method to handle Pascal comments
-Rename the integer method and make some changes to the method itself
-Update the get_next_token method to return new tokens
-Let’s dig into the changes mentioned above:
+*   Новые токены
+*   Новые и обновленные зарезервированные ключевые слова
+*   Новый метод skip_comment для обработки комментариев Pascal
+*   Переименуем метод integer и внесем некоторые изменения в сам метод
+*   Обновим метод get_next_token для возврата новых токенов
 
-To handle a program header, variable declarations, integer and float constants as well as integer and float division, we need to add some new tokens - some of which are reserved keywords - and we also need to update the meaning of the INTEGER token to represent the integer type and not an integer constant. Here is a complete list of new and updated tokens:
+Давайте углубимся в изменения, упомянутые выше:
 
-PROGRAM (reserved keyword)
-VAR (reserved keyword)
-COLON (:)
-COMMA (,)
-INTEGER (we change it to mean integer type and not integer constant like 3 or 5)
-REAL (for Pascal REAL type)
-INTEGER_CONST (for example, 3 or 5)
-REAL_CONST (for example, 3.14 and so on)
-INTEGER_DIV for integer division (the DIV reserved keyword)
-FLOAT_DIV for float division ( forward slash / )
-Here is the complete mapping of reserved keywords to tokens:
+Чтобы обрабатывать заголовок программы, объявления переменных, целочисленные и вещественные константы, а также целочисленное и вещественное деление, нам нужно добавить несколько новых токенов — некоторые из которых являются зарезервированными ключевыми словами — и нам также нужно обновить значение токена INTEGER, чтобы он представлял целочисленный тип, а не целочисленную константу, такую как 3 или 5. Вот полный список новых и обновленных токенов:
+
+*   PROGRAM (зарезервированное ключевое слово)
+*   VAR (зарезервированное ключевое слово)
+*   COLON (:)
+*   COMMA (,)
+*   INTEGER (мы меняем его, чтобы он означал целочисленный тип, а не целочисленную константу, такую как 3 или 5)
+*   REAL (для типа Pascal REAL)
+*   INTEGER_CONST (например, 3 или 5)
+*   REAL_CONST (например, 3.14 и так далее)
+*   INTEGER_DIV для целочисленного деления (зарезервированное ключевое слово DIV)
+*   FLOAT_DIV для деления с плавающей точкой (косая черта /)
+
+Вот полное сопоставление зарезервированных ключевых слов с токенами:
 
 RESERVED_KEYWORDS = {
     'PROGRAM': Token('PROGRAM', 'PROGRAM'),
@@ -200,13 +216,14 @@ RESERVED_KEYWORDS = {
     'BEGIN': Token('BEGIN', 'BEGIN'),
     'END': Token('END', 'END'),
 }
-We’re adding the skip_comment method to handle Pascal comments. The method is pretty basic and all it does is discard all the characters until the closing curly brace is found:
+Мы добавляем метод skip_comment для обработки комментариев Pascal. Метод довольно прост и все, что он делает, это отбрасывает все символы до тех пор, пока не будет найдена закрывающая фигурная скобка:
 
+```python
 def skip_comment(self):
     while self.current_char != '}':
         self.advance()
     self.advance()  # the closing curly brace
-We are renaming the integer method the number method. It can handle both integer constants and float constants like 3 and 3.14:
+Мы переименовываем метод integer в метод number. Он может обрабатывать как целочисленные константы, так и константы с плавающей точкой, такие как 3 и 3.14:
 
 def number(self):
     """Return a (multidigit) integer or float consumed from the input."""
@@ -231,8 +248,10 @@ def number(self):
         token = Token('INTEGER_CONST', int(result))
 
     return token
-We’re also updating the get_next_token method to return new tokens:
+```
+Мы также обновляем метод get_next_token для возврата новых токенов:
 
+```python
 def get_next_token(self):
     while self.current_char is not None:
         ...
@@ -256,46 +275,54 @@ def get_next_token(self):
             self.advance()
             return Token(FLOAT_DIV, '/')
         ...
+```
+Обновление парсера
 
-Updating the Parser
+Теперь перейдем к изменениям в парсере.
 
-Now onto the parser changes.
+Вот краткое изложение изменений:
 
-Here is a summary of the changes:
+*   Новые AST-узлы: Program, Block, VarDecl, Type
+*   Новые методы, соответствующие новым правилам грамматики: block, declarations, variable_declaration и type_spec.
+*   Обновления существующих методов парсера: program, term и factor
 
-New AST nodes: Program, Block, VarDecl, Type
-New methods corresponding to new grammar rules: block, declarations, variable_declaration, and type_spec.
-Updates to the existing parser methods: program, term, and factor
-Let’s go over the changes one by one:
+Давайте рассмотрим изменения по одному:
 
-We’ll start with new AST nodes first. There are four new nodes:
+Начнем с новых AST-узлов. Есть четыре новых узла:
 
-The Program AST node represents a program and will be our root node
+Узел Program AST представляет программу и будет нашим корневым узлом
 
+```python
 class Program(AST):
     def __init__(self, name, block):
         self.name = name
         self.block = block
-The Block AST node holds declarations and a compound statement:
-
+```
+Узел Block AST содержит объявления и составной оператор:
+```python
 class Block(AST):
     def __init__(self, declarations, compound_statement):
         self.declarations = declarations
         self.compound_statement = compound_statement
-The VarDecl AST node represents a variable declaration. It holds a variable node and a type node:
+```
+Узел VarDecl AST представляет объявление переменной. Он содержит узел переменной и узел типа:
 
+```python
 class VarDecl(AST):
     def __init__(self, var_node, type_node):
         self.var_node = var_node
         self.type_node = type_node
-The Type AST node represents a variable type (INTEGER or REAL):
+```
+Узел Type AST представляет тип переменной (INTEGER или REAL):
 
+```python
 class Type(AST):
     def __init__(self, token):
         self.token = token
         self.value = token.value
-As you probably remember, each rule from the grammar has a corresponding method in our recursive-descent parser. Today we’re adding four new methods: block, declarations, variable_declaration, and type_spec. These methods are responsible for parsing new language constructs and constructing new AST nodes:
-
+```
+Как вы, вероятно, помните, каждое правило из грамматики имеет соответствующий метод в нашем рекурсивном нисходящем парсере. Сегодня мы добавляем четыре новых метода: block, declarations, variable_declaration и type_spec. Эти методы отвечают за разбор новых языковых конструкций и построение новых AST-узлов:
+```python
 def block(self):
     """block : declarations compound_statement"""
     declaration_nodes = self.declarations()
@@ -347,8 +374,10 @@ def type_spec(self):
         self.eat(REAL)
     node = Type(token)
     return node
-We also need to update the program, term, and, factor methods to accommodate our grammar changes:
+```
+Нам также необходимо обновить методы program, term и factor, чтобы учесть изменения в нашей грамматике:
 
+```
 def program(self):
     """program : PROGRAM variable SEMI block DOT"""
     self.eat(PROGRAM)
@@ -408,9 +437,9 @@ def factor(self):
     else:
         node = self.variable()
         return node
-
-Now, let’s see what the Abstract Syntax Tree looks like with the new nodes. Here is a small working Pascal program:
-
+```
+Теперь давайте посмотрим, как выглядит абстрактное синтаксическое дерево с новыми узлами. Вот небольшая рабочая программа на Pascal:
+```pas
 PROGRAM Part10AST;
 VAR
    a, b : INTEGER;
@@ -421,25 +450,26 @@ BEGIN {Part10AST}
    b := 10 * a + 10 * a DIV 4;
    y := 20 / 7 + 3.14;
 END.  {Part10AST}
-Let’s generate an AST and visualize it with the genastdot.py:
+```
+Давайте сгенерируем AST и визуализируем его с помощью genastdot.py:
 
 $ python genastdot.py part10ast.pas > ast.dot && dot -Tpng -o ast.png ast.dot
 
 ![alt text](https://ruslanspivak.com/lsbasi-part10/lsbasi_part10_ast.png)
 
-In the picture you can see the new nodes that we have added.
+На картинке вы можете увидеть новые узлы, которые мы добавили.
 
+Обновление интерпретатора
 
-Updating the Interpreter
+Мы закончили с изменениями в лексере и парсере. Осталось добавить новые методы-посетители в наш класс Interpreter. Будет четыре новых метода для посещения наших новых узлов:
 
-We’re done with the lexer and parser changes. What’s left is to add new visitor methods to our Interpreter class. There will be four new methods to visit our new nodes:
+*   visit_Program
+*   visit_Block
+*   visit_VarDecl
+*   visit_Type
 
-visit_Program
-visit_Block
-visit_VarDecl
-visit_Type
-They are pretty straightforward. You can also see that the Interpreter does nothing with VarDecl and Type nodes:
-
+Они довольно просты. Вы также можете видеть, что Interpreter ничего не делает с узлами VarDecl и Type:
+```python
 def visit_Program(self, node):
     self.visit(node.block)
 
@@ -455,8 +485,9 @@ def visit_VarDecl(self, node):
 def visit_Type(self, node):
     # Do nothing
     pass
-We also need to update the visit_BinOp method to properly interpret integer and float divisions:
-
+```
+Нам также необходимо обновить метод visit_BinOp, чтобы правильно интерпретировать целочисленное деление и деление с плавающей точкой:
+```python
 def visit_BinOp(self, node):
     if node.op.type == PLUS:
         return self.visit(node.left) + self.visit(node.right)
@@ -468,24 +499,24 @@ def visit_BinOp(self, node):
         return self.visit(node.left) // self.visit(node.right)
     elif node.op.type == FLOAT_DIV:
         return float(self.visit(node.left)) / float(self.visit(node.right))
+```
+Давайте подытожим, что нам пришлось сделать, чтобы расширить интерпретатор Pascal в этой статье:
 
-Let’s sum up what we had to do to extend the Pascal interpreter in this article:
+*   Добавить новые правила в грамматику и обновить некоторые существующие правила
+*   Добавить новые токены и вспомогательные методы в лексер, обновить и изменить некоторые существующие методы
+*   Добавить новые AST-узлы в парсер для новых языковых конструкций
+*   Добавить новые методы, соответствующие новым правилам грамматики, в наш рекурсивный нисходящий парсер и обновить некоторые существующие методы
+*   Добавить новые методы-посетители в интерпретатор и обновить один существующий метод-посетитель
 
-Add new rules to the grammar and update some existing rules
-Add new tokens and supporting methods to the lexer, update and modify some existing methods
-Add new AST nodes to the parser for new language constructs
-Add new methods corresponding to the new grammar rules to our recursive-descent parser and update some existing methods
-Add new visitor methods to the interpreter and update one existing visitor method
-As a result of our changes we also got rid of some of the hacks I introduced in Part 9, namely:
+В результате наших изменений мы также избавились от некоторых хаков, которые я представил в Части 9, а именно:
 
-Our interpreter can now handle the PROGRAM header
-Variables can now be declared using the VAR keyword
-The DIV keyword is used for integer division and a forward slash / is used for float division
+*   Наш интерпретатор теперь может обрабатывать заголовок PROGRAM
+*   Переменные теперь можно объявлять с помощью ключевого слова VAR
+*   Ключевое слово DIV используется для целочисленного деления, а косая черта / используется для деления с плавающей точкой
 
-If you haven’t done so yet, then, as an exercise, re-implement the interpreter in this article without looking at the source code and use part10.pas as your test input file.
+Если вы еще этого не сделали, то в качестве упражнения перепишите интерпретатор в этой статье, не глядя на исходный код, и используйте part10.pas в качестве входного тестового файла.
 
-
-That’s all for today. In the next article, I’ll talk in greater detail about symbol table management. Stay tuned and see you soon!
+На сегодня это все. В следующей статье я более подробно расскажу об управлении таблицей символов. Оставайтесь с нами и до скорой встречи!
 
 ### Литература
 
