@@ -7,12 +7,8 @@ tags:
   - Основы программирования
 nolastmod: true
 draft: false
+description: Лекция 10
 ---
-
-**2 семестр** \
-Основы программирования. 
-
-<!--more-->
 
 ### Rvalue reference
 - `&&` - rvalue reference (`&` - lvalue reference)

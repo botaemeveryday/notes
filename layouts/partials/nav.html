@@ -9,8 +9,10 @@
   {{ if site.Params.zenMode }}
   <div class="container flex justify-between max-w-[65ch] mx-auto px-4 md:px-0">
   {{ else }}
-  <div class="container flex justify-between px-4">
+  <div class="container flex flex-col md:flex-row md:items-center justify-between gap-4 px-4">
   {{ end }}
+    
+    <!-- Левая часть: Аватар и название -->
     <section class="flex items-center gap-4">
       <div class="avatar" title="{{ T "!flip" }}">
         <div class="h-10 rounded-full">
@@ -32,53 +34,141 @@
       {{ end }}
     </section>
 
-    {{ $navItems := slice "about" "search" "rss" "posts" "categories" "tags" }}
-    {{ if site.Params.reorderNavItems }}
-      {{ $navItems = site.Params.reorderNavItems }}
-    {{ end }}
+    
+      
+      <!-- Навигация -->
+      <div class="order-1 md:order-2 flex items-center gap-2 md:gap-4">
+        {{ $navItems := slice "about" "search" "rss" "posts" "categories" "tags" }}
+        {{ if site.Params.reorderNavItems }}
+          {{ $navItems = site.Params.reorderNavItems }}
+        {{ end }}
 
-    <div class="dropdown dropdown-end sm:hidden">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
-        <ion-icon name="menu" class="text-2xl"></ion-icon>
-      </div>
-      <ul tabindex="0" class="dropdown-content menu w-36 bg-base-100 rounded-box z-1 shadow-md">
-        {{ partial "navMobileMenu.html" (dict "navItems" $navItems) }}
-      </ul>
-    </div>
-    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
-      {{ if not site.Params.collapseNavItems }}
-
-      {{ range $navItems }}
-      {{ partial "renderNavItem.html" . }}
-      {{ end }}
-
-      {{ with site.Params.navItems }}
-      {{ partial "navCustomItems.html" (dict "navItems" $navItems "mobile" false) }}
-      {{ end }}
-
-      {{ else }}
-
-      {{ $collapseNavItems := site.Params.collapseNavItems }}
-      {{ $items := complement $collapseNavItems $navItems }}
-      {{ range $items }}
-      {{ partial "renderNavItem.html" . }}
-      {{ end }}
-
-      <div class="dropdown dropdown-end dropdown-hover">
-        <div tabindex="0" role="button" class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" aria-label="Select an option">
-          <ion-icon class="group-hover:text-primary-content text-xl" name="menu"></ion-icon>
+        <!-- Мобильное меню -->
+        <div class="dropdown dropdown-end sm:hidden">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Select an option">
+            <ion-icon name="menu" class="text-2xl"></ion-icon>
+          </div>
+          <ul tabindex="0" class="dropdown-content menu w-36 bg-base-100 rounded-box z-1 shadow-md">
+            <!-- Поиск в мобильном меню -->
+            <li class="p-2 border-b border-base-300 dark:border-base-700">
+              <div class="relative">
+                <input 
+                  type="text" 
+                  id="global-search-mobile"
+                  placeholder="Поиск..." 
+                  class="w-full px-3 py-1.5 pl-8 text-sm rounded 
+                         border border-base-300 dark:border-base-700
+                         bg-base-100 dark:bg-base-900"
+                  autocomplete="off"
+                >
+                <svg class="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-base-content/60" 
+                     fill="none" 
+                     stroke="currentColor" 
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+              </div>
+            </li>
+            
+            {{ partial "navMobileMenu.html" (dict "navItems" $navItems) }}
+          </ul>
         </div>
-        <ul tabindex="0" class="dropdown-content menu w-36 bg-base-100 rounded-box z-1 shadow-xl">
-          {{ range $collapseNavItems }}
-          {{ partial "renderMobileNavItem.html" . }}
+        
+        <!-- Десктопная навигация -->
+        <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+          {{ if not site.Params.collapseNavItems }}
+
+          {{ range $navItems }}
+          {{ partial "renderNavItem.html" . }}
           {{ end }}
 
           {{ with site.Params.navItems }}
-          {{ partial "navCustomItems.html" (dict "navItems" $navItems "mobile" true) }}
+          {{ partial "navCustomItems.html" (dict "navItems" $navItems "mobile" false) }}
           {{ end }}
-        </ul>
+
+          {{ else }}
+
+          {{ $collapseNavItems := site.Params.collapseNavItems }}
+          {{ $items := complement $collapseNavItems $navItems }}
+          {{ range $items }}
+          {{ partial "renderNavItem.html" . }}
+          {{ end }}
+
+          <div class="dropdown dropdown-end dropdown-hover">
+            <div tabindex="0" role="button" class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" aria-label="Select an option">
+              <ion-icon class="group-hover:text-primary-content text-xl" name="menu"></ion-icon>
+            </div>
+            <ul tabindex="0" class="dropdown-content menu w-36 bg-base-100 rounded-box z-1 shadow-xl">
+              {{ range $collapseNavItems }}
+              {{ partial "renderMobileNavItem.html" . }}
+              {{ end }}
+
+              {{ with site.Params.navItems }}
+              {{ partial "navCustomItems.html" (dict "navItems" $navItems "mobile" true) }}
+              {{ end }}
+            </ul>
+          </div>
+          {{ end }}
+        </section>
       </div>
-      {{ end }}
-    </section>
+    </div>
   </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('global-search');
+  const mobileSearchInput = document.getElementById('global-search-mobile');
+  const clearBtn = document.getElementById('clear-search-nav');
+  
+  // Синхронизация полей поиска
+  function syncSearchInputs(value) {
+    if (searchInput) searchInput.value = value;
+    if (mobileSearchInput) mobileSearchInput.value = value;
+    
+    // Показать/скрыть кнопку очистки
+    if (clearBtn) {
+      clearBtn.classList.toggle('hidden', !value.trim());
+    }
+    
+    // Выполнить поиск
+    if (typeof performSearch === 'function') {
+      performSearch(value);
+    }
+  }
+  
+  // Обработка основного поля поиска
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      syncSearchInputs(this.value);
+    });
+    
+    searchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        syncSearchInputs(this.value);
+      }
+    });
+  }
+  
+  // Обработка мобильного поля поиска
+  if (mobileSearchInput) {
+    mobileSearchInput.addEventListener('input', function() {
+      syncSearchInputs(this.value);
+    });
+  }
+  
+  // Обработка кнопки очистки
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      syncSearchInputs('');
+    });
+  }
+  
+  // Восстановление из URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('q');
+  if (query) {
+    setTimeout(() => syncSearchInputs(query), 100);
+  }
+});
+</script>

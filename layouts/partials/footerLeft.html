@@ -5,7 +5,23 @@
     now.Year }}{{ end }} {{ site.Title }}
   </p>
   {{ else }}
-  <p>💚 {{ site.Title }}</p>
+  <p class="flex items-center" style="gap:2px">💚
+  <a href="https://github.com/notakeith" 
+    class="no-underline text-current" 
+    style="transition: color 0.2s;"
+    onmouseover="this.style.color='#38A11B'" 
+    onmouseout="this.style.color='currentColor'">
+    notakeith
+  </a>
+  <span>&</span>
+  <a href="https://github.com/salt-caramel" 
+    class="no-underline text-current" 
+    style="transition: color 0.2s;"
+    onmouseover="this.style.color='#38A11B'" 
+    onmouseout="this.style.color='currentColor'">
+    salt-caramel
+  </a>
+</p>
   {{ end }}
 
   {{ if site.Params.footerBottomText }}

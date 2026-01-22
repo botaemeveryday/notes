@@ -24,7 +24,7 @@
   }">
     <!-- If backgroundImage defined -->
     <div id="dream-global-bg"></div>
-
+    {{ partial "welcome-modal.html" . }}
     {{ partial "nav.html" . }}
 
     <div class="flip-container">
@@ -38,6 +38,7 @@
         </div>
       </div>
     </div>
+
 
     {{ partial "scripts.html" . }}
     {{ block "js" . }} {{ end }}

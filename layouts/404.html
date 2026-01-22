@@ -2,8 +2,9 @@
 
 {{ define "main" }}
 <div class="h-[60vh] mx-auto px-4 flex flex-col justify-center items-center prose dark:prose-invert">
-  <h1>Oops...You are lost in dream.</h1>
-  <p>Don't worry though, click the button below to wake up.</p>
-  <button class="btn my-5" @click="window.location.href = '{{ site.BaseURL }}'">{{ T "backToHome" }}</button>
+  <h1 class="text-3xl md:text-3xl mb-4">Заблудились в лабиринте мыслей?</h1>
+  <p>Эта страница ещё не написана или переместилась в другое место.</p>
+  <p>Возможно, она существует только в параллельной вселенной.</p>
+  <a class="btn my-5" href="{{ site.BaseURL }}">{{ T "backToHome" }}</a>
 </div>
 {{ end }}

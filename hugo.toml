@@ -1,6 +1,6 @@
 baseURL = "http://notes.botaemeveryday.io/"
 languageCode = 'ru-ru'
-title = 'notakeith & salt-caramel'
+title = 'botaemeveryday'
 theme = "dream"
 
 defaultContentLanguage = "ru"
@@ -10,6 +10,10 @@ hasCJKLanguage = true
   unsafe = true 
 
 customSyntaxHighlighting = true
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
 
 [markup]
 [markup.highlight]

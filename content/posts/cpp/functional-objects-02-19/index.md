@@ -7,12 +7,8 @@ tags:
   - Основы программирования
 nolastmod: true
 draft: false
+description: Лекция 3
 ---
-
-**2 семестр** \
-Основы программирования. 
-
-<!--more-->
 
 ```cpp
 std::vector<int>::iterator myremove(std::vector<int>::iterator begin, std::vector<int>::iterator end, int num) {
