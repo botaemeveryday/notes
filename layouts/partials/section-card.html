@@ -1,0 +1,44 @@
+<a class="card bg-base-100 hover:bg-base-content/10 shadow-xl cursor-pointer dark:border dark:border-base-content/30"
+   href="{{ .RelPermalink }}">
+
+  {{ if .Params.cover }}
+  <figure>
+    {{ with .Resources.Get .Params.cover }}
+      {{ if eq .MediaType.SubType "svg" }}
+        <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" />
+      {{ else }}
+        {{ $webp := .Resize (printf "%dx%d webp" .Width .Height) }}
+        <picture>
+          <source srcset="{{ $webp.RelPermalink }}" type="image/webp" />
+          <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" />
+        </picture>
+      {{ end }}
+    {{ else }}
+      <img src="{{ .Params.cover }}" alt="{{ .Title }}" />
+    {{ end }}
+  </figure>
+  {{ end }}
+
+  <div class="card-body">
+    <h2 class="card-title">📁 {{ .Title }}</h2>
+
+    <p class="date text-base-content/60">
+      обновлено {{ (index (.Pages.ByDate.Reverse) 0).Date | time.Format "Monday, Jan 2, 2006" }}
+    </p>
+
+    {{ with .Params.description }}
+      <p>{{ . }}</p>
+    {{ end }}
+
+    {{ $hasAuthor := or .Params.author site.Params.author }}
+    <div class="card-actions justify-between items-center mt-4">
+      {{ if $hasAuthor }}
+        {{ partial "author.html" (dict "Params" .Params "template" "summary") }}
+      {{ end }}
+
+      <div class="flex items-center date text-base-content/60">
+        <span>{{ len .Pages }} постов</span>
+      </div>
+    </div>
+  </div>
+</a>

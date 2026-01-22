@@ -7,12 +7,8 @@ tags:
   - Основы программирования
 nolastmod: true
 draft: false
+description: Лекция 4
 ---
-
-**2 семестр** \
-Основы программирования. 
-
-<!--more-->
 
 ```cpp
 

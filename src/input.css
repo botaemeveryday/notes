@@ -1,0 +1,96 @@
+@import 'tailwindcss' source(none);
+
+@source "../layouts";
+
+@plugin '@tailwindcss/typography';
+@plugin "daisyui" {
+  themes: emerald --default, forest --prefersdark;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@config '../tailwind.config.js';
+
+#disqus_thread iframe[src*='ads-iframe'] {
+  display: none;
+}
+
+#dream-global-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
+}
+
+.flip-container {
+  width: 100vw;
+  /* The height of navbar is 112px (80px + 2rem). */
+  height: calc(100vh - 80px - 2rem);
+  max-width: 100%;
+  perspective: 1000px;
+}
+
+#TableOfContents {
+  @apply sticky top-24 overflow-y-auto;
+
+  /* 6 + 1 rem */
+  max-height: calc(100vh - 7rem);
+}
+
+#TableOfContents ul {
+  @apply menu menu-sm;
+}
+
+.dream-alert {
+  > .heading {
+    @apply flex items-center gap-1 text-sm font-medium;
+  }
+
+  ion-icon {
+    font-size: 1rem;
+  }
+
+  &.note {
+    @apply border-s-blue-600 dark:border-s-blue-500;
+
+    .heading {
+      @apply text-blue-600 dark:text-blue-500;
+    }
+  }
+
+  &.tip {
+    @apply border-s-green-600 dark:border-s-green-500;
+
+    .heading {
+      @apply text-green-600 dark:text-green-500;
+    }
+  }
+
+  &.important {
+    @apply border-s-purple-600 dark:border-s-purple-500;
+
+    .heading {
+      @apply text-purple-600 dark:text-purple-500;
+    }
+  }
+
+  &.warning {
+    @apply border-s-yellow-600 dark:border-s-yellow-500;
+
+    .heading {
+      @apply text-yellow-600 dark:text-yellow-500;
+    }
+  }
+
+  &.caution {
+    @apply border-s-red-600 dark:border-s-red-500;
+
+    .heading {
+      @apply text-red-600 dark:text-red-500;
+    }
+  }
+}

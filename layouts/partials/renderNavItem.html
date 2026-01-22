@@ -22,9 +22,9 @@
   <ion-icon class="group-hover:text-primary-content" name="grid"></ion-icon>
 </a>
 {{ else if and (eq . "tags") site.Taxonomies.tags }}
-<a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="{{ "tags" | relLangURL }}" title="{{ T "allTags" }}">
+<!-- <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="{{ "tags" | relLangURL }}" title="{{ T "allTags" }}">
   <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
-</a>
+</a> -->
 {{ else }}
 {{ $navItems := site.Params.navItems }}
 {{ $item := index $navItems . }}

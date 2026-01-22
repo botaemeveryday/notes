@@ -31,14 +31,56 @@
 
 {{ define "main" }}
 <div class="lg:grid lg:grid-cols-4 gap-4 mt-4 px-4">
-  <div class="hidden lg:block">
-    {{ if fileExists "layouts/partials/adsense.html" }}
-      <div class="dream-adsense w-2/3">
-        {{ partialCached "adsense.html" . }}
+  <!-- ЛЕВАЯ КОЛОНКА: Все статьи из раздела -->
+  <div class="hidden lg:block lg:col-span-1">
+    <div 
+      x-data="{ 
+        currentSlug: '{{ .RelPermalink }}',
+        isCollapsed: false,
+        toggleCollapse() { this.isCollapsed = !this.isCollapsed }
+      }"
+      class="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto pr-4"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <a class="text-lg font-semibold text-base-content" href="{{ .CurrentSection.RelPermalink }}" >
+          {{ .CurrentSection.Title | default "Статьи" }}
+        </a>
+        <!-- <button 
+          @click="toggleCollapse" 
+          class="btn btn-xs btn-ghost"
+          :aria-expanded="!isCollapsed"
+        >
+          <span x-show="!isCollapsed" class="text-xs">Свернуть</span>
+          <span x-show="isCollapsed" class="text-xs">Развернуть</span>
+        </button> -->
       </div>
-    {{ end }}
+      
+      <div x-show="!isCollapsed" x-transition>
+        <ul class="menu menu-sm rounded-box w-full p-2 space-y-1">
+          {{ range where .Site.RegularPages "Section" "posts" }}
+            {{ if eq .CurrentSection.RelPermalink $.CurrentSection.RelPermalink }}
+              <li>
+                <a 
+                  href="{{ .RelPermalink }}" 
+                  class="flex items-center justify-between hover:bg-base-300 transition-colors rounded-md px-3 py-2"
+                  :class="{ 'bg-primary/20 text-primary font-medium': currentSlug === '{{ .RelPermalink }}' }"
+                >
+                  <span class="truncate">{{ .LinkTitle | default .Title }}</span>
+                  {{ if eq .RelPermalink $.RelPermalink }}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  {{ end }}
+                </a>
+              </li>
+            {{ end }}
+          {{ end }}
+        </ul>
+      </div>
+    </div>
   </div>
 
+  <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА: Содержание статьи -->
   <div class="lg:col-span-2">
     <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
       {{ template "_internal/schema.html" . }}
@@ -140,6 +182,7 @@
     </article>
   </div>
 
+  <!-- ПРАВАЯ КОЛОНКА: Оглавление статьи -->
   <div
     x-data="tocHighlighter()"
     @scroll.window="debouncedScroll"
