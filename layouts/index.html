@@ -11,10 +11,6 @@
         id="global-search" 
         placeholder="Поиск по конспектам..." 
         class="w-full px-6 py-4 pl-12 text-l
-       border-gray-300 
-       bg-white 
-       dark:border-gray-700 
-       dark:bg-gray-900 
        focus:border-blue-500 
        focus:ring-2 
        focus:ring-blue-500/20 
@@ -22,8 +18,12 @@
        transition-all 
        duration-200 
        shadow"
+       style="
+        color: var(--color-base-content);
+        background-color: var(--color-base-100);
+        border-color: var(--color-base-300);
+        border-radius: 64px;"
         autocomplete="off"
-        style="border-radius: 64px;"
       >
       </button>
     </div>

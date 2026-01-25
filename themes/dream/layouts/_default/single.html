@@ -144,9 +144,6 @@
 {{ partial "luxon.html" . }}
 {{ end }}
 
-{{ if site.Params.customSyntaxHighlighting }}
-{{- $syntaxLightCSS := resources.Get "css/syntax-light.css" | minify -}}
-{{- $syntaxDarkCSS := resources.Get "css/syntax-dark.css" | minify -}}
 <script>
   window.customSyntaxHighlighting = {
     light: {{ $syntaxLightCSS.RelPermalink }},

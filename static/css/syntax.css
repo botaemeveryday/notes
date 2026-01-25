@@ -1,0 +1,81 @@
+/* syntax.css — единая тема для светлой и тёмной темы */
+
+/* Основные переменные для цветов синтаксиса */
+:root {
+  --syntax-text: #2e2e2e;       /* основной текст кода */
+  --syntax-keyword: #d63384;    /* ключевые слова */
+  --syntax-string: #e07c1d;     /* строки */
+  --syntax-number: #7950f2;     /* числа */
+  --syntax-function: #1c7ed6;   /* функции */
+  --syntax-variable: #40c057;   /* переменные */
+  --syntax-comment: #6c757d;    /* комментарии */
+}
+
+.dark {
+  --syntax-text: #e9ecef;
+  --syntax-keyword: #f783ac;
+  --syntax-string: #ffa94d;
+  --syntax-number: #b197fc;
+  --syntax-function: #74c0fc;
+  --syntax-variable: #63e6be;
+  --syntax-comment: #adb5bd;
+}
+
+/* Обёртка кода */
+.chroma {
+  padding: 1em;
+  border-radius: 0.5em;
+  overflow: auto;
+  background-color: transparent; /* фон страницы управляет цветом */
+  border: 0.1px solid var(--base-300, #ccc); /* аккуратная рамка */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+/* Строки кода */
+.chroma .line {
+  display: block;
+}
+
+/* Подсветка синтаксиса */
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt, .chroma .kn {
+  color: var(--syntax-keyword);
+}
+
+.chroma .n, .chroma .l, .chroma .p {
+  color: var(--text);
+}
+
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .sd, .chroma .s2, .chroma .dl {
+  color: var(--syntax-string);
+}
+
+.chroma .m, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .mo {
+  color: var(--syntax-number);
+}
+
+.chroma .nf, .chroma .fm {
+  color: var(--syntax-function);
+  font-weight: bold;
+}
+
+.chroma .nv, .chroma .py, .chroma .nx {
+  color: var(--syntax-variable);
+}
+
+.chroma .c, .chroma .cm, .chroma .c1 {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+/* Специальные элементы */
+.chroma .gd { color: #ff5555; background-color: #ffcccc; } /* deleted */
+.chroma .gi { color: #50fa7b; background-color: #ddffdd; } /* inserted */
+.chroma .ge { font-style: italic; } /* emphasis */
+.chroma .gs { font-weight: bold; } /* strong */
+.chroma .gu { color: var(--syntax-function); } /* subheading */
+.chroma .gp { color: var(--syntax-text); } /* prompt */
+.chroma .gr { color: #ff5555; } /* error */
+.chroma .gh { color: var(--syntax-function); font-weight: bold; } /* heading */
+.chroma .gl { text-decoration: underline; } /* underline */

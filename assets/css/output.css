@@ -17,14 +17,10 @@
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-purple-500: oklch(62.7% 0.265 303.9);
     --color-purple-600: oklch(55.8% 0.288 302.321);
-    --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-400: oklch(70.7% 0.022 261.325);
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-gray-600: oklch(44.6% 0.03 256.802);
-    --color-gray-700: oklch(37.3% 0.034 259.733);
-    --color-gray-900: oklch(21% 0.034 264.665);
     --color-black: #000;
-    --color-white: #fff;
     --spacing: 0.25rem;
     --container-md: 28rem;
     --container-4xl: 56rem;
@@ -1148,6 +1144,9 @@
       }
     }
   }
+  .absolute {
+    position: absolute;
+  }
   .relative {
     position: relative;
   }
@@ -1188,8 +1187,14 @@
   .top-0 {
     top: calc(var(--spacing) * 0);
   }
+  .top-1\/2 {
+    top: calc(1/2 * 100%);
+  }
   .top-20 {
     top: calc(var(--spacing) * 20);
+  }
+  .left-2 {
+    left: calc(var(--spacing) * 2);
   }
   .join {
     display: inline-flex;
@@ -1347,6 +1352,9 @@
   }
   .z-30 {
     z-index: 30;
+  }
+  .order-1 {
+    order: 1;
   }
   .timeline-end {
     @layer daisyui.l1.l2.l3 {
@@ -2524,6 +2532,9 @@
       height: var(--size);
     }
   }
+  .h-3 {
+    height: calc(var(--spacing) * 3);
+  }
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
@@ -2553,6 +2564,9 @@
   }
   .w-2\/3 {
     width: calc(2/3 * 100%);
+  }
+  .w-3 {
+    width: calc(var(--spacing) * 3);
   }
   .w-4 {
     width: calc(var(--spacing) * 4);
@@ -2595,6 +2609,10 @@
   }
   .grow {
     flex-grow: 1;
+  }
+  .-translate-y-1\/2 {
+    --tw-translate-y: calc(calc(1/2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
@@ -2708,6 +2726,9 @@
       }
     }
   }
+  .rounded {
+    border-radius: 0.25rem;
+  }
   .rounded-box {
     border-radius: var(--radius-box);
   }
@@ -2723,25 +2744,22 @@
   .rounded-md {
     border-radius: 0.375rem;
   }
-  .rounded-xl {
-    border-radius: 0.75rem;
-  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
-  .border-2 {
-    border-style: var(--tw-border-style);
-    border-width: 2px;
+  .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+  .border-base-300 {
+    border-color: var(--color-base-300);
   }
   .border-base-content\/30 {
     border-color: var(--color-base-content);
     @supports (color: color-mix(in lab, red, red)) {
       border-color: color-mix(in oklab, var(--color-base-content) 30%, transparent);
     }
-  }
-  .border-gray-300 {
-    border-color: var(--color-gray-300);
   }
   .bg-base-100 {
     background-color: var(--color-base-100);
@@ -2754,9 +2772,6 @@
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, hsl(var(--primary)) 20%, transparent);
     }
-  }
-  .bg-white {
-    background-color: var(--color-white);
   }
   .p-1 {
     padding: calc(var(--spacing) * 1);
@@ -2782,6 +2797,9 @@
   .px-6 {
     padding-inline: calc(var(--spacing) * 6);
   }
+  .py-1\.5 {
+    padding-block: calc(var(--spacing) * 1.5);
+  }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
   }
@@ -2799,6 +2817,9 @@
   }
   .pb-4 {
     padding-bottom: calc(var(--spacing) * 4);
+  }
+  .pl-8 {
+    padding-left: calc(var(--spacing) * 8);
   }
   .pl-12 {
     padding-left: calc(var(--spacing) * 12);
@@ -3118,6 +3139,11 @@
       gap: calc(var(--spacing) * 2);
     }
   }
+  .md\:order-2 {
+    @media (width >= 48rem) {
+      order: 2;
+    }
+  }
   .md\:divider-horizontal {
     @media (width >= 48rem) {
       @layer daisyui.l1.l2 {
@@ -3151,6 +3177,11 @@
   .md\:flex-row {
     @media (width >= 48rem) {
       flex-direction: row;
+    }
+  }
+  .md\:items-center {
+    @media (width >= 48rem) {
+      align-items: center;
     }
   }
   .md\:gap-4 {
@@ -3262,19 +3293,9 @@
       }
     }
   }
-  .dark\:border-gray-700 {
-    &:where(.dark, .dark *) {
-      border-color: var(--color-gray-700);
-    }
-  }
   .dark\:bg-base-content {
     &:where(.dark, .dark *) {
       background-color: var(--color-base-content);
-    }
-  }
-  .dark\:bg-gray-900 {
-    &:where(.dark, .dark *) {
-      background-color: var(--color-gray-900);
     }
   }
   .dark\:text-gray-400 {
@@ -3621,6 +3642,25 @@
     }
   }
 }
+.custom-search-input {
+  color: var(--color-base-content);
+  background-color: var(--color-base-100);
+  border: 2px solid var(--color-base-300);
+  border-radius: 64px;
+  padding: 1rem 1.5rem 1rem 3rem;
+  font-size: 1.125rem;
+  width: 100%;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+.custom-search-input::placeholder {
+  color: oklch(var(--color-base-content) / 0.6);
+}
+.custom-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px oklch(var(--color-primary) / 0.2);
+}
 @layer base {
   :where(:root),:root:has(input.theme-controller[value=emerald]:checked),[data-theme=emerald] {
     color-scheme: light;
@@ -3867,6 +3907,21 @@
     background-position-x: -115%;
   }
 }
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
 @property --tw-rotate-x {
   syntax: "*";
   inherits: false;
@@ -3973,6 +4028,9 @@
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
       --tw-rotate-x: initial;
       --tw-rotate-y: initial;
       --tw-rotate-z: initial;
