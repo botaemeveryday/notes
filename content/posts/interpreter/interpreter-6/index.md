@@ -251,7 +251,7 @@ if __name__ == '__main__':
 
 Вот пример сеанса:
 
-```
+```bash
 $ python calc6.py
 calc> 3
 3

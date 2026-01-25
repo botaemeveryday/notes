@@ -1,29 +1,8 @@
 {{ define "title" }}{{ .Title }}{{ end }}
 
 {{ define "css" }}
+<link id="custom-syntax-dark" rel="stylesheet" href="{{ "css/syntax.css" | relURL }}" />
 
-{{ if site.Params.customSyntaxHighlighting }}
-<link rel="stylesheet" data-custom-syntax-highlighting />
-<style>
-  .chroma {
-    padding: 1em;
-    background-color: var(--dream-pre-bg, #f5f5f5);
-    border-radius: .5em;
-    overflow: auto;
-  }
-
-  html.dark .chroma {
-    background-color: var(--dream-pre-bg-dark, #262626);
-  }
-</style>
-{{ else }}
-<style>
-  pre {
-    padding: 1em;
-    overflow: auto;
-  }
-</style>
-{{ end }}
 
 {{ partialCached "commentSystemHeads.html" . }}
 
@@ -131,7 +110,7 @@
       <section id="dream-single-post-content" itemprop="articleBody">
 
         {{ if and .Params.Cover site.Params.showSummaryCoverInPost }}
-          <img class="w-full z-30" src="{{ .Params.Cover }}" alt="{{ .Title }}" />
+          <img class="w-full z-30" src="{{ .Params.Cover }}" alt="{{ .Title }}" style="border-radius: 1em;"/>
         {{ end }}
 
         {{ .Content | emojify }}

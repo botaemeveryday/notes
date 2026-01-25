@@ -146,7 +146,7 @@ def visit_UnaryOp(self, node):
 
 Вот пример сеанса:
 
-```
+```bash
 $ python spi.py
 spi> - 3
 -3
@@ -160,25 +160,25 @@ spi> 5 - - - + - (3 + 4) - +2
 
 Я также обновил утилиту `genastdot.py` для обработки унарных операторов. Вот некоторые примеры сгенерированных изображений AST для выражений с унарными операторами:
 
-```
+```bash
 $ python genastdot.py "- 3" > ast.dot && dot -Tpng -o ast.png ast.dot
 ```
 
 ![alt text](https://ruslanspivak.com/lsbasi-part8/lsbasi_part8_genastdot_01.png)
 
-```
+```bash
 $ python genastdot.py "+ 3" > ast.dot && dot -Tpng -o ast.png ast.dot
 ```
 
 ![alt text](https://ruslanspivak.com/lsbasi-part8/lsbasi_part8_genastdot_02.png)
 
-```
+```bash
 $ python genastdot.py "5 - - - + - 3" > ast.dot && dot -Tpng -o ast.png ast.dot
 ```
 
 ![alt text](https://ruslanspivak.com/lsbasi-part8/lsbasi_part8_genastdot_03.png)
 
-```
+```bash
 $ python genastdot.py "5 - - - + - (3 + 4) - +2" \
   > ast.dot && dot -Tpng -o ast.png ast.dot
 ```

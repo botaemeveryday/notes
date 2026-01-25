@@ -69,6 +69,7 @@ class Symbol(object):
 
 Начнем с основных встроенных типов. Мы видели два встроенных типа до сих пор, когда объявляли переменные: INTEGER и REAL. Как мы представляем символ встроенного типа в коде? Вот один из вариантов:
 
+```python
 class BuiltinTypeSymbol(Symbol):
     def __init__(self, name):
         super().__init__(name)
@@ -77,10 +78,12 @@ class BuiltinTypeSymbol(Symbol):
         return self.name
 
     __repr__ = __str__
+```
 Класс наследуется от класса Symbol, и конструктор требует только имя типа. Категория закодирована в имени класса, а параметр type из базового класса для символа встроенного типа равен None. Двойное подчеркивание или dunder (как в "Double UNDERscore") методы __str__ и __repr__ являются специальными методами Python, и мы определили их для получения красивого отформатированного сообщения при печати объекта символа.
 
 Загрузите файл интерпретатора и сохраните его как spi.py; запустите оболочку python из того же каталога, где вы сохранили файл spi.py, и поиграйте с классом, который мы только что определили, в интерактивном режиме:
 
+```bash
 $ python
 >>> from spi import BuiltinTypeSymbol
 >>> int_type = BuiltinTypeSymbol('INTEGER')
@@ -89,9 +92,11 @@ INTEGER
 >>> real_type = BuiltinTypeSymbol('REAL')
 >>> real_type
 REAL
+```
 
 Как мы можем представить символ переменной? Давайте создадим класс VarSymbol:
 
+```python
 class VarSymbol(Symbol):
     def __init__(self, name, type):
         super().__init__(name, type)
@@ -100,10 +105,13 @@ class VarSymbol(Symbol):
         return '<{name}:{type}>'.format(name=self.name, type=self.type)
 
     __repr__ = __str__
+```
+
 В классе мы сделали параметры name и type обязательными, а имя класса VarSymbol четко указывает на то, что экземпляр класса будет идентифицировать символ переменной (категория - переменная).
 
 Вернемся к интерактивной оболочке python, чтобы увидеть, как мы можем вручную создавать экземпляры для наших символов переменных, теперь, когда мы знаем, как создавать экземпляры класса BuiltinTypeSymbol:
 
+```bash
 $ python
 >>> from spi import BuiltinTypeSymbol, VarSymbol
 >>> int_type = BuiltinTypeSymbol('INTEGER')
@@ -115,6 +123,8 @@ $ python
 >>> var_y_symbol = VarSymbol('y', real_type)
 >>> var_y_symbol
 <y:REAL>
+```
+
 Как видите, сначала мы создаем экземпляр символа встроенного типа, а затем передаем его в качестве параметра конструктору VarSymbol.
 
 Вот иерархия символов, которые мы определили, в визуальной форме:
@@ -139,6 +149,7 @@ $ python
 
 Что такое таблица символов? Таблица символов - это абстрактный тип данных (ADT) для отслеживания различных символов в исходном коде. Сегодня мы собираемся реализовать нашу таблицу символов как отдельный класс с некоторыми вспомогательными методами:
 
+```python
 class SymbolTable(object):
     def __init__(self):
         self._symbols = {}
@@ -160,12 +171,15 @@ class SymbolTable(object):
         symbol = self._symbols.get(name)
         # 'symbol' is either an instance of the Symbol class or 'None'
         return symbol
+```
+
 Есть две основные операции, которые мы будем выполнять с таблицей символов: хранение символов и поиск их по имени: следовательно, нам нужны два вспомогательных метода - define и lookup.
 
 Метод define принимает символ в качестве параметра и сохраняет его внутри в своем упорядоченном словаре _symbols, используя имя символа в качестве ключа, а экземпляр символа - в качестве значения. Метод lookup принимает имя символа в качестве параметра и возвращает символ, если он его находит, или "None", если нет.
 
 Давайте вручную заполним нашу таблицу символов для той же программы на Pascal, которую мы использовали совсем недавно, где мы вручную создавали символы переменных и встроенных типов:
 
+```objectpascal
 PROGRAM Part11;
 VAR
    x : INTEGER;
@@ -174,8 +188,11 @@ VAR
 BEGIN
 
 END.
+```
+
 Запустите оболочку Python снова и следуйте инструкциям:
 
+```bash
 $ python
 >>> from spi import SymbolTable, BuiltinTypeSymbol, VarSymbol
 >>> symtab = SymbolTable()
@@ -202,6 +219,7 @@ Symbols: [INTEGER, <x:INTEGER>, REAL]
 Define: <y:REAL>
 >>> symtab
 Symbols: [INTEGER, <x:INTEGER>, REAL, <y:REAL>]
+```
 
 Если бы вы посмотрели на содержимое словаря _symbols, он выглядел бы примерно так:
 
@@ -211,6 +229,7 @@ Symbols: [INTEGER, <x:INTEGER>, REAL, <y:REAL>]
 
 Прежде чем это сделать, давайте расширим наш класс SymbolTable, чтобы инициализировать встроенные типы при создании экземпляра таблицы символов. Вот полный исходный код для сегодняшнего класса SymbolTable:
 
+```python
 class SymbolTable(object):
     def __init__(self):
         self._symbols = OrderedDict()
@@ -237,9 +256,11 @@ class SymbolTable(object):
         symbol = self._symbols.get(name)
         # 'symbol' is either an instance of the Symbol class or 'None'
         return symbol
+```
 
 Теперь перейдем к посетителю узлов AST SymbolTableBuilder:
 
+```python
 class SymbolTableBuilder(NodeVisitor):
     def __init__(self):
         self.symtab = SymbolTable()
@@ -275,19 +296,23 @@ class SymbolTableBuilder(NodeVisitor):
         var_name = node.var_node.value
         var_symbol = VarSymbol(var_name, type_symbol)
         self.symtab.define(var_symbol)
+```
 
 Вы видели большинство этих методов раньше в классе Interpreter, но метод visit_VarDecl заслуживает особого внимания. Вот он снова:
 
+```python
 def visit_VarDecl(self, node):
     type_name = node.type_node.value
     type_symbol = self.symtab.lookup(type_name)
     var_name = node.var_node.value
     var_symbol = VarSymbol(var_name, type_symbol)
     self.symtab.define(var_symbol)
+```
 Этот метод отвечает за посещение (обход) узла VarDecl AST и сохранение соответствующего символа в таблице символов. Сначала метод ищет символ встроенного типа по имени в таблице символов, затем создает экземпляр класса VarSymbol и сохраняет (определяет) его в таблице символов.
 
 Давайте протестируем наш обходчик AST SymbolTableBuilder и посмотрим его в действии:
 
+```bash
 $ python
 >>> from spi import Lexer, Parser, SymbolTableBuilder
 >>> text = """
@@ -315,10 +340,12 @@ Define: <y:REAL>
 …
 >>> symtab_builder.symtab
 Symbols: [INTEGER, REAL, <x:INTEGER>, <y:REAL>]
+```
 В интерактивном сеансе выше вы можете видеть последовательность сообщений "Define: ..." и "Lookup: ...", которые указывают порядок, в котором символы определяются и ищутся в таблице символов. Последняя команда в сеансе печатает содержимое таблицы символов, и вы можете видеть, что оно точно такое же, как содержимое таблицы символов, которую мы построили вручную раньше. Магия посетителей узлов AST заключается в том, что они в значительной степени делают всю работу за вас. :)
 
 Мы уже можем использовать нашу таблицу символов и построитель таблицы символов с пользой: мы можем использовать их для проверки того, что переменные объявлены до того, как они используются в присваиваниях и выражениях. Все, что нам нужно сделать, это просто расширить посетителя еще двумя методами: visit_Assign и visit_Var:
 
+```python
 def visit_Assign(self, node):
     var_name = node.left.value
     var_symbol = self.symtab.lookup(var_name)
@@ -333,10 +360,12 @@ def visit_Var(self, node):
 
     if var_symbol is None:
         raise NameError(repr(var_name))
+```
 Эти методы вызовут исключение NameError, если они не смогут найти символ в таблице символов.
 
 Взгляните на следующую программу, где мы ссылаемся на переменную "b", которая еще не была объявлена:
 
+```objectpascal
 PROGRAM NameError1;
 VAR
    a : INTEGER;
@@ -344,8 +373,10 @@ VAR
 BEGIN
    a := 2 + b;
 END.
+```
 Давайте посмотрим, что произойдет, если мы построим AST для программы и передадим его нашему построителю таблицы символов для посещения:
 
+```bash
 $ python
 >>> from spi import Lexer, Parser, SymbolTableBuilder
 >>> text = """
@@ -373,10 +404,12 @@ Traceback (most recent call last):
   File "spi.py", line 674, in visit_Var
     raise NameError(repr(var_name))
 NameError: 'b'
+```
 Именно то, что мы ожидали!
 
 Вот еще один случай ошибки, когда мы пытаемся присвоить значение переменной, которая еще не была определена, в данном случае переменной 'a':
 
+```objectpascal
 PROGRAM NameError2;
 VAR
    b : INTEGER;
@@ -385,8 +418,10 @@ BEGIN
    b := 1;
    a := b + 2;
 END.
+```
 Тем временем в оболочке Python:
 
+```bash
 >>> from spi import Lexer, Parser, SymbolTableBuilder
 >>> text = """
 ... PROGRAM NameError2;
@@ -414,16 +449,19 @@ Traceback (most recent call last):
   File "spi.py", line 665, in visit_Assign
     raise NameError(repr(var_name))
 NameError: 'a'
+```
 Отлично, наш новый посетитель поймал и эту проблему!
 
 Я хотел бы подчеркнуть тот факт, что все эти проверки, которые выполняет наш посетитель AST SymbolTableBuilder, выполняются до времени выполнения, то есть до того, как наш интерпретатор фактически вычисляет исходную программу. Чтобы донести эту мысль до конца, если бы мы интерпретировали следующую программу:
 
+```objectpascal
 PROGRAM Part11;
 VAR
    x : INTEGER;
 BEGIN
    x := 2;
 END.
+```
 Содержимое таблицы символов и глобальной памяти во время выполнения непосредственно перед выходом из программы выглядело бы примерно так:
 
 ![alt text](https://ruslanspivak.com/lsbasi-part11/lsbasi_part11_symtab_vs_globmem.png)
@@ -438,6 +476,7 @@ END.
 
 Давайте соберем все вместе и протестируем наш новый интерпретатор со следующей программой:
 
+```objectpascal
 PROGRAM Part11;
 VAR
    number : INTEGER;
@@ -450,9 +489,11 @@ BEGIN {Part11}
    b := 10 * a + 10 * number DIV 4;
    y := 20 / 7 + 3.14
 END.  {Part11}
+```
 
 Сохраните программу как part11.pas и запустите интерпретатор:
 
+```bash
 $ python spi.py part11.pas
 Define: INTEGER
 Define: REAL
@@ -471,15 +512,22 @@ Lookup: b
 Lookup: a
 Lookup: number
 Lookup: y
+```
 
 Содержимое таблицы символов:
+
+```objectpascal
 Symbols: [INTEGER, REAL, <number:INTEGER>, <a:INTEGER>, <b:INTEGER>, <y:REAL>]
+```
 
 Содержимое GLOBAL_MEMORY во время выполнения:
+
+```objectpascal
 a = 2
 b = 25
 number = 2
 y = 5.99714285714
+```
 
 Я хотел бы снова обратить ваше внимание на тот факт, что класс Interpreter не имеет ничего общего с построением таблицы символов, и он полагается на SymbolTableBuilder, чтобы убедиться, что переменные в исходном коде правильно объявлены до того, как они будут использованы Interpreter.
 
@@ -490,6 +538,8 @@ y = 5.99714285714
 Что такое таблица символов?
 В чем разница между определением символа и разрешением/поиском символа?
 Учитывая следующую небольшую программу на Pascal, каким будет содержимое таблицы символов, глобальной памяти (словарь GLOBAL_MEMORY, который является частью Interpreter)?
+
+```objectpascal
 PROGRAM Part11;
 VAR
    x, y : INTEGER;
@@ -497,6 +547,7 @@ BEGIN
    x := 2;
    y := 3 + x;
 END.
+```
 
 На этом все на сегодня. В следующей статье я расскажу об областях видимости, и мы запачкаем руки разбором вложенных процедур. Оставайтесь с нами и до скорой встречи! И помните, что несмотря ни на что, "Продолжайте идти!"
 

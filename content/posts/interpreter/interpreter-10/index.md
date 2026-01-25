@@ -380,7 +380,7 @@ def type_spec(self):
 ```
 Нам также необходимо обновить методы program, term и factor, чтобы учесть изменения в нашей грамматике:
 
-```
+```python
 def program(self):
     """program : PROGRAM variable SEMI block DOT"""
     self.eat(PROGRAM)

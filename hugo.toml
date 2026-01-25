@@ -4,12 +4,10 @@ title = 'botaemeveryday'
 theme = "dream"
 
 defaultContentLanguage = "ru"
-hasCJKLanguage = true  
+hasCJKLanguage = true
 
 [markup.goldmark.renderer]
-  unsafe = true 
-
-customSyntaxHighlighting = true
+  unsafe = true
 
 [taxonomies]
   tag = "tags"
@@ -17,13 +15,7 @@ customSyntaxHighlighting = true
 
 [markup]
 [markup.highlight]
-codeFences = true
-style = 'monokailight'
-tabWidth = 4
-hl_inline = false
-lineNoStart = 1
-lineNos = false
-lineNumbersInTable = true
+noClasses = false
 
 [params]
 author = "notakeith & salt-caramel"

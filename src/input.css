@@ -94,3 +94,25 @@
     }
   }
 }
+
+.custom-search-input {
+  color: var(--color-base-content);
+  background-color: var(--color-base-100);
+  border: 2px solid var(--color-base-300);
+  border-radius: 64px;
+  padding: 1rem 1.5rem 1rem 3rem;
+  font-size: 1.125rem;
+  width: 100%;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.custom-search-input::placeholder {
+  color: oklch(var(--color-base-content) / 0.6);
+}
+
+.custom-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px oklch(var(--color-primary) / 0.2);
+}

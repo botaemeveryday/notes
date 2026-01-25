@@ -7,7 +7,11 @@ module.exports = {
     './themes/**/layouts/**/*.html',
     './themes/**/content/**/*.md',
   ],
+    
+  // Включите dark mode
+  darkMode: 'class', // или 'media' для prefers-color-scheme
   
+
   // 2. Настройки темы
   theme: {
     container: {
