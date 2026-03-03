@@ -15,7 +15,7 @@ tags:
   - Windows
   - Anki
 nolastmod: true
-draft: true
+draft: false
 ---
 
 # Постепенное нарастание функционала ОС 

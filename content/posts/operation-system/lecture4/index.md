@@ -12,7 +12,7 @@ tags:
   - Аналогии
   - Anki
 nolastmod: true
-draft: true
+draft: false
 ---
 
 …
