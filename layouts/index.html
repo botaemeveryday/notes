@@ -34,15 +34,13 @@
 </div>
 
 {{/* =========================
-   1. Подготовка данных для поиска
+   1. Подготовка данных
 ========================= */}}
 
-{{/* Все опубликованные посты (исключаем черновики) */}}
 {{ $allPosts := where site.RegularPages "Type" "posts" }}
 {{ $allPosts = where $allPosts "IsSection" false }}
 {{ $allPosts = where $allPosts "Draft" false }}
 
-{{/* Все sections (разделы) */}}
 {{ $sections := slice }}
 {{ with site.GetPage "section" "posts" }}
   {{ range .Sections }}
@@ -51,65 +49,30 @@
 {{ end }}
 
 {{/* =========================
-   2. Подготовка данных для отображения БЕЗ поиска
+   2. Группировка секций по семестрам
 ========================= */}}
 
-{{/* Для обычного отображения (без поиска) */}}
-{{ $postsInSections := dict }}
+{{/* Собираем все уникальные номера семестров */}}
+{{ $semesterMap := dict }}
 {{ range $sections }}
-  {{ range where .Pages "Draft" false }}
-    {{ $postsInSections = merge $postsInSections (dict .RelPermalink true) }}
-  {{ end }}
+  {{ $sem := .Params.semester | default 0 }}
+  {{ $existing := index $semesterMap (string $sem) | default slice }}
+  {{ $semesterMap = merge $semesterMap (dict (string $sem) ($existing | append .)) }}
 {{ end }}
 
-{{ $standalone := slice }}
-{{ range $allPosts }}
-  {{ if not (index $postsInSections .RelPermalink) }}
-    {{ $standalone = $standalone | append . }}
-  {{ end }}
+{{/* Получаем отсортированные ключи семестров (по убыванию) */}}
+{{ $semesterKeys := slice }}
+{{ range $key, $_ := $semesterMap }}
+  {{ $semesterKeys = $semesterKeys | append ($key | int) }}
 {{ end }}
-
-{{/* Общий feed для обычного отображения */}}
-{{ $feed := slice }}
-{{ range $sections }}
-  {{ $publishedPages := where .Pages "Draft" false }}
-  {{ if gt (len $publishedPages) 0 }}
-    {{ $latest := index ($publishedPages.ByDate.Reverse) 0 }}
-    {{ $feed = $feed | append (dict
-      "kind" "section"
-      "date" $latest.Date
-      "page" .
-      "searchable" (printf "%s %s %s %s" 
-        (.Title | lower) 
-        (.Description | default "" | lower) 
-        (delimit (.Params.tags | default slice) " ")
-        (printf "раздел секция папка категория")
-      )
-    ) }}
-  {{ end }}
-{{ end }}
-
-{{ range $standalone }}
-  {{ $feed = $feed | append (dict
-    "kind" "post"
-    "date" .Date
-    "page" .
-    "searchable" (printf "%s %s %s" 
-      (.Title | lower) 
-      (.Description | default "" | lower) 
-      (delimit (.Params.tags | default slice) " ")
-    )
-  ) }}
-{{ end }}
+{{ $semesterKeys = sort $semesterKeys "value" "desc" }}
 
 {{/* =========================
-   3. Подготовка данных для поиска (ВСЕ посты + разделы)
+   3. Подготовка данных для поиска (все посты + разделы)
 ========================= */}}
 
-{{/* Создаем полный список для поиска */}}
 {{ $allSearchItems := slice }}
 
-{{/* Добавляем все разделы */}}
 {{ range $sections }}
   {{ $publishedPages := where .Pages "Draft" false }}
   {{ if gt (len $publishedPages) 0 }}
@@ -137,7 +100,6 @@
   {{ end }}
 {{ end }}
 
-{{/* Добавляем все отдельные посты (и те, что внутри разделов, и одиночные) */}}
 {{ range $allPosts }}
   {{ $allSearchItems = $allSearchItems | append (dict
     "kind" "post"
@@ -151,47 +113,54 @@
   ) }}
 {{ end }}
 
-{{/* Сортировка */}}
-{{ $feed = sort $feed "date" "desc" }}
 {{ $allSearchItems = sort $allSearchItems "date" "desc" }}
 
 {{/* =========================
-   4. Рендер с учетом поиска
+   4. Рендер
 ========================= */}}
 
 <div class="container px-4">
-  
-  {{/* Обычное отображение (без поиска) */}}
+
+  {{/* Обычное отображение — сгруппировано по семестрам */}}
   <div id="normal-view">
-    <div class="dream-grid">
-      {{ range $feed }}
-        <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column searchable-item" 
-             data-search="{{ .searchable | safeHTMLAttr }}"
-             data-kind="{{ .kind }}"
-             data-date="{{ .date.Format "2006-01-02" }}">
-          
-          {{ if eq .kind "section" }}
-            {{ partial "section-card.html" .page }}
-          {{ else }}
-            {{ .page.Render "summary" }}
-          {{ end }}
-        </div>
+    
+    {{ range $semesterKeys }}
+      {{ $semNum := . }}
+      {{ $semSections := index $semesterMap (string $semNum) }}
+      
+      {{/* Заголовок семестра */}}
+      {{ if gt $semNum 0 }}
+        <h2 class="semester-heading">Семестр {{ $semNum }}</h2>
       {{ else }}
-        <div class="w-full p-4">
-          <p class="text-center text-gray-500">Публикаций пока нет.</p>
-        </div>
+        <h2 class="semester-heading">Без семестра</h2>
       {{ end }}
-    </div>
+      
+      {{/* Карточки секций этого семестра */}}
+      <div class="dream-grid mb-8">
+        {{ range $semSections }}
+          {{ $publishedPages := where .Pages "Draft" false }}
+          {{ if gt (len $publishedPages) 0 }}
+            <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">
+              {{ partial "section-card.html" . }}
+            </div>
+          {{ end }}
+        {{ end }}
+      </div>
+
+    {{ else }}
+      <div class="w-full p-4">
+        <p class="text-center text-gray-500">Публикаций пока нет.</p>
+      </div>
+    {{ end }}
+
   </div>
-  
-  {{/* Контейнер для результатов поиска - такой же класс dream-grid */}}
+
+  {{/* Контейнер для результатов поиска */}}
   <div id="search-view" class="hidden">
-    <div class="dream-grid" id="search-grid">
-      <!-- Результаты поиска будут вставляться сюда динамически -->
-    </div>
+    <div class="dream-grid" id="search-grid"></div>
   </div>
-  
-  {{/* Сообщение, когда ничего не найдено */}}
+
+  {{/* Сообщение «ничего не найдено» */}}
   <div id="no-results" class="flex justify-center items-center py-12 hidden">
     <div class="max-w-md mx-auto">
       <div class="w-16 h-16 mx-auto text-base-content/20 mb-4 flex items-center justify-center">
@@ -208,93 +177,89 @@
   </div>
 </div>
 
-{{/* Стили для поиска */}}
+{{/* Стили */}}
 <style>
-  .search-highlight {
-    background-color: rgba(255, 235, 59, 0.3);
-    padding: 0 0px;
-  }
-  
-  .search-hidden {
-    display: none !important;
-  }
-  
-  .search-visible {
-    animation: fadeIn 0.3s ease;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  #global-search:focus {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
-  
+  .semester-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0;
+  color: var(--color-base-content);
+  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.semester-heading:before,
+.semester-heading:after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--color-base-content);
+}
+
+.semester-heading:before {
+  margin-right: 1rem;
+}
+
+.semester-heading:after {
+  margin-left: 1rem;
+}
+
   .search-result-item {
     opacity: 0;
     transform: translateY(10px);
     animation: fadeIn 0.3s ease forwards;
   }
-  
-  /* Гарантируем, что dream-grid работает правильно */
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #global-search:focus {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
   .dream-grid {
     display: flex;
     flex-wrap: wrap;
     margin: -1rem;
   }
-  
+
   .dream-column {
     padding: 1rem;
     box-sizing: border-box;
   }
-  
-  /* Адаптивные классы для сетки */
-  .w-full.md\:w-1\/2.lg\:w-1\/3.xl\:w-1\/4 {
-    width: 100%;
-  }
-  
+
   @media (min-width: 768px) {
-    .w-full.md\:w-1\/2.lg\:w-1\/3.xl\:w-1\/4 {
-      width: 50%;
-    }
+    .w-full.md\:w-1\/2.lg\:w-1\/3.xl\:w-1\/4 { width: 50%; }
   }
-  
   @media (min-width: 1024px) {
-    .w-full.md\:w-1\/2.lg\:w-1\/3.xl\:w-1\/4 {
-      width: 33.333%;
-    }
+    .w-full.md\:w-1\/2.lg\:w-1\/3.xl\:w-1\/4 { width: 33.333%; }
   }
-  
   @media (min-width: 1280px) {
-    .w-full.md\:w-1\/2.lg\:w-1\/3.xl\:w-1\/4 {
-      width: 25%;
-    }
-  }
-  
-  /* Стили для SVG */
-  .search-icon,
-  .clear-icon {
-    display: inline-block;
-    flex-shrink: 0;
+    .w-full.md\:w-1\/2.lg\:w-1\/3.xl\:w-1\/4 { width: 25%; }
   }
 </style>
 
-{{/* Шаблон для элемента поиска (скрыт по умолчанию) */}}
+{{/* Шаблон для поиска */}}
 <template id="search-item-template">
   <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column search-result-item">
     <div class="card-content"></div>
   </div>
 </template>
 
-{{/* Скрипт для поиска */}}
+{{/* Скрипт поиска */}}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('global-search');
     const clearBtn = document.getElementById('clear-search');
-    
-    // Предзагружаем данные для поиска
+
     window.searchData = {
       items: [
         {{ range $allSearchItems }}
@@ -308,35 +273,24 @@
           tags: {{ .page.Params.tags | default slice | jsonify }},
           readingTime: {{ .page.ReadingTime | default 0 }},
           section: {{ if eq .kind "section" }}true{{ else }}false{{ end }},
-          html: `{{ if eq .kind "section" }}
-                   {{ partial "section-card.html" .page }}
-                 {{ else }}
-                   {{ .page.Render "summary" }}
-                 {{ end }}`.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
+          html: `{{ if eq .kind "section" }}{{ partial "section-card.html" .page }}{{ else }}{{ .page.Render "summary" }}{{ end }}`.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
         },
         {{ end }}
       ]
     };
-    
-    // Показывать/скрывать кнопку очистки
+
     searchInput.addEventListener('input', function() {
       if (this.value.trim().length > 0) {
-        clearBtn.classList.remove('hidden');
         performSearch(this.value);
       } else {
-        clearBtn.classList.add('hidden');
         clearSearch();
       }
     });
-    
-    // Обработка нажатия Enter
+
     searchInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        performSearch(this.value);
-      }
+      if (e.key === 'Enter') performSearch(this.value);
     });
-    
-    // Фокус на поле поиска при нажатии Ctrl+K
+
     document.addEventListener('keydown', function(e) {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
@@ -347,8 +301,7 @@
         searchInput.focus();
       }
     });
-    
-    // Восстановить поиск из URL при загрузке
+
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('q');
     if (query) {
@@ -356,67 +309,42 @@
       setTimeout(() => performSearch(query), 100);
     }
   });
-  
+
   function performSearch(query) {
     const searchTerm = query.toLowerCase().trim();
-    if (!searchTerm) {
-      clearSearch();
-      return;
-    }
-    
-    // Переключаем на поисковый вид и СКРЫВАЕМ обычный контент
+    if (!searchTerm) { clearSearch(); return; }
+
     const normalView = document.getElementById('normal-view');
     const searchView = document.getElementById('search-view');
     const searchGrid = document.getElementById('search-grid');
-    
-    normalView.style.display = 'none'; // Полностью скрываем обычный контент
-    searchView.classList.remove('hidden');
-    searchGrid.innerHTML = '';
 
     normalView.style.display = 'none';
     searchView.classList.remove('hidden');
+    searchGrid.innerHTML = '';
 
-    searchGrid.style.cssText = `
-  display: flex !important;
-  flex-wrap: wrap !important;
-  margin: -1rem !important;
-  position: static !important;
-  height: auto !important;
-  opacity: 1 !important;
-  min-height: 200px !important;
-`;
-
-searchGrid.innerHTML = '';
-    
     const items = window.searchData.items;
     let visibleCount = 0;
-    
-    // Фильтруем и добавляем элементы
-    items.forEach((item, index) => {
+
+    items.forEach((item) => {
       if (item.searchable.toLowerCase().includes(searchTerm)) {
         const template = document.getElementById('search-item-template');
         const clone = template.content.cloneNode(true);
         const element = clone.querySelector('.search-result-item');
         const cardContent = clone.querySelector('.card-content');
-        
-        // Устанавливаем HTML контента
+
         cardContent.innerHTML = highlightSearchTerms(item.html, searchTerm);
-        
-        // Добавляем задержку для анимации
         element.style.animationDelay = `${visibleCount * 0.05}s`;
-        
         searchGrid.appendChild(clone);
         visibleCount++;
       }
     });
-    
-    // Обновить счетчик результатов
+
     const resultsDiv = document.getElementById('search-results');
     const resultCount = document.getElementById('result-count');
     const noResultsDiv = document.getElementById('no-results');
-    
+
     resultCount.textContent = visibleCount;
-    
+
     if (visibleCount > 0) {
       resultsDiv.classList.remove('hidden');
       noResultsDiv.classList.add('hidden');
@@ -426,39 +354,27 @@ searchGrid.innerHTML = '';
       noResultsDiv.classList.remove('hidden');
       searchView.classList.add('hidden');
     }
-    
-    // Сохранить запрос в URL
+
     if (history.pushState) {
       const url = new URL(window.location);
-      if (searchTerm) {
-        url.searchParams.set('q', searchTerm);
-      } else {
-        url.searchParams.delete('q');
-      }
+      searchTerm ? url.searchParams.set('q', searchTerm) : url.searchParams.delete('q');
       history.pushState({}, '', url);
     }
   }
-  
+
   function highlightSearchTerms(html, term) {
     if (!term) return html;
-    
-    // Экранируем спецсимволы для регулярного выражения
     const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(${escapedTerm})`, 'gi');
-    
-    // Создаем временный элемент для работы с DOM
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
-    
-    // Функция для рекурсивного поиска и замены
+
     function highlightNode(node) {
       if (node.nodeType === Node.TEXT_NODE) {
         const text = node.textContent;
         if (regex.test(text)) {
           const fragment = document.createDocumentFragment();
-          const parts = text.split(regex);
-          
-          parts.forEach(part => {
+          text.split(regex).forEach(part => {
             if (regex.test(part)) {
               const span = document.createElement('span');
               span.className = 'search-highlight';
@@ -468,45 +384,38 @@ searchGrid.innerHTML = '';
               fragment.appendChild(document.createTextNode(part));
             }
           });
-          
           node.parentNode.replaceChild(fragment, node);
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
-        // Игнорируем определенные теги (скрипты, стили, SVG)
-        if (!['SCRIPT', 'STYLE', 'CODE', 'PRE', 'SVG', 'PATH', 'CIRCLE', 'RECT', 'LINE', 'POLYGON', 'POLYLINE'].includes(node.tagName)) {
+        if (!['SCRIPT','STYLE','CODE','PRE','SVG','PATH','CIRCLE','RECT','LINE','POLYGON','POLYLINE'].includes(node.tagName)) {
           Array.from(node.childNodes).forEach(child => highlightNode(child));
         }
       }
     }
-    
+
     Array.from(tempDiv.childNodes).forEach(child => highlightNode(child));
     return tempDiv.innerHTML;
   }
-  
+
   function clearSearch() {
     const searchInput = document.getElementById('global-search');
-    const clearBtn = document.getElementById('clear-search');
     const resultsDiv = document.getElementById('search-results');
     const noResultsDiv = document.getElementById('no-results');
     const normalView = document.getElementById('normal-view');
     const searchView = document.getElementById('search-view');
-    
+
     searchInput.value = '';
-    clearBtn.classList.add('hidden');
     resultsDiv.classList.add('hidden');
     noResultsDiv.classList.add('hidden');
-    
-    // Переключаем обратно на обычный вид
-    normalView.style.display = 'block'; // Восстанавливаем отображение
+    normalView.style.display = 'block';
     searchView.classList.add('hidden');
-    
-    // Сбросить URL
+
     if (history.pushState) {
       const url = new URL(window.location);
       url.searchParams.delete('q');
       history.pushState({}, '', url);
     }
-    
+
     searchInput.focus();
   }
 </script>
