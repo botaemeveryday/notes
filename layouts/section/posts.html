@@ -2,9 +2,21 @@
 
 <div class="container p-4">
   <div class="prose dark:prose-invert">
-    <h1 class="px-4 text-2xl">📁 {{ .Title }}</h1>
-    {{ with .Params.description }}
-      <p class="px-4">{{ . }}</p>
+    <h1 class="px-4 text-2xl">{{ .Title }}</h1>
+    
+    {{/* Читаем info.md напрямую из файловой системы */}}
+    {{ $infoPath := "" }}
+    {{ with .File }}
+      {{ $infoPath = path.Join .Dir "info.md" }}
+    {{ end }}
+    
+    {{ if and $infoPath (fileExists $infoPath) }}
+      {{ $infoContent := readFile $infoPath }}
+      <div class="px-4 mt-4 prose dark:prose-invert max-w-none">
+        {{ $infoContent | markdownify }}
+      </div>
+    {{ else if .Params.description }}
+      <p class="px-4">{{ .Params.description }}</p>
     {{ end }}
   </div>
 

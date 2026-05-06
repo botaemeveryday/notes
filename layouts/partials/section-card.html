@@ -20,7 +20,7 @@
   {{ end }}
 
   <div class="card-body">
-    <h2 class="card-title">📁 {{ .Title }}</h2>
+    <h2 class="card-title">{{ .Title }}</h2>
 
     <p class="date text-base-content/60">
       обновлено {{ (index (.Pages.ByDate.Reverse) 0).Date | time.Format "Monday, Jan 2, 2006" }}
