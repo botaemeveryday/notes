@@ -1,25 +1,67 @@
-<div class="flex items-center">
-  {{ if .Params.avatar }}
-  <div class="avatar mr-1">
-    <div class="w-8 rounded-full">
-      <img class="my-0!" src="{{ .Params.avatar }}" alt="{{ .Params.author }}" />
-    </div>
-  </div>
-  {{ else }}
-  <!-- <span>@</span> -->
-  {{ end }}
-
-  <span itemprop="author" itemscope itemtype="https://schema.org/Person">
-  {{ if .Params.author }}
-    {{ if and .Params.authorlink (eq .template "single") }}
-      <a itemprop="url" href="{{ .Params.authorlink }}" target="_blank">
-        <span itemprop="name">{{ .Params.author }}</span>
-      </a>
+<div class="flex items-center gap-1">
+  {{ $authors := slice }}
+  
+  {{/* Проверяем разные форматы указания авторов */}}
+  {{ if .Params.authors }}
+    {{ $authors = .Params.authors }}
+  {{ else if .Params.author }}
+    {{/* Если author — это строка, пробуем разделить по &, и, запятой */}}
+    {{ $authorStr := .Params.author }}
+    {{ $authorNames := slice }}
+    
+    {{ if (findRE " & " $authorStr) }}
+      {{ $authorNames = split $authorStr " & " }}
+    {{ else if (findRE ", " $authorStr) }}
+      {{ $authorNames = split $authorStr ", " }}
+    {{ else if (findRE " и " $authorStr) }}
+      {{ $authorNames = split $authorStr " и " }}
     {{ else }}
-      <span itemprop="name">{{ .Params.author }}</span>
+      {{ $authorNames = slice $authorStr }}
     {{ end }}
-  {{ else }}
-    <!-- <span itemprop="name">{{ site.Params.author }}</span> -->
+    
+    {{ range $authorNames }}
+      {{ $name := trim . " " }}
+      {{ $authors = $authors | append (dict "name" $name) }}
+    {{ end }}
   {{ end }}
-  </span>
+  
+  {{/* Отображаем авторов */}}
+  {{ if gt (len $authors) 0 }}
+    {{ range $i, $author := $authors }}
+      {{ if $i }}
+        <span class="text-base-content/40 mx-0.5"></span>
+      {{ end }}
+      
+      {{/* Аватарка */}}
+      {{ if $author.avatar }}
+        <div class="avatar mr-1">
+          <div class="w-8 rounded-full">
+            <img class="my-0!" src="{{ $author.avatar }}" alt="{{ $author.name }}" />
+          </div>
+        </div>
+      {{ else if $.Params.avatar }}
+        <div class="avatar mr-1">
+          <div class="w-8 rounded-full">
+            <img class="my-0!" src="{{ $.Params.avatar }}" alt="{{ $author.name }}" />
+          </div>
+        </div>
+      {{ end }}
+      
+      {{/* Имя автора со ссылкой */}}
+      <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+        {{ $authorLink := $author.link | default $.Params.authorlink }}
+        {{ if and $authorLink (eq $.template "single") }}
+          <a itemprop="url" href="{{ $authorLink }}" target="_blank" rel="noopener noreferrer" class="hover:opacity-80">
+            <span itemprop="name">{{ $author.name }}</span>
+          </a>
+        {{ else }}
+          <span itemprop="name">{{ $author.name }}</span>
+        {{ end }}
+      </span>
+    {{ end }}
+  {{ else if site.Params.author }}
+    <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+      <!-- <span itemprop="name">{{ site.Params.author }}</span> -->
+    </span>
+  {{ end }}
 </div>

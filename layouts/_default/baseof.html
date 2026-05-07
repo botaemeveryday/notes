@@ -50,9 +50,7 @@
       </script>
     {{ end }}
 
-    {{ if .Store.Get "hasMathjax" }}
-      {{ partialCached "mathjax.html" . }}
-    {{ end }}
+    {{ partialCached "mathjax.html" . }}
 
     {{ range site.Params.Advanced.customJS }}
     <script src="{{ . | relURL }}"></script>

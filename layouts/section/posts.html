@@ -1,18 +1,33 @@
 {{ define "main" }}
 
 <div class="container p-4">
-  <div class="prose dark:prose-invert">
-    <h1 class="px-4 text-2xl">📁 {{ .Title }}</h1>
-    {{ with .Params.description }}
-      <p class="px-4">{{ . }}</p>
+  <div class="prose dark:prose-invert" style="max-width: 100%; width: 100%;">
+    <h1 class="px-4 text-2xl">{{ .Title }}</h1>
+
+    {{ $infoPath := "" }}
+    {{ with .File }}
+      {{ $infoPath = path.Join .Dir "_info.md" }}
+    {{ end }}
+
+    {{ if and $infoPath (fileExists $infoPath) }}
+      {{ $infoContent := readFile $infoPath }}
+      <div class="px-4 mt-4 prose dark:prose-invert max-w-none w-full">
+        {{ $infoContent | markdownify }}
+      </div>
+    {{ else if .Params.description }}
+      <p class="px-4">{{ .Params.description }}</p>
     {{ end }}
   </div>
 
   <div class="dream-grid">
     {{ range .Pages.ByDate.Reverse }}
-      <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">
-        {{ .Render "summary" }}
-      </div>
+      {{/* Пропускаем страницы, начинающиеся с _ (например _info.md) */}}
+      {{ $fileName := .File.LogicalName }}
+      {{ if not (strings.Contains $fileName "_info") }}
+        <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">
+          {{ .Render "summary" }}
+        </div>
+      {{ end }}
     {{ end }}
   </div>
 </div>

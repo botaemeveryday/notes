@@ -1,33 +1,37 @@
 baseURL = "http://notes.botaemeveryday.io/"
-languageCode = 'ru-ru'
-title = 'botaemeveryday'
+languageCode = "ru-ru"
+title = "botaemeveryday"
 theme = "dream"
 
 defaultContentLanguage = "ru"
 hasCJKLanguage = true
 
-[markup.goldmark.renderer]
-  unsafe = true
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)'], ['$', '$']]
+  [markup.highlight]
+    noClasses = false
 
 [taxonomies]
   tag = "tags"
   category = "categories"
 
-[markup]
-[markup.highlight]
-noClasses = false
-
 [params]
-author = "notakeith & salt-caramel"
-description = "botaemeveryday Конспектики"
-avatar = "images/avatar.jpg"
-headerTitle = "botaemeveryday"
-motto = "Конспектики с любовью"
- 
-favicon = "favicon.ico"
- 
-stickyNav = false
-showTableOfContents = true
-showSummaryCoverInPost = true
-imageZoomableInPost = true
-showPrevNextPost = true
+  author = "notakeith & salt-caramel"
+  description = "botaemeveryday Конспектики"
+  avatar = "images/avatar.jpg"
+  headerTitle = "botaemeveryday"
+  motto = "Конспектики"
+  favicon = "favicon.ico"
+  stickyNav = false
+  showTableOfContents = true
+  showSummaryCoverInPost = true
+  imageZoomableInPost = true
+  showPrevNextPost = true
