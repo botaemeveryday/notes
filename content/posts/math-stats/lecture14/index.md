@@ -7,7 +7,7 @@ tags:
   - Математическая статистика
   - 4 семестр
 nolastmod: true
-draft: true
+draft: false
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4
