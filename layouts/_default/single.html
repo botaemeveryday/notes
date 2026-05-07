@@ -4,8 +4,6 @@
 <link id="custom-syntax-dark" rel="stylesheet" href="{{ "css/syntax.css" | relURL }}" />
 
 
-{{ partialCached "commentSystemHeads.html" . }}
-
 {{ end }}
 
 {{ define "main" }}
@@ -24,19 +22,11 @@
         <a class="text-lg font-semibold text-base-content" href="{{ .CurrentSection.RelPermalink }}" >
           {{ .CurrentSection.Title | default "Статьи" }}
         </a>
-        <!-- <button 
-          @click="toggleCollapse" 
-          class="btn btn-xs btn-ghost"
-          :aria-expanded="!isCollapsed"
-        >
-          <span x-show="!isCollapsed" class="text-xs">Свернуть</span>
-          <span x-show="isCollapsed" class="text-xs">Развернуть</span>
-        </button> -->
       </div>
       
       <div x-show="!isCollapsed" x-transition>
         <ul class="menu menu-sm rounded-box w-full p-2 space-y-1">
-          {{ range where .Site.RegularPages "Section" "posts" }}
+          {{ range sort (where .Site.RegularPages "Section" "posts") "Date" "asc" }}
             {{ if eq .CurrentSection.RelPermalink $.CurrentSection.RelPermalink }}
               <li>
                 <a 
@@ -85,7 +75,7 @@
             {{ .Date | time.Format "Monday, Jan 2, 2006" }}
           {{ end }}
 
-          | <span>{{ .ReadingTime }}{{ T "minuteRead" .ReadingTime }}</span>
+          <!-- | <span>{{ .ReadingTime }}{{ T "minuteRead" .ReadingTime }}</span> -->
 
           {{ if ne .Params.nolastmod true }}
           | <span>{{ T "updatedAt" }}
@@ -102,8 +92,6 @@
           {{ if $hasAuthor }}
             {{ partial "author.html" (dict "Params" .Params "template" "single") }}
           {{ end }}
-
-          {{ partial "share.html" . }}
         </div>
       </header>
 
@@ -149,14 +137,6 @@
         <div></div>
         {{ end }}
       </div>
-      {{ end }}
-
-      {{ if or site.Config.Services.Disqus.Shortname site.Params.utterancesRepo site.Params.valine site.Params.waline site.Params.twikoo.enabled }}
-      <div class="divider"></div>
-
-      <section class="space-y-4">
-        {{ partialCached "commentSystems.html" . .RelPermalink }}
-      </section>
       {{ end }}
     </article>
   </div>

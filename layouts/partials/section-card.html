@@ -23,12 +23,13 @@
     <h2 class="card-title">{{ .Title }}</h2>
 
     <p class="date text-base-content/60">
-      обновлено {{ (index (.Pages.ByDate.Reverse) 0).Date | time.Format "Monday, Jan 2, 2006" }}
-    </p>
-
+      {{ (index (.Pages.ByDate.Reverse) 0).Date | time.Format "Monday, Jan 2, 2006" }}
+      <br>
     {{ with .Params.description }}
-      <p>{{ . }}</p>
+       {{ . }}
     {{ end }}
+
+    </p>
 
     {{ $hasAuthor := or .Params.author site.Params.author }}
     <div class="card-actions justify-between items-center mt-4">

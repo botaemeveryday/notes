@@ -5,7 +5,8 @@
     now.Year }}{{ end }} {{ site.Title }}
   </p>
   {{ else }}
-  <p class="flex items-center" style="gap:2px">💚
+  <p class="flex items-center" style="gap:2px">
+    <span class="text-base-content/60">made by</span>
   <a href="https://github.com/notakeith" 
     class="no-underline text-current" 
     style="transition: color 0.2s;"
@@ -13,7 +14,7 @@
     onmouseout="this.style.color='currentColor'">
     notakeith
   </a>
-  <span>&</span>
+  <span class="text-base-content/60">&</span>
   <a href="https://github.com/salt-caramel" 
     class="no-underline text-current" 
     style="transition: color 0.2s;"
@@ -27,12 +28,9 @@
   {{ if site.Params.footerBottomText }}
   <p>{{ site.Params.footerBottomText | safeHTML }}</p>
   {{ else }}
-  <p class="text-sm">
-    🌱
-    <span class="text-base-content/60">
-      Powered by Hugo, inspired by ITMO</a>.</span
-    >
-  </p>
+    <!-- another line -->
   {{ end }}
+
+<!-- {{ partial "contributors.html" . }} -->
 </div>
 

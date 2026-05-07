@@ -4,11 +4,7 @@
 
 {{ define "main" }}
 
-{{ if site.Params.zenMode }}
-<div class="max-w-[65ch] mt-8 lg:mt-12 mx-auto px-4"
-{{ else }}
 <div class="mt-8 lg:mt-12 px-4"
-{{ end }}
 x-data="{
   search: '',
   get posts() { return this.search !== '' ? window.fuse.search(this.search) : [] },
