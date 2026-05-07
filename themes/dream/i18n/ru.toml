@@ -47,10 +47,10 @@ other = " минут чтения"
 other = "Обновлено"
 
 [prevPage]
-other = "Предыдущая"
+other = "Следущая"
 
 [nextPage]
-other = "Следующая"
+other = "Предыдущая"
 
 [search]
 other = "Поиск"
