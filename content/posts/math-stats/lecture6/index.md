@@ -15,11 +15,11 @@ authors:
 ---
 
 <div style="justify-content:space-around; display: flex">
-  <a href="/posts/math-stats/lecture6/resources/anki1.apkg" class="btn rounded-full no-underline">
+  <a href="resources/cards.apkg" class="btn rounded-full no-underline">
       <ion-icon name="copy-outline"></ion-icon>
       Карточки Анки (Л6)
   </a>
-  <a href="/posts/math-stats/lecture6/resources/transcription.txt" class="btn rounded-full no-underline">
+  <a href="resources/transcription.txt" class="btn rounded-full no-underline">
       <ion-icon name="text-outline"></ion-icon>
       Расшифровка аудио
   </a>
