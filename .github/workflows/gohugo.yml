@@ -48,13 +48,6 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Install Node.js dependencies
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
-      - name: Build CSS with Tailwind
-        run: |
-          if [ -f package.json ] && grep -q "build:css" package.json; then
-            npm run build:css
-          elif [ -f tailwind.config.js ]; then
-            npx tailwindcss -i ./src/input.css -o ./assets/css/output.css
-          fi
       - name: Build with Hugo
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
@@ -68,7 +61,7 @@ jobs:
           [ -f public/index.html ] || exit 1
           grep -q "<body" public/index.html || (echo "Index.html пустой!"; exit 1)
           echo "Содержимое index.html:"
-          cat public/index.html      
+          cat public/index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
