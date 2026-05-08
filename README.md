@@ -22,7 +22,7 @@
 ## Хочешь помочь?
 
 Контрибьютить можно и нужно!
-Смотри файл **[CONTRIBUTING](CONTRIBUTING)**.
+Смотри файл **[CONTRIBUTING](CONTRIBUTING.md)**.
 
 ## Благодарности
 

@@ -1,21 +1,13 @@
 ---
-title: "3. От MULTICS до MacOS и Linux: полная история эволюции операционных систем"
-description: "Как Unix стал Unix, зачем понадобился язык C, кто такие Bell Labs, почему Линус поспорил с Таненбаумом, и при чем здесь антимонопольное законодательство, Столман с Copyleft и обкусанное яблоко."
+title: "Лекция 3"
+description: "Полная история эволюции операционных систем"
 date: 2026-02-18T00:01:00+03:00
 cover: cover.png
 tags:
   - Операционные-системы
-  - История-IT
-  - Unix
-  - Linux
-  - Bell-Labs
-  - GNU
-  - Richard-Stallman
-  - macOS
-  - Windows
-  - Anki
+  - 4 семестр
 nolastmod: true
-draft: false
+draft: true
 ---
 
 # Постепенное нарастание функционала ОС 

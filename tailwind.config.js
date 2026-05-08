@@ -1,39 +1,31 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // 1. Укажите пути к вашим файлам
   content: [
     './layouts/**/*.html',
     './content/**/*.md',
     './themes/**/layouts/**/*.html',
     './themes/**/content/**/*.md',
   ],
-    
-  // Включите dark mode
-  darkMode: 'class', // или 'media' для prefers-color-scheme
-  
 
-  // 2. Настройки темы
+  darkMode: 'class',
+
   theme: {
     container: {
       center: true,
       padding: '1rem',
     },
-    
-    // 3. Расширение базовой темы
+
     extend: {
-      // Border radius должен быть здесь!
       borderRadius: {
         'sm': '0.125rem',
         'DEFAULT': '0.25rem',
         'md': '0.375rem',
         'lg': '0.5rem',
-        'xl': '0.75rem', // ← Вот rounded-xl!
+        'xl': '0.75rem',
         '2xl': '1rem',
         '3xl': '1.5rem',
         'full': '9999px',
       },
-      
-      // Другие настройки...
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -44,9 +36,7 @@ module.exports = {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
         },
-        // ... добавьте остальные цвета
       },
-      
       typography: {
         DEFAULT: {
           css: {
@@ -76,10 +66,7 @@ module.exports = {
       },
     },
   },
-  
-  // 4. Плагины
   plugins: [
     require('@tailwindcss/typography'),
-    // require('daisyui') // Если используете DaisyUI
   ],
 }
