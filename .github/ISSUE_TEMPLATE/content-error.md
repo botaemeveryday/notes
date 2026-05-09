@@ -1,34 +1,33 @@
 ---
-name: Content Error
-about: Report a mistake in lecture notes, transcriptions, or Anki cards
+name: Ошибка в контенте
+about: Сообщить об ошибке в конспектах лекций
 title: "[CONTENT]"
 labels: content
 assignees: ''
-
 ---
 
-**Lecture**
-Which lecture has the error?
+**Лекция**
+В какой лекции обнаружена ошибка? (можно ссылку)
 
-**Exact Location**
-Where exactly is the mistake? (section, paragraph, line number)
+**Точное местоположение**
+Где именно находится ошибка? (раздел, параграф, номер строки)
 
-**Current Text (what's wrong)**
-Copy the incorrect text here.
+**Текущий текст (что неправильно)**
+Скопируйте сюда неверный текст.
 
-**Suggested Correction**
-What should it say instead?
+**Предлагаемое исправление**
+Как должно быть правильно?
 
-**Error Type**
-- [ ] Typo / spelling
-- [ ] Mathematical mistake
-- [ ] Missing content
-- [ ] Wrong reference
-- [ ] Anki card error
-- [ ] Transcription error
+**Тип ошибки**
+- [ ] Опечатка / орфографическая ошибка
+- [ ] Математическая ошибка
+- [ ] Отсутствующий материал
+- [ ] Неверная ссылка
+- [ ] Ошибка в карточке Anki
+- [ ] Ошибка транскрипции
 
-**Explanation (optional)**
-Why is this wrong? Add any references if you have them.
+**Пояснение (по желанию)**
+Почему это неверно? Добавьте любые ссылки, если они у вас есть.
 
-**Additional Context**
-Anything else we should know?
+**Дополнительный контекст**
+Есть ли ещё какая-то важная информация?
