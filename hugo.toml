@@ -1,5 +1,5 @@
 baseURL = "https://botaemeveryday.github.io/notes/"
-languageCode = "ru-ru"
+locale = "ru-RU"
 title = "botaemeveryday"
 theme = "dream"
 
@@ -10,6 +10,10 @@ hasCJKLanguage = true
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+    [markup.goldmark.parser]
+      autoHeadingID = true
+      [markup.goldmark.parser.attribute]
+        title = true
     [markup.goldmark.extensions]
       [markup.goldmark.extensions.passthrough]
         enable = true
@@ -35,3 +39,6 @@ hasCJKLanguage = true
   showSummaryCoverInPost = true
   imageZoomableInPost = true
   showPrevNextPost = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

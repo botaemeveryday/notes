@@ -17,3 +17,9 @@
   {{ $mainJs = $mainJs | minify }}
 {{ end }}
 <script src="{{ $mainJs.RelPermalink }}"></script>
+
+{{ $codeCopyJs := resources.Get "js/code-copy.js" }}
+{{ if hugo.IsProduction }}
+  {{ $codeCopyJs = $codeCopyJs | minify }}
+{{ end }}
+<script src="{{ $codeCopyJs.RelPermalink }}"></script>

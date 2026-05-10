@@ -28,9 +28,13 @@
   {{ if site.Params.footerBottomText }}
   <p>{{ site.Params.footerBottomText | safeHTML }}</p>
   {{ else }}
-    <!-- another line -->
-  {{ end }}
+    <div>
+  <a href="https://github.com/botaemeveryday/notes" class="inline-block transition-transform hover:scale-105">
+    <img src="https://img.shields.io/github/stars/botaemeveryday/notes?style=flat-square&logo=github&labelColor=1a1a1a&color=333333" 
+         alt="GitHub stars" />
 
-<!-- {{ partial "contributors.html" . }} -->
+  </a>
+</div>
+  {{ end }}
 </div>
 

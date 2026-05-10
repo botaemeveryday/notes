@@ -1,0 +1,156 @@
+<script>
+  let searchIndex = [];
+  let searchTimeout = null;
+
+  document.addEventListener('DOMContentLoaded', async function() {
+    const searchInput = document.getElementById('global-search');
+
+    try {
+      const jsonUrl = '{{ "index.json" | relURL }}';
+      console.log("Пытаемся загрузить индекс поиска по адресу:", jsonUrl);
+      
+      const response = await fetch(jsonUrl);
+      if (!response.ok) {
+        throw new Error(`Ошибка HTTP: ${response.status}`);
+      }
+      
+      searchIndex = await response.json();
+      console.log("✅ Поисковый индекс загружен! Количество элементов:", searchIndex.length);
+    } catch (error) {
+      console.error('❌ Ошибка загрузки базы для поиска:', error);
+      document.getElementById('search-results').classList.remove('hidden');
+      document.getElementById('search-results').innerHTML = `<span class="text-red-500">Ошибка инициализации поиска. Проверь консоль (F12).</span>`;
+      return;
+    }
+
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      const query = this.value;
+      
+      searchTimeout = setTimeout(() => {
+        query.trim().length > 0 ? performSearch(query) : clearSearch();
+      }, 300); 
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      if (e.key === 'Escape' && searchInput.value) {
+        clearSearch();
+      }
+    });
+
+    const urlQuery = new URLSearchParams(window.location.search).get('q');
+    if (urlQuery) {
+      searchInput.value = urlQuery;
+      setTimeout(() => performSearch(urlQuery), 500);
+    }
+  });
+
+  function performSearch(query) {
+    const searchTerm = query.toLowerCase().trim();
+    if (!searchTerm || searchIndex.length === 0) return;
+
+    document.getElementById('normal-view').style.display = 'none';
+    document.getElementById('search-view').classList.remove('hidden');
+    
+    const searchGrid = document.getElementById('search-grid');
+    searchGrid.innerHTML = '';
+
+    let visibleCount = 0;
+    
+    searchIndex.forEach((item) => {
+      const title = item.title || "";
+      const content = item.content || "";
+      const tags = Array.isArray(item.tags) ? item.tags.join(' ') : "";
+
+      const textToSearch = `${title} ${content} ${tags}`.toLowerCase();
+
+      if (textToSearch.includes(searchTerm)) {
+        const template = document.getElementById('search-item-template').content.cloneNode(true);
+        const element = template.querySelector('.search-result-item');
+        
+        element.style.opacity = '1';
+        element.style.transform = 'none';
+        
+        let htmlToInsert = item.html || "";
+        if (htmlToInsert.trim() === "") {
+          htmlToInsert = `
+            <div class="card bg-base-100 shadow-xl border border-base-300 h-full">
+              <div class="card-body">
+                <h2 class="card-title text-base-content">${item.title || 'Документ'}</h2>
+                <p class="text-base-content/70 text-sm mt-2">${(item.content || '').substring(0, 150)}...</p>
+                <div class="card-actions justify-end mt-4">
+                  <a href="${item.id}" class="btn btn-primary btn-sm">Перейти</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        template.querySelector('.card-content').innerHTML = highlightSearchTerms(htmlToInsert, searchTerm);
+        
+        searchGrid.appendChild(template);
+        visibleCount++;
+      }
+    });
+
+    document.getElementById('result-count').textContent = visibleCount;
+    document.getElementById('search-results').classList.toggle('hidden', visibleCount === 0);
+    document.getElementById('no-results').classList.toggle('hidden', visibleCount > 0);
+    document.getElementById('search-view').classList.toggle('hidden', visibleCount === 0);
+
+    if (history.pushState) {
+      const url = new URL(window.location);
+      url.searchParams.set('q', searchTerm);
+      history.pushState({}, '', url);
+    }
+  }
+
+  function highlightSearchTerms(html, term) {
+    if (!term || !html) return html;
+    const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+
+    function highlightNode(node) {
+      if (node.nodeType === Node.TEXT_NODE && regex.test(node.textContent)) {
+        const fragment = document.createDocumentFragment();
+        node.textContent.split(regex).forEach(part => {
+          if (regex.test(part)) {
+            const span = document.createElement('span');
+            span.className = 'search-highlight text-primary font-bold bg-primary/20 rounded px-1';
+            span.textContent = part;
+            fragment.appendChild(span);
+          } else if (part) {
+            fragment.appendChild(document.createTextNode(part));
+          }
+        });
+        node.parentNode.replaceChild(fragment, node);
+      } else if (node.nodeType === Node.ELEMENT_NODE && !['SCRIPT','STYLE','CODE','PRE','SVG'].includes(node.tagName)) {
+        Array.from(node.childNodes).forEach(highlightNode);
+      }
+    }
+    Array.from(tempDiv.childNodes).forEach(highlightNode);
+    return tempDiv.innerHTML;
+  }
+
+  window.clearSearch = function() {
+    const searchInput = document.getElementById('global-search');
+    searchInput.value = '';
+    
+    document.getElementById('search-results').classList.add('hidden');
+    document.getElementById('no-results').classList.add('hidden');
+    document.getElementById('search-view').classList.add('hidden');
+    document.getElementById('normal-view').style.display = 'block';
+
+    if (history.pushState) {
+      const url = new URL(window.location);
+      url.searchParams.delete('q');
+      history.pushState({}, '', url);
+    }
+    searchInput.focus();
+  }
+</script>

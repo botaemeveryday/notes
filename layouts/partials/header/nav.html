@@ -1,0 +1,31 @@
+{{ if site.Params.stickyNav }}
+<nav x-data="{ isSticky: false }"
+  x-init="window.addEventListener('scroll', () => { isSticky = window.scrollY > 30 })"
+  class="sticky top-0 z-30 mt-4 lg:mt-8 py-4 transition-all duration-300"
+  :class="{ 'bg-base-100 shadow-lg dark:border-b dark:border-base-content/30': isSticky }">
+{{ else }}
+<nav class="mt-4 lg:mt-8 py-4">
+{{ end }}
+  <div class="container flex flex-col md:flex-row md:items-center justify-between gap-4 px-4">
+    <section class="flex items-center gap-4 whitespace-nowrap">
+      <div class="avatar" title="{{ T "!flip" }}">
+        <div class="h-10 rounded-full">
+          <img src="{{ site.Params.avatar | relURL }}" alt="{{ site.Params.headerTitle }}" />
+        </div>
+      </div>
+
+      {{ if or site.Params.headerTitle site.Params.motto }}
+      <div>
+        {{ if site.Params.headerTitle }}
+        <a href="{{ site.BaseURL }}" class="text-lg font-semibold cursor-pointer">
+          {{ site.Params.headerTitle }}
+        </a>
+        {{ end }}
+        {{ if site.Params.motto }}
+        <div class="text-base-content/60 text-sm hidden sm:block">{{ site.Params.motto }}</div>
+        {{ end }}
+      </div>
+      {{ end }}
+    </section>
+  </div>
+</nav>

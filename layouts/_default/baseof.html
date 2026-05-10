@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ site.LanguageCode }}"
+<html lang="{{ site.Language.Locale }}"
   x-data
   :class="$store.darkMode.class()"
   :data-theme="$store.darkMode.theme()">
@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ block "title" . -}} {{ T "home" }} {{- end }} | {{ site.Title }}</title>
 
-    {{ partial "head.html" . }}
+    {{ partial "core/head.html" . }}
 
     {{ block "css" . }} {{ end }}
 
@@ -22,10 +22,8 @@
   <body x-data="{
     flip: false,
   }">
-    <!-- If backgroundImage defined -->
     <div id="dream-global-bg"></div>
-    {{ partial "welcome-modal.html" . }}
-    {{ partial "nav.html" . }}
+    {{ partial "header/nav.html" . }}
 
     <div class="flip-container">
       <div class="flipper">
@@ -33,14 +31,14 @@
           <div class="container">
             {{ block "main" . }} {{ end }}
 
-            {{ partial "footer.html" . }}
+            {{ partial "footer/footer.html" . }}
           </div>
         </div>
       </div>
     </div>
 
 
-    {{ partial "scripts.html" . }}
+    {{ partial "core/scripts.html" . }}
     {{ block "js" . }} {{ end }}
 
     {{ if .Store.Get "hasMermaid" }}
@@ -50,7 +48,7 @@
       </script>
     {{ end }}
 
-    {{ partialCached "mathjax.html" . }}
+    {{ partialCached "core/mathjax.html" . }}
 
     {{ range site.Params.Advanced.customJS }}
     <script src="{{ . | relURL }}"></script>

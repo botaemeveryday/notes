@@ -1,0 +1,21 @@
+{{ if site.Params.Experimental.jsDate }}
+  {{ partial "core/luxon.html" . }}
+{{ end }}
+
+{{ $tocJs := resources.Get "js/toc.js" }}
+{{ if hugo.IsProduction }}{{ $tocJs = $tocJs | minify }}{{ end }}
+<script src="{{ $tocJs.RelPermalink }}"></script>
+
+{{ if site.Params.imageZoomableInPost }}
+  {{ if fileExists "layouts/partials/ui/medium-zoom.html" }}
+    {{ partialCached "ui/medium-zoom.html" . }}
+  {{ else }}
+    <script type="module">
+      import mediumZoom from 'https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/+esm';
+      mediumZoom('#dream-single-post-content img', {
+        background: 'oklch(var(--b1))',
+        margin: 24,
+      })
+    </script>
+  {{ end }}
+{{ end }}

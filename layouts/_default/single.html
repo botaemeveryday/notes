@@ -1,202 +1,35 @@
 {{ define "title" }}{{ .Title }}{{ end }}
-
-{{ define "css" }}
-<link id="custom-syntax-dark" rel="stylesheet" href="{{ "css/syntax.css" | relURL }}" />
-
-
-{{ end }}
+{{ define "css" }}{{ end }}
 
 {{ define "main" }}
-<div class="lg:grid lg:grid-cols-4 gap-4 mt-4 px-4">
-  <!-- ЛЕВАЯ КОЛОНКА: Все статьи из раздела -->
-  <div class="hidden lg:block lg:col-span-1">
-    <div 
-      x-data="{ 
-        currentSlug: '{{ .RelPermalink }}',
-        isCollapsed: false,
-        toggleCollapse() { this.isCollapsed = !this.isCollapsed }
-      }"
-      class="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto pr-4"
-    >
-      <div class="flex items-center justify-between mb-4">
-        <a class="text-lg font-semibold text-base-content" href="{{ .CurrentSection.RelPermalink }}" >
-          {{ .CurrentSection.Title | default "Статьи" }}
-        </a>
-      </div>
-      
-      <div x-show="!isCollapsed" x-transition>
-        <ul class="menu menu-sm rounded-box w-full p-2 space-y-1">
-          {{ range sort (where .Site.RegularPages "Section" "posts") "Date" "asc" }}
-            {{ if eq .CurrentSection.RelPermalink $.CurrentSection.RelPermalink }}
-              <li>
-                <a 
-                  href="{{ .RelPermalink }}" 
-                  class="flex items-center justify-between hover:bg-base-300 transition-colors rounded-md px-3 py-2"
-                  :class="{ 'bg-primary/20 text-primary font-medium': currentSlug === '{{ .RelPermalink }}' }"
-                >
-                  <span class="truncate">{{ .LinkTitle | default .Title }}</span>
-                  {{ if eq .RelPermalink $.RelPermalink }}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                  {{ end }}
-                </a>
-              </li>
-            {{ end }}
-          {{ end }}
-        </ul>
-      </div>
-    </div>
-  </div>
+<div class="lg:grid lg:grid-cols-4 gap-8 mt-4 px-4 container mx-auto">
+  <aside class="hidden lg:block lg:col-span-1">
+    {{ partial "post/sidebar-left.html" . }}
+  </aside>
 
-  <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА: Содержание статьи -->
-  <div class="lg:col-span-2">
-    <article class="mx-auto prose prose-quoteless dark:prose-invert" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+  <main class="lg:col-span-2">
+    <article class="mx-auto prose prose-quoteless dark:prose-invert max-w-none" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
       {{ template "_internal/schema.html" . }}
 
-      <header>
-        <h1 itemprop="headline">{{ .Title }}</h1>
-
-        {{ $taxonomy := "tags" }} {{ with .Param $taxonomy }}
-        <div class="flex flex-wrap gap-4 mt-6">
-          {{ range $index, $tag := . }} {{ with $.Site.GetPage (printf "/%s/%s"
-          $taxonomy $tag) -}}
-          <a href="{{ .Permalink }}" class="badge h-6 no-underline hover:badge-primary">
-            {{ replace $tag "-" " " | title }} 
-          </a>
-          {{- end -}} {{- end -}}
-        </div>
-        {{ end }}
-        
-        <p class="text-sm">
-          {{ if site.Params.Experimental.jsDate }}
-            <span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
-          {{ else }}
-            {{ .Date | time.Format "Monday, Jan 2, 2006" }}
-          {{ end }}
-
-          <!-- | <span>{{ .ReadingTime }}{{ T "minuteRead" .ReadingTime }}</span> -->
-
-          {{ if ne .Params.nolastmod true }}
-          | <span>{{ T "updatedAt" }}
-            {{ if site.Params.Experimental.jsDate }}
-              <span data-format="luxon">{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</span>
-            {{ else }}
-              {{ .Lastmod | time.Format "Monday, Jan 2, 2006" }}
-            {{ end }}</span>
-          {{ end }}
-        </p>
-
-        {{ $hasAuthor := or .Params.author site.Params.author }}
-        <div class="flex justify-between">
-          {{ if $hasAuthor }}
-            {{ partial "author.html" (dict "Params" .Params "template" "single") }}
-          {{ end }}
-        </div>
-      </header>
+      {{ partial "post/header.html" . }}
 
       <section id="dream-single-post-content" itemprop="articleBody">
-
-        {{ if and .Params.Cover site.Params.showSummaryCoverInPost }}
-          <img class="w-full z-30" src="{{ .Params.Cover }}" alt="{{ .Title }}" style="border-radius: 1em;"/>
-        {{ end }}
-
         {{ .Content | emojify }}
-
-        {{ if fileExists "layouts/partials/adsense-post-bottom.html" }}
-          <div class="dream-adsense-post-bottom">
-            {{ partialCached "adsense-post-bottom.html" . }}
-          </div>
-        {{ end }}
       </section>
 
       {{ if site.Params.showPrevNextPost }}
-      <div class="divider"></div>
-      <div class="flex flex-col md:flex-row justify-between gap-4 py-4">
-        {{ with .NextInSection }}
-        <a role="button" class="btn btn-outline h-12" href="{{ .RelPermalink }}" title="{{ .Title }}">
-          <ion-icon name="chevron-back"></ion-icon>
-          <div class="inline-flex flex-col items-start">
-            <span class="text-base-content/60 text-xs font-normal">{{ T "prevPage" }}</span>
-            <span class="max-w-48 truncate">{{ .LinkTitle }}</span>
-          </div>
-        </a>
-        {{ else }}
-        <div></div>
-        {{ end }}
-
-        {{ with .PrevInSection }}
-        <a role="button" class="btn btn-outline h-12" href="{{ .RelPermalink }}" title="{{ .Title }}">
-          <div class="inline-flex flex-col items-end">
-            <span class="text-base-content/60 text-xs font-normal">{{ T "nextPage" }}</span>
-            <span class="max-w-48 truncate">{{ .LinkTitle }}</span>
-          </div>
-          <ion-icon name="chevron-forward"></ion-icon>
-        </a>
-        {{ else }}
-        <div></div>
-        {{ end }}
-      </div>
+        {{ partial "post/prev-next.html" . }}
       {{ end }}
     </article>
-  </div>
+  </main>
 
-  <!-- ПРАВАЯ КОЛОНКА: Оглавление статьи -->
-  <div
-    x-data="tocHighlighter()"
-    @scroll.window="debouncedScroll"
-    class="hidden lg:flex lg:flex-col lg:items-end">
-    {{ if site.Params.showTableOfContents }}
-      {{ .TableOfContents }}
-    {{ end }}
-  </div>
+  <aside class="hidden lg:block lg:col-span-1">
+    {{ partial "post/sidebar-right.html" . }}
+  </aside>
+
 </div>
 {{ end }}
 
 {{ define "js" }}
-
-{{ if site.Params.Experimental.jsDate }}
-{{ partial "luxon.html" . }}
-{{ end }}
-
-{{ if site.Params.customSyntaxHighlighting }}
-{{- $syntaxLightCSS := resources.Get "css/syntax-light.css" | minify -}}
-{{- $syntaxDarkCSS := resources.Get "css/syntax-dark.css" | minify -}}
-<script>
-  window.customSyntaxHighlighting = {
-    light: {{ $syntaxLightCSS.RelPermalink }},
-    dark: {{ $syntaxDarkCSS.RelPermalink }}
-  }
-
-  document.addEventListener('alpine:initialized', () => {
-    var isDark = Alpine.store('darkMode').isDark()
-    var customSyntaxHighlightingUrl = isDark ? window.customSyntaxHighlighting.dark : window.customSyntaxHighlighting.light
-
-    document
-      .querySelector('link[data-custom-syntax-highlighting]')
-      .setAttribute('href', customSyntaxHighlightingUrl)
-  })
-</script>
-{{ end }}
-
-{{ $tocJs := resources.Get "js/toc.js" }}
-{{ if hugo.IsProduction }}
-  {{ $tocJs = $tocJs | minify }}
-{{ end }}
-<script src="{{ $tocJs.RelPermalink }}"></script>
-
-{{ if site.Params.imageZoomableInPost }}
-  {{ if fileExists "layouts/partials/medium-zoom.html" }}
-    {{ partialCached "medium-zoom.html" . }}
-  {{ else }}
-    <script type="module">
-      import mediumZoom from 'https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/+esm';
-      mediumZoom('#dream-single-post-content img', {
-        background: 'oklch(var(--b1))',
-        margin: 24,
-      })
-    </script>
-  {{ end }}
-{{ end }}
-
+  {{ partial "post/scripts.html" . }}
 {{ end }}

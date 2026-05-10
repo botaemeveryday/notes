@@ -5,54 +5,51 @@
 {{ end }}
 
 {{ define "main"}}
-
-<div class="flex flex-col md:flex-row mt-4">
-{{ end }}
-  <div class="md:basis-[200px] lg:basis-[300px] p-4 prose dark:prose-invert">
-    <h1 class="text-2xl">
+<div class="flex flex-col md:flex-row mt-8 px-4 container mx-auto">
+  
+  <div class="md:basis-[250px] lg:basis-[350px] p-4 prose dark:prose-invert">
+    <h1 class="text-3xl font-extrabold mb-2">
       {{- $title := T (print "all" (strings.FirstUpper .Data.Plural)) }}
       {{- default (strings.FirstUpper .Data.Plural) $title -}}
     </h1>
-    <p class="text-sm">
+    
+    <p class="text-base-content/60 text-sm mb-6">
       {{- if eq (len .Data.Terms) 1 }}
-      {{- default (print "1 " .Data.Singular) (T .Data.Singular 1) }}
+        {{- default (print "1 " .Data.Singular) (T .Data.Singular 1) }}
       {{- else }}
-      {{- default (print (len .Data.Terms) " " .Data.Plural) (T .Data.Singular (len .Data.Terms)) }}
+        {{- default (print (len .Data.Terms) " " .Data.Plural) (T .Data.Singular (len .Data.Terms)) }}
       {{- end -}}
     </p>
-    <div class="flex flex-wrap gap-4 mt-6">
+    
+    <div class="flex flex-wrap gap-2">
       {{ range .Data.Terms.Alphabetical }}
-      <a href="{{ .Page.RelPermalink }}" class="badge h-6 no-underline hover:badge-primary">
-        {{ .Page.LinkTitle }}
+      <a href="{{ .Page.RelPermalink }}" class="badge badge-outline font-medium hover:badge-primary hover:bg-primary/10 transition-colors py-3">
+        #{{ .Page.LinkTitle | lower }}
+        <span class="ml-1.5 text-xs opacity-50">({{ .Count }})</span>
       </a>
       {{ end }}
     </div>
   </div>
-  <div class="divider divider-vertical"></div>
+  
+  <div class="divider md:divider-horizontal px-4 md:px-0 opacity-50"></div>
+  
   <div class="flex-1">
     {{ $paginator := .Paginate (where site.RegularPages (print ".Params." .Data.Plural) "ne" nil) }}
 
-    <div class="dream-grid">
+    <div class="flex flex-wrap -mx-4">
       {{ range $paginator.Pages }}
-        <div class="w-full md:w-1/2 lg:w-1/3 p-4 dream-column">
+        <div class="w-full md:w-1/2 xl:w-1/3 p-4">
           {{ .Render "summary" }}
         </div>
       {{ end }}
     </div>
 
     {{ if gt $paginator.TotalPages 1 }}
-    <div class="flex justify-center pt-8">
-      {{ partial "paginator.html" (dict "paginator" $paginator) }}
+    <div class="flex justify-center pt-12 pb-8">
+      {{ partial "ui/paginator.html" (dict "paginator" $paginator) }}
     </div>
     {{ end }}
   </div>
+
 </div>
-
-
-{{ define "js" }}
-
-{{ if site.Params.Experimental.jsDate }}
-{{ partial "luxon.html" . }}
-{{ end }}
-
 {{ end }}

@@ -1,0 +1,38 @@
+{{- $searchIndex := slice -}}
+
+{{- /* 1. Добавляем папки (предметы) */ -}}
+{{- with site.GetPage "section" "posts" -}}
+  {{- range .Sections -}}
+    {{- if not .Draft -}}
+      {{- $html := partial "ui/section-card.html" . -}}
+      {{- $searchIndex = $searchIndex | append (dict
+        "id" .RelPermalink
+        "kind" "section"
+        "title" .Title
+        "content" (.Plain | default .Description)
+        "tags" (.Params.tags | default slice)
+        "html" $html
+      ) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 2. Добавляем сами лекции */ -}}
+{{- $allPosts := where site.RegularPages "Type" "posts" -}}
+{{- $allPosts = where $allPosts "IsSection" false -}}
+{{- $allPosts = where $allPosts "Draft" false -}}
+
+{{- range $allPosts -}}
+  {{- $html := .Render "summary" -}}
+  {{- $searchIndex = $searchIndex | append (dict
+    "id" .RelPermalink
+    "kind" "post"
+    "title" .Title
+    "content" .Plain
+    "tags" (.Params.tags | default slice)
+    "html" $html
+  ) -}}
+{{- end -}}
+
+{{- /* Выводим готовый JSON */ -}}
+{{- $searchIndex | jsonify -}}

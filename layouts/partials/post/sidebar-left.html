@@ -1,0 +1,27 @@
+<div 
+  x-data="{ currentSlug: '{{ .RelPermalink }}' }"
+  class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2 custom-scrollbar"
+>
+  <div class="mb-4 pb-2 border-b border-base-content/10">
+    <a class="text-sm font-bold text-base-content/50 uppercase tracking-wider hover:text-primary transition-colors" href="{{ .CurrentSection.RelPermalink }}" >
+      ← {{ .CurrentSection.Title | default "Вернуться к курсу" }}
+    </a>
+  </div>
+  
+  <ul class="menu menu-sm w-full p-0 space-y-1">
+    {{ range .CurrentSection.RegularPages.ByDate }}
+      <li>
+        <a 
+          href="{{ .RelPermalink }}" 
+          class="flex items-center justify-between rounded-lg px-3 py-2 transition-all"
+          :class="currentSlug === '{{ .RelPermalink }}' ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-base-200 text-base-content/80'"
+        >
+          <span class="truncate">{{ .LinkTitle | default .Title }}</span>
+          {{ if eq .RelPermalink $.RelPermalink }}
+            <div class="w-1.5 h-1.5 rounded-full bg-primary ml-2 shrink-0"></div>
+          {{ end }}
+        </a>
+      </li>
+    {{ end }}
+  </ul>
+</div>

@@ -1,0 +1,12 @@
+<div 
+  x-data="tocHighlighter()"
+  @scroll.window="debouncedScroll"
+  class="sticky top-24"
+>
+  {{ if site.Params.showTableOfContents }}
+    <div class="text-sm font-bold text-base-content/50 uppercase tracking-wider mb-4 border-l-4 border-primary pl-2">Содержание</div>
+    <div class="text-sm text-base-content/70 custom-scrollbar max-h-[calc(100vh-10rem)] overflow-y-auto">
+      {{ .TableOfContents }}
+    </div>
+  {{ end }}
+</div>

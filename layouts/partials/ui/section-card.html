@@ -21,10 +21,17 @@
 
   <div class="card-body">
     <h2 class="card-title">{{ .Title }}</h2>
-
-    <p class="date text-base-content/60">
-      {{ (index (.Pages.ByDate.Reverse) 0).Date | time.Format "Monday, Jan 2, 2006" }}
-      <br>
+          <p class="date text-base-content/60">
+        {{- if .Pages -}}
+          {{- with index .Pages.ByDate.Reverse 0 -}}
+            {{- .Date | time.Format "Monday, Jan 2, 2006" -}}
+          {{- else -}}
+            No posts yet
+          {{- end -}}
+        {{- else -}}
+          No posts yet
+        {{- end -}}
+        <br>
     {{ with .Params.description }}
        {{ . }}
     {{ end }}
@@ -34,7 +41,7 @@
     {{ $hasAuthor := or .Params.author site.Params.author }}
     <div class="card-actions justify-between items-center mt-4">
       {{ if $hasAuthor }}
-        {{ partial "author.html" (dict "Params" .Params "template" "summary") }}
+        {{ partial "post/author.html" (dict "Params" .Params "template" "summary") }}
       {{ end }}
 
       <div class="flex items-center date text-base-content/60">

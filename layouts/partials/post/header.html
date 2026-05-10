@@ -1,0 +1,60 @@
+<header class="mb-10">
+    <nav class="text-sm font-medium text-base-content/40 mb-6 flex items-center gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+        <ion-icon name="home-outline"></ion-icon>
+        Главная
+    </a>
+    <span class="opacity-50">/</span>
+    <a href="{{ .CurrentSection.RelPermalink }}" class="hover:text-primary transition-colors">
+        {{ .CurrentSection.Title }}
+    </a>
+    <span class="opacity-50">/</span>
+    <span class="text-base-content/80 truncate">{{ .Title }}</span>
+    </nav>
+
+    <h1 itemprop="headline" class="text-3xl md:text-4xl font-extrabold mb-4">{{ .Title }}</h1>
+
+    {{ with .GetTerms "tags" }}
+    <div class="flex flex-wrap gap-2 my-4">
+        {{ range . }}
+        <a href="{{ .RelPermalink }}"
+            class="badge hover:badge-primary hover:bg-primary/10 transition-colors no-underline">
+            #{{ .LinkTitle | lower }}
+        </a>
+        {{ end }}
+    </div>
+    {{ end }}
+
+        {{ if and .Params.Cover site.Params.showSummaryCoverInPost }}
+          <img class="w-full rounded-2xl shadow-sm mb-8 object-cover" src="{{ .Params.Cover }}" alt="{{ .Title }}" />
+        {{ end }}
+
+    <div
+        class="flex flex-wrap items-center justify-between gap-4 text-sm text-base-content/60 bg-base-200/50 p-4 rounded-xl">
+        <div class="flex items-center gap-2">
+            <ion-icon name="calendar-outline" class="text-lg"></ion-icon>
+            {{ if site.Params.Experimental.jsDate }}
+            <span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
+            {{ else }}
+            {{ .Date | time.Format "02.01.2006" }}
+            {{ end }}
+
+            {{ if ne .Params.nolastmod true }}
+            <span class="mx-2">•</span>
+            <span class="italic">Обновлено:
+                {{ if site.Params.Experimental.jsDate }}
+                <span data-format="luxon">{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</span>
+                {{ else }}
+                {{ .Lastmod | time.Format "02.01.2006" }}
+                {{ end }}
+            </span>
+            {{ end }}
+        </div>
+
+        {{ if or .Params.author site.Params.author }}
+        <div class="flex items-center gap-2">
+            {{ partial "post/author.html" (dict "Params" .Params "template" "single") }}
+        </div>
+        {{ end }}
+    </div>
+</header>

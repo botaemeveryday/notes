@@ -7,9 +7,11 @@
   themes: emerald --default, forest --prefersdark;
 }
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (@media (prefers-color-scheme: dark));
 
 @config '../tailwind.config.js';
+
+@import "./css/syntax.css";
 
 #disqus_thread iframe[src*='ads-iframe'] {
   display: none;
@@ -115,4 +117,58 @@
 .custom-search-input:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px oklch(var(--color-primary) / 0.2);
+}
+
+@layer components {
+  /* Обертка кода */
+  .highlight {
+    @apply relative rounded-xl overflow-hidden my-6 shadow-lg border;
+    @apply bg-base-200 border-base-300; /* Светлая тема */
+    @apply dark:bg-[#282a36] dark:border-[#44475a] dark:shadow-2xl; /* Темная тема (Dracula) */
+  }
+
+  /* Верхняя панель мака (с точками) */
+  .highlight::before {
+    content: "";
+    display: block;
+    height: 36px;
+    width: 100%;
+    @apply border-b;
+    @apply bg-base-300/50 border-base-300; /* Светлая тема */
+    @apply dark:bg-white/5 dark:border-black/30; /* Темная тема */
+
+    /* Три точки */
+    background-image: 
+      radial-gradient(circle, #ff5f56 50%, transparent 55%),
+      radial-gradient(circle, #ffbd2e 50%, transparent 55%),
+      radial-gradient(circle, #27c93f 50%, transparent 55%);
+    background-size: 12px 12px;
+    background-position: 16px center, 34px center, 52px center;
+    background-repeat: no-repeat;
+  }
+
+  /* САМОЕ ВАЖНОЕ: УПРАВЛЕНИЕ ЦВЕТОМ ТЕКСТА */
+  .highlight pre {
+    @apply p-4 overflow-x-auto text-sm leading-relaxed;
+    margin: 0 !important;
+    background: transparent !important; 
+    /* Принудительно делаем базовый текст темным в светлой теме и белым в темной */
+    @apply text-gray-800 dark:text-[#f8f8f2];
+  }
+
+  /* Скроллбар */
+  .highlight pre::-webkit-scrollbar { height: 8px; }
+  .highlight pre::-webkit-scrollbar-track { background: transparent; }
+  .highlight pre::-webkit-scrollbar-thumb {
+    @apply bg-base-content/20 rounded-full hover:bg-base-content/40 transition-colors;
+  }
+
+  /* Кнопка копирования */
+  .copy-code-btn {
+    @apply absolute top-1.5 right-2 p-1.5 rounded-md text-base-content/50 hover:bg-base-content/10 hover:text-base-content transition-all opacity-0;
+  }
+  
+  .highlight:hover .copy-code-btn {
+    @apply opacity-100;
+  }
 }
