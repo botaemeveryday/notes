@@ -11,7 +11,7 @@ semester: 4
 К каждой лекции прикреплены транскрипции аудиозаписей и карточки анки по этой лекции. Здесь, ниже, находятся объединённые карточки анки. \
 Так же можно скачать контекст всех лекций (39 939 токенов)
 
-Если нашли ошибку или хотите дополнить — открывайте [issue](https://github.com/botaemeveryday/notes/issues/new?template=content-error.md) (можете на русском писать, пофек) или [pull request](https://github.com/botaemeveryday/notes/pulls)
+Если нашли ошибку или хотите дополнить — открывайте [issue](https://github.com/botaemeveryday/notes/issues/new?template=content-error.md) или [pull request](https://github.com/botaemeveryday/notes/pulls)
 
 <a href="resources/lectures.pdf" class="btn rounded-full no-underline">
     <ion-icon name="cloud-download-outline"></ion-icon>
