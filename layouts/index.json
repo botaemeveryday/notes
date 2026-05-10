@@ -1,6 +1,5 @@
 {{- $searchIndex := slice -}}
 
-{{- /* 1. Добавляем папки (предметы) */ -}}
 {{- with site.GetPage "section" "posts" -}}
   {{- range .Sections -}}
     {{- if not .Draft -}}
@@ -17,7 +16,6 @@
   {{- end -}}
 {{- end -}}
 
-{{- /* 2. Добавляем сами лекции */ -}}
 {{- $allPosts := where site.RegularPages "Type" "posts" -}}
 {{- $allPosts = where $allPosts "IsSection" false -}}
 {{- $allPosts = where $allPosts "Draft" false -}}
@@ -34,5 +32,4 @@
   ) -}}
 {{- end -}}
 
-{{- /* Выводим готовый JSON */ -}}
 {{- $searchIndex | jsonify -}}
