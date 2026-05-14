@@ -6,6 +6,7 @@ node_modules
 public
 resources
 .hugo_build.lock
+output.css
 
 docs/.next
 docs/out
