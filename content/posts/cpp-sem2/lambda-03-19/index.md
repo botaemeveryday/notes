@@ -36,9 +36,39 @@ authors:
 - [this] - all by copy current object
 - [*this] - all by reference current object
 
-|                                                   |                                                   |                                                   |
-| ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
-| ![](images/e54f7544240f96e5b74b0deef2a177f3.png) | ![](images/e114b3e2ed130426f8aba9db491182fc.png) | ![](images/dfab15957ec1e02b49651acfdf060899.png) |
+Example 1: Capture by Value and by Reference
+```cpp
+int main() {
+    int x = 1;
+    int y = 2;
+
+    auto f = [x, &y](int v) { return v + x + y; };
+}
+```
+
+Example 2: Capture `*this` by Value (C++17)
+```cpp
+struct Foo {
+    int field = 0;
+};
+
+int func(int i) {
+    auto f = [*this](int value) { return field + value; };
+    return f(i);
+}
+```
+
+Example 3: Capture this by Value (Pointer)
+```cpp
+struct Foo {
+    int field = 0;
+};
+
+int func(int i) {
+    auto f = [this](int value) { return field + value; };
+    return f(i);
+}
+```
 
 
 ### mutable lambda:

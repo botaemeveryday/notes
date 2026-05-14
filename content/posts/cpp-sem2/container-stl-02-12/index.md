@@ -159,10 +159,14 @@ void replace (
 - Пример: функция `std::reverse`
 ###  Итератор с произвольным доступом
 - Нужно как-то понимать расстояние между бегин и енд
-	- Двигаться на произвольное расстояние
+	- Двигаться на произвольное расстояние за $O(1)$
 	- Двунаправленный итератор
-	- Требования (см слайд) (фактически нужно всё то, что и для указателя)
-	- ![](images/93d1b892db2152fe6b237dc22000605f.png)
+	- Пусть \( r \) и \( s \) итераторы с произвольным доступом, \( n \) целое число, тогда:
+		- \( r+n, \; n+r, \; r-n \)
+		- \( r[n] = *(r+n) \)
+		- \( r+=n, \; r-=n \)
+		- \( r-s \to \text{int} \)
+		- \( r< s, \; r>s, \; r\le s, \; r\ge s \)
 	- (как бы есть разрывы)
 - Пример: функция `std::binary_search`
 
@@ -173,7 +177,17 @@ void replace (
 	- (гарантия что располагаются последовательно)
 
 - Указатель - непрерывный итератор
-![](images/29998c0603264e4d80d1b7ae67edb478.png)
+
+```mermaid
+graph TD
+    Input[Input Iterators] --> Forward[Forward Iterators]
+    Output[Output Iterators] --> Forward
+    Forward --> Bidirectional[Bidirectional Iterators]
+    Bidirectional --> RandomAccess[Random Access Iterators]
+    RandomAccess --> Contiguous[Contiguous Iterators]
+```
+// график иерархии требований
+
 Входные выходные / Выходные итераторы → Однонаправленные итераторы → Двунаправленные итераторы → Итераторы с произвольным доступом → Непрерывный итератор
 
 - **Итераторы**:
@@ -185,9 +199,41 @@ void replace (
 - `iterator/const_itetrator`
 	- для константных контейнеров нужно использовать константные итераторы
 - (Табличка со слайда с контейнерами)
-![](images/e2c1470879f076d1728f21552ff6f9b7.png)
-![](images/15e066910fa6b1fabceadc6523c09214.png)
-![](images/2d117f0f01f2f1039c5f4721b55746db.png)
+
+
+| Container       | Iterator Type                   | Category                 |
+|----------------|--------------------------------|---------------------------|
+| `T a[n]`       | `T*`                           | mutable, contiguous       |
+| `T a[n]`       | `const T*`                     | const, contiguous         |
+| `vector<T>`    | `vector<T>::iterator`          | mutable, contiguous       |
+| `vector<T>`    | `vector<T>::const_iterator`    | const, contiguous         |
+| `deque<T>`     | `deque<T>::iterator`           | mutable, random access    |
+| `deque<T>`     | `deque<T>::const_iterator`     | const, random access      |
+| `list<T>`      | `list<T>::iterator`            | mutable, bidirectional    |
+| `list<T>`      | `list<T>::const_iterator`      | const, bidirectional      |
+
+
+| Container       | Iterator Type                   | Category                 |
+|----------------|--------------------------------|---------------------------|
+| `set<T>`       | `set<T>::iterator`             | const, bidirectional      |
+| `set<T>`       | `set<T>::const_iterator`       | const, bidirectional      |
+| `multiset<T>`  | `multiset<T>::iterator`        | const, bidirectional      |
+| `map<Key, T>`  | `map<Key, T>::iterator`        | mutable, bidirectional    |
+| `map<Key, T>`  | `map<Key, T>::const_iterator`  | const, bidirectional      |
+| `multimap<Key, T>` | `multimap<Key, T>::iterator`   | mutable, bidirectional    |
+| `multimap<Key, T>` | `multimap<Key, T>::const_iterator` | const, bidirectional |
+
+| Container                         | Iterator Type                                     | Category             |
+|-----------------------------------|---------------------------------------------------|----------------------|
+| `unordered_set<T>`                | `unordered_set<T>::iterator`                      | mutable, forward     |
+| `unordered_set<T>`                | `unordered_set<T>::const_iterator`                | const, forward       |
+| `unordered_map<Key, T>`           | `unordered_map<Key, T>::iterator`                 | mutable, forward     |
+| `unordered_map<Key, T>`           | `unordered_map<Key, T>::const_iterator`           | const, forward       |
+| `unordered_multiset<T>`           | `unordered_multiset<T>::iterator`                 | mutable, forward     |
+| `unordered_multiset<T>`           | `unordered_multiset<T>::const_iterator`           | const, forward       |
+| `unordered_multimap<Key, T>`      | `unordered_multimap<Key, T>::iterator`            | mutable, forward     |
+| `unordered_multimap<Key, T>`      | `unordered_multimap<Key, T>::const_iterator`      | const, forward       |
+
 
 ###  Обобщённые алгоритмы
 - **Обобщённые алгоритмы**
@@ -199,12 +245,30 @@ void replace (
 	- Функтор `greater` используется в таких алгоритмах
 	- в `std::sort` можно положить как функцию, так и функтор
 - **Неизменяемые** - чисто что-то получает из объектов
-	- ![](images/8be1d5de063af725df469f55d73d7d47.png)
+	- find
+	- adjacent_find
+	- count
+	- for_each
+	- mismatch
+	- equal
+	- search
 	- `find` и `find_if` - находит первое вхождение элемента(модификаци с `_if`)
 		- Разница в том, что есть третий объект - функция/функтор
 	- `std::count` - сколько заданных значений O(n)
 - **Изменяющие алгоритмы** - что-то делают с объектами
-	- ![](images/8db4a6c2ec8f03a57b01512d95ab5369.png)
+	- copy
+	- copy_backward
+	- fill
+	- generate
+	- partition
+	- random_shuffle
+	- remove
+	- replace
+	- rotate
+	- swap
+	- swap_ranges
+	- transform
+	- unique
 	- `fill/fill_n` - заполняет элементом. который передан
 		- `_n` - сколько раз
 	- `generate` - заполняет диапазон значениями, генерируемыми предоставленной функцией O(n)

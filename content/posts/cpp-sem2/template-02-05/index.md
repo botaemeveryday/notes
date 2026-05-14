@@ -103,7 +103,22 @@ void func() {
 		return;
 	}
 ```
-![](images/5f8e037926f790264f1a1dd3bea8208f.png)
+
+```cpp
+int main() {
+	auto_ptr<Boo> b {new Boo()};
+	std::vector<auto_ptr<Boo>> boos(1);
+
+	boos[0] = b;
+	boos[0]->func();
+	auto_ptr<Boo> a = boos[0];
+	a->func();
+
+	// b->func();        // Segmentation fault
+	// boos[0]->func();  // Segmentation fault
+
+	return 0;
+}
 
 ### "Ресурс мой, никому не отдам" 
  (просто запрещаем конструкторы копирования и оператор присваивания) стандарт - `std::unique_ptr`
