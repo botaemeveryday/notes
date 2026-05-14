@@ -1,0 +1,159 @@
+/* =============================================
+   Shortcodes — подключи этот файл в свой CSS
+   ============================================= */
+
+/* --- Stat row --- */
+.sc-stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 1.5rem 0;
+}
+
+.sc-stat {
+  background: var(--color-surface-alt, #f5f5f5);
+  border-radius: 10px;
+  padding: 1rem 1.125rem;
+  text-align: center;
+}
+
+.sc-stat__num {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--color-text, #111);
+  line-height: 1.2;
+}
+
+.sc-stat__label {
+  font-size: 0.78rem;
+  color: var(--color-text-muted, #666);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* --- Cards grid --- */
+.sc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 1.5rem 0;
+}
+
+.sc-card {
+  background: var(--color-surface, #fff);
+  border: 0.5px solid var(--color-border, rgba(0,0,0,0.12));
+  border-radius: 12px;
+  padding: 1rem 1.125rem;
+}
+
+.sc-card__icon {
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+}
+
+.sc-card__title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text, #111);
+  margin-bottom: 4px;
+}
+
+.sc-card__body {
+  font-size: 0.82rem;
+  color: var(--color-text-muted, #555);
+  line-height: 1.55;
+}
+
+.sc-card__body p { margin: 0; }
+
+/* --- Callout --- */
+.sc-callout {
+  border-left: 2px solid;
+  border-radius: 0 8px 8px 0;
+  padding: 0.6rem 1rem;
+  margin: 1.25rem 0;
+}
+
+.sc-callout--info {
+  border-color: #378add;
+  background: #e6f1fb;
+}
+
+.sc-callout--tip {
+  border-color: #1d9e75;
+  background: #e1f5ee;
+}
+
+.sc-callout--warn {
+  border-color: #ba7517;
+  background: #faeeda;
+}
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+  .sc-callout--info  { border-color: #378add; background: rgba(55,138,221,.12); }
+  .sc-callout--tip   { border-color: #1d9e75; background: rgba(29,158,117,.12); }
+  .sc-callout--warn  { border-color: #ef9f27; background: rgba(239,159,39,.10); }
+}
+
+.sc-callout__title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+.sc-callout__body {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.sc-callout__body p { margin: 0; }
+
+/* --- CTA banner --- */
+.sc-cta {
+  background: var(--color-surface-alt, #f5f5f5);
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.sc-cta__text {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-text, #111);
+  margin-bottom: 0.875rem;
+}
+
+.sc-cta__text p { margin: 0; }
+
+.sc-cta__btn {
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 8px 20px;
+  border: 0.5px solid var(--color-border, rgba(0,0,0,0.2));
+  border-radius: 8px;
+  color: var(--color-text, #111);
+  text-decoration: none;
+  background: var(--color-surface, #fff);
+  transition: background 0.15s;
+}
+
+.sc-cta__btn:hover {
+  background: var(--color-surface-hover, #eee);
+}
+
+/* Dark mode base overrides (если нет CSS-переменных под тёмную тему) */
+@media (prefers-color-scheme: dark) {
+  .sc-stat        { background: rgba(255,255,255,.06); }
+  .sc-card        { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.1); }
+  .sc-cta         { background: rgba(255,255,255,.05); }
+  .sc-cta__btn    { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); color: #eee; }
+  .sc-cta__btn:hover { background: rgba(255,255,255,.13); }
+  .sc-stat__num, .sc-card__title { color: #f0f0f0; }
+  .sc-stat__label, .sc-card__body { color: #999; }
+}
