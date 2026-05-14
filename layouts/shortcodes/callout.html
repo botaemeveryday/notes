@@ -1,0 +1,4 @@
+<div class="sc-callout sc-callout--{{ default "info" (.Get "type") }}">
+  {{ if .Get "title" }}<div class="sc-callout__title">{{ .Get "title" }}</div>{{ end }}
+  <div class="sc-callout__body">{{ .Inner | markdownify }}</div>
+</div>

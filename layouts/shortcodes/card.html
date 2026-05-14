@@ -1,0 +1,5 @@
+<div class="sc-card">
+  {{ if .Get "icon" }}<div class="sc-card__icon">{{ .Get "icon" }}</div>{{ end }}
+  <div class="sc-card__title">{{ .Get "title" }}</div>
+  <div class="sc-card__body">{{ .Inner | markdownify }}</div>
+</div>

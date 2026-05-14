@@ -1,0 +1,6 @@
+<div class="sc-cta">
+  <div class="sc-cta__text">{{ .Inner | markdownify }}</div>
+  {{ if .Get "label" }}
+  <a class="sc-cta__btn" href="{{ default "#" (.Get "href") }}">{{ .Get "label" }}</a>
+  {{ end }}
+</div>

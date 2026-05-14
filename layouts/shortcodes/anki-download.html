@@ -1,0 +1,104 @@
+{{ $modal_id := printf "anki_modal_%d" .Ordinal }}
+
+<div class="not-prose">
+  <div class="my-8 rounded-2xl bg-gradient-to-br from-base-300/50 to-base-100 border border-base-300 shadow-sm overflow-hidden">
+    <div class="p-5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-5">      
+      <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
+        <div class="hidden sm:flex w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 items-center justify-center shrink-0">
+          <ion-icon name="copy" class="text-2xl"></ion-icon>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-base-content m-0 leading-tight">Карточки Anki</h3>
+          <p class="text-sm text-base-content/60 m-0 mt-1">Скачайте колоды для интервального повторения</p>
+        </div>
+      </div>
+      <button class="btn hover:bg-blue-500/5 rounded-full px-8 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all w-full md:w-auto" onclick="document.getElementById('{{ $modal_id }}').showModal()">
+        Скачать
+      </button>
+    </div>
+  </div>
+
+
+<dialog id="{{ $modal_id }}" class="modal backdrop-blur-sm transition-all">
+    <div class="modal-box bg-base-100 p-0 overflow-hidden shadow-2xl border border-base-300 w-11/12 max-w-md mx-auto">
+      <div class="bg-base-200/50 px-6 py-5 border-b border-base-300 flex justify-between items-center">
+        <h3 class="font-bold text-xl text-base-content m-0">Выберите формат</h3>
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost text-base-content/50 hover:text-base-content">
+            <ion-icon name="close" class="text-xl"></ion-icon>
+          </button>
+        </form>
+      </div>
+      <div class="p-6 flex flex-col gap-3">
+
+        {{ if .Get "lecture" }}
+        <a href="{{ .Get "lecture" }}" class="group relative flex items-start gap-4 p-4 rounded-xl border border-base-300 bg-base-100 hover:border-blue-500/50 hover:bg-blue-500/5 hover:shadow-sm transition-all duration-300 no-underline overflow-hidden">
+          <div class="mt-0.5 text-blue-500 text-2xl transition-transform group-hover:scale-110"><ion-icon name="document-text"></ion-icon></div>
+          <div class="pr-6">
+            <h4 class="font-bold text-base-content text-base m-0">Колода этой лекции</h4>
+            <p class="text-xs text-base-content/60 m-0 mt-1 leading-relaxed">Идеально для закрепления материала сразу после прочтения.</p>
+          </div>
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-blue-500 text-xl">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </a>
+        {{ end }}
+
+        {{ if .Get "course" }}
+        <a href="{{ .Get "course" }}" class="group relative flex items-start gap-4 p-4 rounded-xl border border-base-300 bg-base-100 hover:border-purple-500/50 hover:bg-purple-500/5 hover:shadow-sm transition-all duration-300 no-underline overflow-hidden">
+          <div class="mt-0.5 text-purple-500 text-2xl transition-transform group-hover:scale-110"><ion-icon name="library"></ion-icon></div>
+          <div class="pr-6">
+            <h4 class="font-bold text-base-content text-base m-0">Общая колода курса</h4>
+            <p class="text-xs text-base-content/60 m-0 mt-1 leading-relaxed">Все темы предмета в одном файле. Подходит для подготовки к экзамену.</p>
+          </div>
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-purple-500 text-xl">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </a>
+        {{ end }}
+
+        {{ if .Get "easy" }}
+        <a href="{{ .Get "easy" }}" class="group relative flex items-start gap-4 p-4 rounded-xl border border-base-300 bg-base-100 hover:border-emerald-500/50 hover:bg-emerald-500/5 hover:shadow-sm transition-all duration-300 no-underline overflow-hidden">
+          <div class="mt-0.5 text-emerald-500 text-2xl transition-transform group-hover:scale-110"><ion-icon name="leaf"></ion-icon></div>
+          <div class="pr-6">
+            <h4 class="font-bold text-base-content text-base m-0">Базовые карточки (Easy)</h4>
+            <p class="text-xs text-base-content/60 m-0 mt-1 leading-relaxed">Основные определения и концепции без сложного кода.</p>
+          </div>
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-emerald-500 text-xl">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </a>
+        {{ end }}
+
+        {{ if .Get "hard" }}
+        <a href="{{ .Get "hard" }}" class="group relative flex items-start gap-4 p-4 rounded-xl border border-base-300 bg-base-100 hover:border-orange-500/50 hover:bg-orange-500/5 hover:shadow-sm transition-all duration-300 no-underline overflow-hidden">
+          <div class="mt-0.5 text-orange-500 text-2xl transition-transform group-hover:scale-110"><ion-icon name="flame"></ion-icon></div>
+          <div class="pr-6">
+            <h4 class="font-bold text-base-content text-base m-0">Продвинутые (Hard)</h4>
+            <p class="text-xs text-base-content/60 m-0 mt-1 leading-relaxed">Сложные алгоритмы, ловушки языка и вопросы на "отлично".</p>
+          </div>
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-orange-500 text-xl">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </a>
+        {{ end }}
+
+      </div>
+
+      {{ if ne .Page.RelPermalink "/anki/" }}
+      <div class="bg-base-200/30 px-6 py-4 border-t border-base-300 text-center">
+        <a href="/anki/" class="inline-flex items-center gap-1.5 text-xs font-semibold text-base-content/50 hover:text-primary transition-colors no-underline uppercase tracking-wide">
+          <ion-icon name="help-circle-outline" class="text-lg -mt-0.5"></ion-icon>
+          Как учить эффективно?
+        </a>
+      </div>
+      {{ end }}
+
+    </div>
+
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+
+</div>
