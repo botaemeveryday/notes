@@ -1,27 +1,38 @@
-<div class="flex flex-col gap-2">
-  <div class="text-center text-sm" style="text-align: center;">
-    <span>{{ .paginator.PageNumber }} / {{ .paginator.TotalPages }}</span>
+<div class="flex items-center justify-center gap-3 md:gap-6 w-full my-4">
+
+  <!-- Кнопка "Назад" -->
+  {{ if .paginator.HasPrev }}
+  <a href="{{ .paginator.Prev.URL }}" title="{{ T "prevPage" }}" class="btn btn-ghost border border-base-300 hover:border-primary hover:bg-primary/5 hover:text-primary rounded-full px-4 sm:px-6 transition-all group no-underline">
+    <ion-icon name="arrow-back-outline" class="text-lg group-hover:-translate-x-1 transition-transform"></ion-icon>
+    <span class="hidden sm:inline font-medium">{{ T "prevPage" | default "Назад" }}</span>
+  </a>
+  {{ else }}
+  <button class="btn btn-ghost border border-base-200 rounded-full px-4 sm:px-6 opacity-40 cursor-not-allowed" disabled>
+    <ion-icon name="arrow-back-outline" class="text-lg"></ion-icon>
+    <span class="hidden sm:inline font-medium">{{ T "prevPage" | default "Назад" }}</span>
+  </button>
+  {{ end }}
+
+  <!-- Индикатор текущей страницы -->
+  <div class="flex items-center justify-center px-4 py-2 bg-base-200/50 rounded-full border border-base-300/50">
+    <span class="text-sm font-bold text-base-content">
+      {{ .paginator.PageNumber }} 
+      <span class="text-base-content/40 mx-1.5 font-normal">из</span> 
+      {{ .paginator.TotalPages }}
+    </span>
   </div>
 
-  <div class="join grid grid-cols-2">
-    {{ if .paginator.HasPrev }}
-    <a href="{{ .paginator.Prev.URL }}" title={{ T "prevPage" }} class="join-item btn btn-outline btn-sm">
-      {{ T "prevPage" }}
-    </a>
-    {{ else }}
-    <button class="join-item btn btn-outline btn-sm" disabled>
-      {{ T "prevPage" }}
-    </button>
-    {{ end }}
+  <!-- Кнопка "Вперед" -->
+  {{ if .paginator.HasNext }}
+  <a href="{{ .paginator.Next.URL }}" title="{{ T "nextPage" }}" class="btn btn-ghost border border-base-300 hover:border-primary hover:bg-primary/5 hover:text-primary rounded-full px-4 sm:px-6 transition-all group no-underline">
+    <span class="hidden sm:inline font-medium">{{ T "nextPage" | default "Вперед" }}</span>
+    <ion-icon name="arrow-forward-outline" class="text-lg group-hover:translate-x-1 transition-transform"></ion-icon>
+  </a>
+  {{ else }}
+  <button class="btn btn-ghost border border-base-200 rounded-full px-4 sm:px-6 opacity-40 cursor-not-allowed" disabled>
+    <span class="hidden sm:inline font-medium">{{ T "nextPage" | default "Вперед" }}</span>
+    <ion-icon name="arrow-forward-outline" class="text-lg"></ion-icon>
+  </button>
+  {{ end }}
 
-    {{ if .paginator.HasNext }}
-    <a href="{{ .paginator.Next.URL }}" title="{{ T "nextPage" }}" class="join-item btn btn-outline btn-sm">
-      {{ T "nextPage" }}
-    </a>
-    {{ else }}
-    <button class="join-item btn btn-outline btn-sm" disabled>
-      {{ T "nextPage" }}
-    </button>
-    {{ end }}
-  </div>
 </div>

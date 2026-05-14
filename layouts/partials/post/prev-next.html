@@ -1,26 +1,42 @@
-<div class="divider my-12"></div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="divider my-12 opacity-30"></div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
+  
   {{ with .PrevInSection }}
-  <a class="flex items-center gap-4 p-4 rounded-2xl border border-base-300 hover:border-primary hover:bg-primary/5 transition-all group" href="{{ .RelPermalink }}">
-    <div class="w-10 h-10 rounded-full bg-base-200 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-content transition-colors shrink-0">
-      <ion-icon name="chevron-back"></ion-icon>
-    </div>
-    <div class="flex flex-col flex-1 overflow-hidden">
-      <span class="text-xs text-base-content/50 uppercase tracking-wider">Предыдущая</span>
-      <span class="font-medium truncate">{{ .Title }}</span>
-    </div>
+  <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-start p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-primary/40 hover:bg-primary/5 hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
+    
+    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors group-hover:text-primary">
+      <ion-icon name="arrow-back" class="text-sm transition-transform duration-300 group-hover:-translate-x-1"></ion-icon>
+      Предыдущая
+    </span>
+    
+    <span class="font-bold text-base-content md:text-lg leading-tight line-clamp-2">
+      {{ .Title }}
+    </span>
+    
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/5 transition-all duration-500 -z-10"></div>
   </a>
-  {{ else }}<div></div>{{ end }}
+  {{ else }}
+  <div></div>
+  {{ end }}
+
 
   {{ with .NextInSection }}
-  <a class="flex items-center justify-end text-right gap-4 p-4 rounded-2xl border border-base-300 hover:border-primary hover:bg-primary/5 transition-all group" href="{{ .RelPermalink }}">
-    <div class="flex flex-col flex-1 overflow-hidden">
-      <span class="text-xs text-base-content/50 uppercase tracking-wider">Следующая</span>
-      <span class="font-medium truncate">{{ .Title }}</span>
-    </div>
-    <div class="w-10 h-10 rounded-full bg-base-200 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-content transition-colors shrink-0">
-      <ion-icon name="chevron-forward"></ion-icon>
-    </div>
+  <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-end text-right p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-primary/40 hover:bg-primary/5 hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
+    
+    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors group-hover:text-primary">
+      Следующая
+      <ion-icon name="arrow-forward" class="text-sm transition-transform duration-300 group-hover:translate-x-1"></ion-icon>
+    </span>
+    
+    <span class="font-bold text-base-content md:text-lg leading-tight line-clamp-2">
+      {{ .Title }}
+    </span>
+    
+    <div class="absolute inset-0 bg-gradient-to-l from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/5 transition-all duration-500 -z-10"></div>
   </a>
-  {{ else }}<div></div>{{ end }}
+  {{ else }}
+  <div></div>
+  {{ end }}
+
 </div>

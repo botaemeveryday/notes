@@ -1,12 +1,18 @@
 {{ if site.Params.stickyNav }}
 <nav x-data="{ isSticky: false }"
   x-init="window.addEventListener('scroll', () => { isSticky = window.scrollY > 30 })"
-  class="sticky top-0 z-30 mt-4 lg:mt-8 py-4 transition-all duration-300"
-  :class="{ 'bg-base-100 shadow-lg dark:border-b dark:border-base-content/30': isSticky }">
+  class="sticky top-0 z-30 mt-4 lg:mt-8 py-4 transition-all duration-300
+         shadow-transparent border-b border-transparent
+         dark:border-transparent"
+  :class="{
+    'bg-base-100/95 backdrop-blur-sm shadow-md shadow-black/5 border-base-content/10 dark:border-base-content/20 !mt-0': isSticky
+  }">
 {{ else }}
 <nav class="mt-4 lg:mt-8 py-4">
 {{ end }}
-  <div class="container flex flex-col md:flex-row md:items-center justify-between gap-4 px-4">
+
+  <div class="container flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 mx-auto">
+    
     <section class="flex items-center gap-4 whitespace-nowrap">
       <div class="avatar" title="{{ T "!flip" }}">
         <div class="h-10 rounded-full">
@@ -27,5 +33,90 @@
       </div>
       {{ end }}
     </section>
+
+    <section class="hidden lg:flex items-center gap-1.5 group cursor-pointer">
+
+      <span class="
+        font-serif italic text-[13px] text-base-content/40
+        group-hover:text-base-content/65
+        transition-all duration-500 ease-out
+        tracking-wide leading-none pt-3 pr-0.5
+        select-none
+      " style="font-family: 'Georgia', 'Palatino Linotype', serif;">
+        понравилось?
+      </span>
+
+      <svg
+        class="w-10 h-10 text-base-content/30 group-hover:text-base-content/55 transition-colors duration-500 -mt-0.5 -mr-0.5 flex-shrink-0"
+        viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"
+        style="overflow: visible;"
+      >
+        <path
+          d="M 6 28 C 10 18, 20 12, 32 18"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-linecap="round"
+          fill="none"
+          stroke-dasharray="3 3.5"
+          opacity="0.8"
+        />
+        <path
+          d="M 27 14 L 33 19 L 26 22"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"
+        />
+      </svg>
+
+      <a
+        href="https://github.com/botaemeveryday/notes"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="
+          flex items-center gap-1.5
+          px-2.5 py-1.5 rounded-xl
+          text-base-content/45 hover:text-yellow-500
+          hover:bg-yellow-400/10
+          border border-transparent hover:border-yellow-400/20
+          transition-all duration-300 ease-out
+          font-medium text-sm
+          group/btn
+        "
+        title="Поставить звезду на GitHub"
+      >
+        <svg class="w-4 h-4 transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:fill-yellow-400 group-hover/btn:stroke-yellow-400 stroke-current fill-none flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+
+        <span id="nav-star-count" class="tabular-nums min-w-[2ch] text-center">·</span>
+      </a>
+
+    </section>
   </div>
 </nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('https://api.github.com/repos/botaemeveryday/notes')
+      .then(r => r.json())
+      .then(data => {
+        const el = document.getElementById('nav-star-count');
+        if (el && data.stargazers_count !== undefined) {
+          el.style.transition = 'opacity 0.4s ease';
+          el.style.opacity = '0';
+          setTimeout(() => {
+            el.innerText = data.stargazers_count >= 1000
+              ? (data.stargazers_count / 1000).toFixed(1) + 'k'
+              : data.stargazers_count;
+            el.style.opacity = '1';
+          }, 200);
+        }
+      })
+      .catch(() => {
+        const el = document.getElementById('nav-star-count');
+        if (el) el.innerText = '★';
+      });
+  });
+</script>
