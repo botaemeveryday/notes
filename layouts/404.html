@@ -1,10 +1,95 @@
-{{ define "title" }}404 Not Found{{ end }}
+{{ define "title" }}404 — Заблудились в мыслях?{{ end }}
 
 {{ define "main" }}
-<div class="h-[60vh] mx-auto px-4 flex flex-col justify-center items-center prose dark:prose-invert">
-  <h1 class="text-3xl md:text-3xl mb-4">Заблудились в лабиринте мыслей?</h1>
-  <p>Эта страница ещё не написана или переместилась в другое место.</p>
-  <p>Возможно, она существует только в параллельной вселенной.</p>
-  <a class="btn my-5" href="{{ site.BaseURL }}">{{ T "backToHome" }}</a>
-</div>
+<style>
+  .err-bg::before {
+    content: "";
+    position: fixed; inset: 0;
+    background-image: radial-gradient(rgba(128, 128, 128, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 75%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .err-content { position: relative; z-index: 1; }
+
+  @keyframes err-thread-draw {
+    from { stroke-dashoffset: 400; }
+    to   { stroke-dashoffset: 0; }
+  }
+  .err-thread {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: err-thread-draw 2.5s ease-out 0.5s forwards;
+  }
+
+  @keyframes err-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .err-maze { 
+    animation: err-spin 120s linear infinite; 
+    transform-origin: center; 
+    transform-box: fill-box; 
+  }
+</style>
+
+<div class="err-bg"></div>
+
+<main class="err-content min-h-[75vh] flex flex-col justify-center items-center px-4 py-16">
+
+  <div class="text-3xl -mb-6 -translate-x-12 -rotate-12 select-none text-primary/60 font-serif italic">
+    ой...
+  </div>
+
+  <div class="flex items-center gap-2 md:gap-4 leading-none select-none">
+    <span class="text-[120px] md:text-[200px] font-black tracking-tighter text-base-content/90">4</span>
+
+    <svg viewBox="0 0 200 200" class="w-[110px] h-[110px] md:w-[180px] md:h-[180px] shrink-0 overflow-visible" fill="none" aria-hidden="true">
+      
+      <g class="err-maze text-base-content/30" stroke="currentColor" stroke-width="4" stroke-linecap="round">
+        <path d="M 10 100 A 90 90 0 1 1 190 100 A 90 90 0 0 1 60 180" />
+        <path d="M 30 100 A 70 70 0 1 0 140 40 A 70 70 0 0 0 50 149" />
+        <path d="M 50 100 A 50 50 0 1 1 150 100 A 50 50 0 0 1 120 145" />
+        <path d="M 70 100 A 30 30 0 1 0 100 70" />
+        <line x1="100" y1="10" x2="100" y2="30" />
+        <line x1="170" y1="100" x2="190" y2="100" />
+        <line x1="100" y1="150" x2="100" y2="190" />
+        <circle cx="100" cy="100" r="5" fill="currentColor" stroke="none" />
+      </g>
+
+      <path class="err-thread text-primary"
+            d="M 100 100 Q 110 80, 80 80 Q 50 80, 60 120 Q 70 160, 120 140 Q 160 120, 150 50 Q 140 -20, 220 -20"
+            stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"
+            stroke-dasharray="8 6"/>
+    </svg>
+
+    <span class="text-[120px] md:text-[200px] font-black tracking-tighter text-base-content/90">4</span>
+  </div>
+
+  <div class="mt-8 max-w-lg text-center z-10">
+    <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-base-content mb-3">
+      Заблудились в лабиринте мыслей?
+    </h1>
+    <p class="text-base-content/60 leading-relaxed text-sm md:text-base mb-1">
+      Мы перерыли все конспекты, но не смогли найти эту страницу. Возможно, она была удалена или вы опечатались в адресе.
+    </p>
+  </div>
+
+  <div class="mt-10 group z-10">
+    <a href="{{ site.BaseURL }}"
+       class="inline-flex items-center gap-3 px-8 py-3.5 rounded-full
+              bg-base-100 text-base-content border border-base-300
+              hover:border-primary hover:text-primary hover:bg-primary/5 hover:shadow-md
+              transition-all duration-300 font-semibold no-underline">
+      <svg class="w-5 h-5 group-hover:-translate-x-1.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Вернуться на главную
+    </a>
+  </div>
+
+</main>
 {{ end }}

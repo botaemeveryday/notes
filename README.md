@@ -2,44 +2,68 @@
 
 [![Hugo](https://img.shields.io/badge/Hugo-FF4088?style=flat-square&logo=hugo&logoColor=white)](https://gohugo.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
-# [Сайт: botaemeveryday.github.io/notes](https://botaemeveryday.github.io/notes/)
+Открытая база конспектов по дисциплинам computer science: лекции, переводы, разборы. Сайт собирается на Hugo и публикуется через GitHub Pages.
 
-## Разделы
+**→ [botaemeveryday.github.io/notes](https://botaemeveryday.github.io/notes/)**
 
-На данный момент база содержит материалы по следующим дисциплинам:
+## Содержание
 
-- **[Математическая статистика](https://botaemeveryday.github.io/notes/posts/math-stats/)** — Лекции Лимара Ивана Александровича
-- **[Операционные системы](https://botaemeveryday.github.io/notes/posts/operation-systems/)** — Лекции Маятина Александр Владимирович
-- **[Базы Данных](https://botaemeveryday.github.io/notes/posts/databases/)** — Лекции Мацнева Никиты Игоревича
-- **[Let's Build A Simple Interpreter](https://botaemeveryday.github.io/notes/posts/interpreter/)** — Перевод серии статей Руслана Спивака по созданию интерпретатора.
-- **[C++ (Семестр 2)](https://botaemeveryday.github.io/notes/posts/cpp-sem2/)** — Лекции Хвастунова Александра Павловича
+База регулярно пополняется. Текущий состав:
 
-## 🤝 Как контрибьютить
+### Учебные курсы
 
-Проект открыт для улучшений! Если вы нашли опечатку, хотите дополнить конспект или добавить новую лекцию или свои конспекты — мы будем рады вашим Pull Requests.
+| Дисциплина | Преподаватель |
+|---|---|
+| [Математическая статистика](https://botaemeveryday.github.io/notes/posts/math-stats/) | Лимарь И. А. |
+| [Операционные системы](https://botaemeveryday.github.io/notes/posts/operation-systems/) | Маятин А. В. |
+| [Базы данных](https://botaemeveryday.github.io/notes/posts/databases/) | Мацнев Н. И. |
+| [C++ (семестр 2)](https://botaemeveryday.github.io/notes/posts/cpp-sem2/) | Хвастунов А. П. |
+| [Проектирование БД](https://botaemeveryday.github.io/notes/posts/db-design/) | Мацнев Н. И. |
 
-1. Форкните репозиторий.
-2. Ознакомьтесь с правилами оформления в **[CONTRIBUTING.md](CONTRIBUTING.md)**.
-3. Добавьте свои изменения и создайте PR.
+### Дополнительные материалы
 
-## 🛠 Локальный запуск
+- [Let's Build A Simple Interpreter](https://botaemeveryday.github.io/notes/posts/interpreter/) — перевод серии статей Руслана Спивака по построению интерпретатора.
 
-Если вы хотите развернуть проект у себя на компьютере для разработки:
+## Как принять участие
+
+Проект открыт для правок и дополнений. Pull request'ы приветствуются в любом объёме — от исправления опечатки до публикации собственных конспектов по новому курсу.
+
+Сценарии участия:
+
+- **Опечатка или неточность** — откройте issue или сразу PR с правкой.
+- **Дополнение существующего конспекта** — отредактируйте соответствующий `index.md` в `content/posts/<курс>/<лекция>/`.
+- **Новая лекция в рамках существующего курса** — добавьте директорию по образцу соседних лекций.
+- **Новый курс** — создайте директорию в `content/posts/` с файлом `_index.md` и лекциями внутри. Перед публикацией ознакомьтесь с правилами оформления.
+
+Все требования к структуре файлов, front matter и шорткодам описаны в **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+
+## Структура репозитория
+
+```
+content/posts/      # конспекты, сгруппированные по дисциплинам
+layouts/            # шаблоны Hugo
+  ├── _default/     # базовые шаблоны (list, single, baseof)
+  ├── partials/     # переиспользуемые блоки (header, footer, post)
+  └── shortcodes/   # callout, card, compare, spoiler, key и др.
+```
+
+## Локальная разработка
+
+Требования: Hugo (extended), Node.js, npm.
 
 ```bash
-# Клонируем репозиторий
 git clone https://github.com/botaemeveryday/notes.git
 cd notes
 
-# Устанавливаем зависимости (Tailwind)
-npm install
-
-# Собираем стили
-npm run css
-
-# Запускаем локальный сервер Hugo
-hugo server -D
-
-# Сайт будет доступен по адресу http://localhost:1313/
+npm install        # зависимости Tailwind
+npm run css        # сборка стилей
+hugo server -D     # локальный сервер на http://localhost:1313/
 ```
+
+Флаг `-D` включает рендеринг черновиков (`draft: true` в front matter).
+
+## Лицензия
+
+Распространяется под лицензией MIT. См. [LICENSE](LICENSE).

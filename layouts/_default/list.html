@@ -1,37 +1,77 @@
 {{ define "main" }}
-<div class="container p-4 mx-auto">
+<div class="container px-4 py-6 md:py-10 mx-auto max-w-7xl">
   
-  <div class="prose dark:prose-invert max-w-none w-full mb-8">
-    <h1 class="text-3xl font-bold mb-4">{{ .Title }}</h1>
-    
-    {{ if .Content }}
-      <div class="mb-4">
-        {{ .Content }}
-      </div>
-    {{ end }}
+  <nav class="text-sm font-medium text-base-content/50 mb-6 flex items-center gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+      <ion-icon name="home-outline"></ion-icon> Главная
+    </a>
+    <span class="opacity-50">/</span>
+    <span class="text-base-content/80">{{ .Title }}</span>
+  </nav>
 
-    {{ $validPages := slice }}
-    {{ range .Pages }}
-      {{ if not (strings.Contains .File.LogicalName "_info") }}
-        {{ $validPages = $validPages | append . }}
+  <div class="bg-base-200/40 border border-base-300/50 rounded-[2rem] p-6 md:p-10 mb-10 relative overflow-hidden shadow-sm">
+    
+    <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      
+      <div class="flex-1">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-base-content mb-4 tracking-tight">
+          {{ .Title }}
+        </h1>
+        
+        {{ if .Content }}
+          <div class="prose prose-sm md:prose-base dark:prose-invert text-base-content/70 max-w-3xl leading-relaxed">
+            {{ .Content }}
+          </div>
+        {{ else if .Params.description }}
+          <p class="text-base-content/70 text-sm md:text-base max-w-2xl m-0 leading-relaxed">
+            {{ .Params.description }}
+          </p>
+        {{ end }}
+      </div>
+
+      {{/* Hugo магия: .RegularPages автоматически берет только лекции (без папок) */}}
+      {{ $validPages := where .RegularPages "Draft" false }}
+      {{ $count := len $validPages }}
+      
+      {{ $mod10 := mod $count 10 }}
+      {{ $mod100 := mod $count 100 }}
+      {{ $word := "лекций" }}
+      {{ if and (ge $mod100 11) (le $mod100 14) }}{{ $word = "лекций" }}
+      {{ else if eq $mod10 1 }}{{ $word = "лекция" }}
+      {{ else if and (ge $mod10 2) (le $mod10 4) }}{{ $word = "лекции" }}
       {{ end }}
-    {{ end }}
-    
-    <p class="text-base-content/60 text-sm">
-      {{ len $validPages }} 
-      {{ if eq (len $validPages) 1 }}лекция
-      {{ else if and (gt (len $validPages) 1) (lt (len $validPages) 5) }}лекции
-      {{ else }}лекций{{ end }} в этом разделе
-    </p>
+
+      <div class="shrink-0">
+        <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-base-100 border border-base-300 shadow-sm">
+          <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-lg">
+            <ion-icon name="library"></ion-icon>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-bold text-base-content leading-none">{{ $count }} {{ $word }}</span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
   </div>
 
-  <div class="dream-grid">
-    {{ range $validPages }}
-      <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">
+  {{ if gt $count 0 }}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {{ range $validPages.ByWeight }}
         {{ .Render "summary" }}
+      {{ end }}
+    </div>
+  {{ else }}
+    <div class="py-20 flex flex-col items-center justify-center text-center">
+      <div class="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center text-4xl mb-4 opacity-50">
+        📭
       </div>
-    {{ end }}
-  </div>
+      <h3 class="text-xl font-bold text-base-content mb-2">Здесь пока пусто</h3>
+      <p class="text-base-content/50">Лекции для этого курса еще не загружены.</p>
+    </div>
+  {{ end }}
 
 </div>
 {{ end }}

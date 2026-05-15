@@ -1,50 +1,61 @@
-<a class="card bg-base-100 hover:bg-base-content/10 shadow-xl cursor-pointer dark:border dark:border-base-content/30" href="{{ .RelPermalink }}">
+<a class="group relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-300 shadow-sm hover:shadow-lg transition-all duration-300 no-underline overflow-hidden hover:-translate-y-1" href="{{ .RelPermalink }}">
+  
+  <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
   {{ if .Params.cover }}
-  <figure>
-    {{ with .Resources.Get .Params.cover }}
-    {{ if eq .MediaType.SubType "svg" }}
-      <img src="{{ .RelPermalink }}" alt="{{ .Title }}" />
-    {{ else }}
-      {{ $webp := .Resize (printf "%dx%d webp" .Width .Height) }}
-      <picture>
-        <source srcset="{{ $webp.RelPermalink }}" type="image/webp" />
-        <img src="{{ .RelPermalink }}" alt="{{ .Title }}" />
-      </picture>
-    {{ end }}
-    {{ else }}
-    <img src="{{ .Params.cover }}" alt="{{ .Title }}" />
-    {{ end }}
-  </figure>
-  {{ else if not site.Params.noDefaultSummaryCover }}
-  <figure>
-    {{ with resources.Get (printf "images/default%d.jpg" (index (seq 4 | shuffle) 0)) }}
-    {{ $webp := .Resize (printf "%dx%d webp" .Width .Height) }}
-    <picture>
-      <source srcset="{{ $webp.RelPermalink }}" type="image/webp" />
-      <img src="{{ .RelPermalink }}" alt="{{ .Title }}" />
-    </picture>
-    {{ end }}
-  </figure>
-  {{ end }}
-
-  <div class="card-body">
-    <h2 class="card-title">{{ .Title }}</h2>
-
-    <p class="date text-base-content/60">
-    {{ if site.Params.Experimental.jsDate }}
-      <span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
-    {{ else }}
-      {{ .Date | time.Format "Monday, Jan 2, 2006" }}
-    {{ end }}
-    </p>
-
-    {{ or .Description (.Summary | emojify | safeHTML) }}
-
-    {{ $hasAuthor := or .Params.author site.Params.author }}
-    <div class="card-actions justify-between items-center mt-4">
-      {{ if $hasAuthor }}
-        {{ partial "post/author.html" (dict "Params" .Params "template" "summary") }}
+    <div class="h-32 sm:h-40 w-full overflow-hidden border-b border-base-300/50">
+      {{ with .Resources.Get .Params.cover }}
+        {{ if eq .MediaType.SubType "svg" }}
+          <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover" />
+        {{ else }}
+          {{ $webp := .Resize "600x webp" }}
+          <img src="{{ $webp.RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+        {{ end }}
+      {{ else }}
+        <img src="{{ .Params.cover }}" alt="{{ .Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
       {{ end }}
     </div>
+  {{ else }}
+    <div class="h-1.5 w-full bg-gradient-to-r from-primary/40 to-secondary/40"></div>
+  {{ end }}
+
+  <div class="p-5 flex-1 flex flex-col">
+    
+    <h2 class="text-xl font-bold text-base-content mb-2 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+      {{ .Title }}
+    </h2>
+
+    <div class="text-sm text-base-content/60 leading-relaxed mb-4 line-clamp-3">
+      {{ or .Description (.Summary | plainify | htmlUnescape) }}
+    </div>
+    
+    <div class="mt-auto"></div>
+
+  </div>
+
+  <div class="px-5 py-3 border-t border-base-300/50 bg-base-200/30 flex flex-wrap items-center justify-between gap-3 text-xs text-base-content/50">
+    
+    <div class="flex items-center gap-2">
+      <ion-icon name="calendar-outline" class="text-sm"></ion-icon>
+      {{ if site.Params.Experimental.jsDate }}
+        <span data-format="luxon" class="font-medium">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
+      {{ else }}
+        <span class="font-medium">{{ .Date | time.Format "02 Jan 2006" }}</span>
+      {{ end }}
+    </div>
+
+    <div class="flex items-center">
+      {{ $hasAuthor := or .Params.author site.Params.author }}
+      {{ if $hasAuthor }}
+        <span class="flex items-center gap-1.5 font-medium hover:text-primary transition-colors">
+          {{ partial "post/author.html" (dict "Params" .Params "template" "summary") }}
+        </span>
+      {{ else if .Params.tags }}
+        <span class="px-2 py-1 rounded-md bg-base-300 text-[10px] font-bold uppercase tracking-wider text-base-content/60">
+          #{{ index .Params.tags 0 }}
+        </span>
+      {{ end }}
+    </div>
+
   </div>
 </a>
