@@ -1,32 +1,27 @@
 {{/*
   Open Graph + Twitter Card meta tags.
 
-  Picks the share image like this:
+  Picks the share image:
     - single page  →  /covers/<section>/<file-base-name>.png
     - section page →  /covers/<section>/index.png
-    - fallback     →  /images/avatar.jpg  (site avatar)
+    - fallback     →  /images/avatar.jpg
 
-  Replaces Hugo's built-in _internal/opengraph.html and _internal/twitter_cards.html
-  so that Telegram, Twitter, Facebook, etc. pick up our generated lecture covers.
+  An explicit `cover` param in the page frontmatter overrides everything.
 */}}
 
 {{- $cover := "" -}}
 {{- $section := .Section -}}
 
-{{- if and .IsPage $section -}}
-  {{- $candidate := printf "covers/%s/%s.png" $section .File.ContentBaseName -}}
-  {{- if fileExists (printf "static/%s" $candidate) -}}
-    {{- $cover = printf "/%s" $candidate -}}
+{{- with .Params.cover -}}
+  {{- $cover = . -}}
+{{- else -}}
+  {{- if and .IsPage $section -}}
+    {{- $cover = printf "/covers/%s/%s.png" $section .File.ContentBaseName -}}
+  {{- else if and .IsSection $section -}}
+    {{- $cover = printf "/covers/%s/index.png" $section -}}
+  {{- else -}}
+    {{- $cover = "/images/avatar.jpg" -}}
   {{- end -}}
-{{- else if and .IsSection $section -}}
-  {{- $candidate := printf "covers/%s/index.png" $section -}}
-  {{- if fileExists (printf "static/%s" $candidate) -}}
-    {{- $cover = printf "/%s" $candidate -}}
-  {{- end -}}
-{{- end -}}
-
-{{- if not $cover -}}
-  {{- $cover = "/images/avatar.jpg" -}}
 {{- end -}}
 
 {{- $absCover := $cover | absURL -}}
