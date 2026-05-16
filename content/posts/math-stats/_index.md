@@ -15,7 +15,7 @@ accent: 2
 
 <a href="resources/lectures.pdf" class="btn rounded-full no-underline">
     <ion-icon name="cloud-download-outline"></ion-icon>
-    Все лекции .pdf
+    Лекции .pdf
 </a>
 <a href="https://drive.google.com/file/d/1q-rPOZw5VSDHMy7yRdXghV_eWjTZp2Zx/view" class="btn rounded-full no-underline">
     <ion-icon name="help-outline"></ion-icon>
@@ -28,11 +28,11 @@ accent: 2
 
 <div style="height: 8px"></div>
 
-<a href="resources/Конспект_по_ТВиМВ_Версия_от_февраля_2025.pdf" class="btn rounded-full no-underline">
+<a href="resources/math-stats.apkg" class="btn rounded-full no-underline">
     <ion-icon name="copy-outline"></ion-icon>
     Карточки Анки
 </a>
 <a href="resources/context.txt" class="btn rounded-full no-underline">
     <ion-icon name="code-slash-outline"></ion-icon>
-    Контекст для ИИ
+    Контекст для LLM
 </a>

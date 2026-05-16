@@ -1,12 +1,9 @@
 ---
 title: Часть 9
 description: Давайте построим простой интерпретатор.
-date: 2025-05-08T00:09:00-00:00
-cover: images/cover.png
+date: 2025-05-08
 tags:
   - Материалы ОП
-nolastmod: true
-draft: false
 author: rspivak
 avatar: https://avatars.githubusercontent.com/u/56723?v=4
 authorlink: https://github.com/rspivak
