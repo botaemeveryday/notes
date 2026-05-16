@@ -37,7 +37,6 @@ date: 2026-05-07
 tags:
   - C++
   - 2 семестр
-draft: false
 ---
 ```
 
@@ -57,11 +56,11 @@ git clone https://github.com/botaemeveryday/notes.git
 cd notes
 
 npm install            # установка Tailwind и зависимостей
-npm run css            # сборка стилей
+npm run build            # сборка стилей
 hugo server -D         # http://localhost:1313
 ```
 
-`npm run css` нужно перезапускать после добавления новых Tailwind-классов, которых ещё не было в проекте — иначе классы не попадут в итоговый CSS.
+`npm run build` нужно перезапускать после добавления новых Tailwind-классов, которых ещё не было в проекте — иначе классы не попадут в итоговый CSS.
 
 ## Правила оформления
 
@@ -70,7 +69,7 @@ hugo server -D         # http://localhost:1313
 | Объект | Соглашение | Примеры |
 |---|---|---|
 | Папка курса | `kebab-case` | `database-design`, `operation-systems` |
-| Папка лекции | `kebab-case`, по содержанию или номеру | `lecture_01`, `multithreading-05-21`, `template-2-04-23` |
+| Папка лекции | `kebab-case` | `lecture-01` |
 | Изображения | произвольное имя, желательно осмысленное | `cover.png`, `process-tree.png` |
 
 В рамках одного курса придерживайтесь единого стиля именования лекций — либо нумерованного (`lecture_01`, `lecture_02`), либо тематического (`allocator-02-26`, `casts-04-02`). Не смешивайте.

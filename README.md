@@ -16,11 +16,12 @@
 
 | Дисциплина | Преподаватель |
 |---|---|
-| [Математическая статистика](https://botaemeveryday.github.io/notes/posts/math-stats/) | Лимарь И. А. |
+| [Математическая статистика](https://botaemeveryday.github.io/notes/posts/math-stats/) | Лимар И. А. |
 | [Операционные системы](https://botaemeveryday.github.io/notes/posts/operation-systems/) | Маятин А. В. |
 | [Базы данных](https://botaemeveryday.github.io/notes/posts/databases/) | Мацнев Н. И. |
+| [Технологии программирования на Java](https://botaemeveryday.github.io/notes/posts/databases/) | Макаревич Р. Д. |
+| [C++ (семестр 1)](https://botaemeveryday.github.io/notes/posts/cpp-sem1/) | Хвастунов А. П. |
 | [C++ (семестр 2)](https://botaemeveryday.github.io/notes/posts/cpp-sem2/) | Хвастунов А. П. |
-| [Проектирование БД](https://botaemeveryday.github.io/notes/posts/db-design/) | Мацнев Н. И. |
 
 ### Дополнительные материалы
 
@@ -58,7 +59,7 @@ git clone https://github.com/botaemeveryday/notes.git
 cd notes
 
 npm install        # зависимости Tailwind
-npm run css        # сборка стилей
+npm run build        # сборка стилей
 hugo server -D     # локальный сервер на http://localhost:1313/
 ```
 
