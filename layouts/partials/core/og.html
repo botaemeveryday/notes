@@ -1,0 +1,55 @@
+{{/*
+  Open Graph + Twitter Card meta tags.
+
+  Picks the share image like this:
+    - single page  →  /covers/<section>/<file-base-name>.png
+    - section page →  /covers/<section>/index.png
+    - fallback     →  /images/avatar.jpg  (site avatar)
+
+  Replaces Hugo's built-in _internal/opengraph.html and _internal/twitter_cards.html
+  so that Telegram, Twitter, Facebook, etc. pick up our generated lecture covers.
+*/}}
+
+{{- $cover := "" -}}
+{{- $section := .Section -}}
+
+{{- if and .IsPage $section -}}
+  {{- $candidate := printf "covers/%s/%s.png" $section .File.ContentBaseName -}}
+  {{- if fileExists (printf "static/%s" $candidate) -}}
+    {{- $cover = printf "/%s" $candidate -}}
+  {{- end -}}
+{{- else if and .IsSection $section -}}
+  {{- $candidate := printf "covers/%s/index.png" $section -}}
+  {{- if fileExists (printf "static/%s" $candidate) -}}
+    {{- $cover = printf "/%s" $candidate -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if not $cover -}}
+  {{- $cover = "/images/avatar.jpg" -}}
+{{- end -}}
+
+{{- $absCover := $cover | absURL -}}
+{{- $title := .Title | default site.Title -}}
+{{- $desc := or .Description .Summary site.Params.description -}}
+{{- $desc = $desc | plainify -}}
+
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $title }}">
+{{ with $desc }}<meta property="og:description" content="{{ . }}">{{ end }}
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:image" content="{{ $absCover }}">
+<meta property="og:image:secure_url" content="{{ $absCover }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="{{ $title }}">
+{{- if .IsPage }}{{ with .Lastmod }}
+<meta property="og:updated_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}{{ end }}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $title }}">
+{{ with $desc }}<meta name="twitter:description" content="{{ . }}">{{ end }}
+<meta name="twitter:image" content="{{ $absCover }}">
+<meta name="twitter:image:alt" content="{{ $title }}">

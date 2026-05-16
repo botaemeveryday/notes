@@ -1,5 +1,4 @@
-{{ template "_internal/opengraph.html" . }}
-{{ template "_internal/twitter_cards.html" . }}
+{{ partial "core/og.html" . }}
 
 {{ with site.Params.favicon }}
   {{ if hasPrefix . "<link" }}
