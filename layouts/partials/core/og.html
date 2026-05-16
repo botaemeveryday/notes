@@ -2,25 +2,44 @@
   Open Graph + Twitter Card meta tags.
 
   Picks the share image:
-    - single page  →  /covers/<section>/<file-base-name>.png
-    - section page →  /covers/<section>/index.png
+    - single page  →  /covers/<course>/<file-base-name>.png
+    - section page →  /covers/<course>/index.png
     - fallback     →  /images/avatar.jpg
+
+  Content layout assumption:
+    content/posts/<course>/<lecture>/index.md   ← lecture
+    content/posts/<course>/_index.md            ← course landing
+
+  So the "section" we care about for the cover path is the SECOND path
+  segment ("operation-systems"), not the first ("posts").
 
   An explicit `cover` param in the page frontmatter overrides everything.
 */}}
 
 {{- $cover := "" -}}
-{{- $section := .Section -}}
+
+{{- /* Extract the course slug from the file path. We split File.Dir
+       on "/" and take index 1 (after "posts"). Works for:
+         posts/operation-systems/lecture-10/  → "operation-systems"
+         posts/operation-systems/             → "operation-systems"
+       Falls back to .Section for pages outside posts/. */ -}}
+{{- $course := "" -}}
+{{- with .File }}
+  {{- $parts := split (trim .Dir "/") "/" -}}
+  {{- if and (ge (len $parts) 2) (eq (index $parts 0) "posts") -}}
+    {{- $course = index $parts 1 -}}
+  {{- end -}}
+{{- end -}}
 
 {{- with .Params.cover -}}
   {{- $cover = . -}}
 {{- else -}}
-  {{- if and .IsPage $section -}}
-    {{- $cover = printf "/covers/%s/%s.png" $section .File.ContentBaseName -}}
-  {{- else if and .IsSection $section -}}
-    {{- $cover = printf "/covers/%s/index.png" $section -}}
+  {{- if and .IsPage $course -}}
+    {{- $cover = printf "covers/%s/%s.png" $course .File.ContentBaseName -}}
+  {{- else if and .IsSection $course -}}
+    {{- $cover = printf "covers/%s/index.png" $course -}}
   {{- else -}}
-    {{- $cover = "/images/avatar.jpg" -}}
+    {{- $cover = "images/avatar.jpg" -}}
   {{- end -}}
 {{- end -}}
 
