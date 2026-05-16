@@ -1,23 +1,18 @@
 name: Deploy Hugo site to Pages
-
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: "pages"
   cancel-in-progress: false
-
 defaults:
   run:
     shell: bash
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,6 +38,34 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: pip install Pillow pyyaml genanki
+
+      - name: Cache fonts
+        uses: actions/cache@v4
+        with:
+          path: .cache/fonts
+          key: covers-fonts-v1
+
+      - name: Cache cover markers
+        uses: actions/cache@v4
+        with:
+          path: .cache/covers
+          key: covers-markers-${{ github.sha }}
+          restore-keys: covers-markers-
+
+      - name: Generate OG covers
+        run: python scripts/generate-covers.py
+
+      - name: Generate Anki decks
+        run: python scripts/generate-anki.py
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
@@ -65,7 +88,10 @@ jobs:
         run: |
           [ -f public/index.html ] || exit 1
           grep -q "<body" public/index.html || (echo "Index.html пустой!"; exit 1)
+          ls public/covers/*/*.png > /dev/null 2>&1 || \
+            (echo "Обложки не попали в public/covers/!"; exit 1)
           echo "Содержимое index.html проверено."
+          echo "Обложки на месте."
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
