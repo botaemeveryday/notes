@@ -1,61 +1,175 @@
-<a class="group relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-300 shadow-sm hover:shadow-lg transition-all duration-300 no-underline overflow-hidden hover:-translate-y-1" href="{{ .RelPermalink }}">
-  
-  <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+{{ $palette     := slice "#BE6B47" "#6F8B5A" "#5B7C9A" "#8B5E3C" "#84516E" "#B58239" }}
+{{ $paletteSoft := slice "#EBCEBC" "#D6E2C7" "#C7D5E0" "#DDC4A8" "#D8BCCC" "#E2CAA0" }}
 
-  {{ if .Params.cover }}
-    <div class="h-32 sm:h-40 w-full overflow-hidden border-b border-base-300/50">
-      {{ with .Resources.Get .Params.cover }}
-        {{ if eq .MediaType.SubType "svg" }}
-          <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover" />
-        {{ else }}
-          {{ $webp := .Resize "600x webp" }}
-          <img src="{{ $webp.RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-        {{ end }}
-      {{ else }}
-        <img src="{{ .Params.cover }}" alt="{{ .Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-      {{ end }}
+{{ $customColor := .Params.cover_color }}
+{{ $customSoft  := .Params.cover_color_soft }}
+
+{{ $color := "" }}
+{{ $soft  := "" }}
+
+{{ if and $customColor $customSoft }}
+  {{ $color = $customColor }}
+  {{ $soft  = $customSoft }}
+{{ else if $customColor }}
+  {{ $color = $customColor }}
+  {{ $soft = "#F0F0F0" }}
+  {{ range $i, $c := $palette }}
+    {{ if eq $c $customColor }}
+      {{ $soft = index $paletteSoft $i }}
+    {{ end }}
+  {{ end }}
+{{ else }}
+  {{ $hash := 0 }}
+  {{ range $char := split .Title "" }}
+    {{ $hash = add $hash (int (index $char 0)) }}
+  {{ end }}
+  {{ $idx := mod $hash 6 }}
+  {{ $color = index $palette $idx }}
+  {{ $soft  = index $paletteSoft $idx }}
+{{ end }}
+
+{{ $idx2 := 0 }}
+{{ range $i, $c := $palette }}
+  {{ if eq $c $color }}
+    {{ $idx2 = mod (add $i 2) 6 }}
+  {{ end }}
+{{ end }}
+{{ $color2 := index $palette $idx2 }}
+
+{{ $style := int (.Params.cover_style | default site.Params.coverStyle | default 1) }}
+
+{{ $allPages := slice }}
+{{ if .CurrentSection }}
+  {{ range .CurrentSection.RegularPages.ByWeight }}
+    {{ if and (not .Draft) (not (strings.Contains .File.LogicalName "_info")) }}
+      {{ $allPages = $allPages | append . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ $total := len $allPages }}
+{{ $n := 1 }}
+{{ range $i, $p := $allPages }}
+  {{ $indexFromEnd := sub $total $i }}
+  {{ if eq $p.RelPermalink $.RelPermalink }}
+    {{ $n = $indexFromEnd }}
+  {{ end }}
+{{ end }}
+{{ $nn := printf "%02d" $n }}
+
+{{ $clean := replaceRE `[^A-Za-zА-Яа-яЁё0-9 ]+` "" .Title }}
+{{ $words := split (trim $clean " ") " " }}
+{{ $initials := "" }}
+{{ $count := 0 }}
+{{ range $words }}
+  {{ if and (gt (len .) 0) (lt $count 2) }}
+    {{ $firstChar := substr . 0 1 }}
+    {{ $upper := upper $firstChar }}
+    {{ $initials = printf "%s%s" $initials $upper }}
+    {{ $count = add $count 1 }}
+  {{ end }}
+{{ end }}
+{{ if eq $initials "" }}
+  {{ $initials = "L" }}
+{{ end }}
+
+
+<a href="{{ .RelPermalink }}"
+   class="group flex flex-col h-full bg-base-100 border border-base-300 rounded-2xl overflow-hidden no-underline text-base-content hover:bg-base-200/50 hover:border-primary/50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative">
+
+  <span class="absolute left-0 top-0 bottom-0 w-[4px] opacity-0 group-hover:opacity-100 transition-opacity z-20"
+        style="background: {{ $color }}"></span>
+
+  {{ if eq $style 1 }}
+    <div class="aspect-[16/10] relative overflow-hidden flex items-center justify-center" style="background: {{ $soft }}">
+      <span class="absolute top-3 left-4 text-xs font-bold tracking-widest opacity-80" style="color: {{ $color }}; font-family: monospace;">№ {{ $nn }}</span>
+      <span class="font-extrabold tracking-tighter text-2xl select-none" style="color: {{ $color }}">{{ .Title | default "?" }}</span>
     </div>
+
+  {{ else if eq $style 2 }}
+    <div class="aspect-[16/10] relative overflow-hidden flex items-center justify-center bg-base-200">
+      <span class="absolute select-none font-bold opacity-20 text-[140px] -rotate-6" style="color: {{ $color }};">{{ $n }}</span>
+      <div class="absolute inset-0 flex flex-col justify-end p-4">
+        <span class="text-xs uppercase tracking-widest font-bold opacity-80" style="color: {{ $color }};">Лекция · {{ .Date | time.Format "02 Jan" }}</span>
+      </div>
+      <div class="absolute inset-3 border-2 border-dashed rounded-lg pointer-events-none opacity-30" style="border-color: {{ $color }};"></div>
+    </div>
+
+  {{ else if eq $style 3 }}
+    <div class="aspect-[16/10] relative overflow-hidden bg-base-100" style="background-image: repeating-linear-gradient(45deg, {{ $color }}22 0 2px, transparent 2px 12px);">
+      <div class="absolute inset-0 flex flex-col justify-between p-4">
+        <span class="text-xs font-bold tracking-widest" style="color: {{ $color }}; font-family: monospace;">{{ $nn }} / {{ printf "%02d" $total }}</span>
+        {{ with .GetTerms "tags" }}
+          {{ with index . 0 }}
+            <div class="self-start px-3 py-1 rounded-full text-xs font-bold bg-base-100 border shadow-sm" style="border-color: {{ $color }}; color: {{ $color }}">#{{ .LinkTitle | lower }}</div>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+
+  {{ else if eq $style 4 }}
+    <div class="aspect-[16/10] relative overflow-hidden bg-base-200" style="background-image: radial-gradient({{ $color }}44 1.5px, transparent 1.5px); background-size: 16px 16px;">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="px-5 py-3 bg-base-100 border-2 rounded-xl flex items-center gap-2" style="border-color: {{ $color }}; box-shadow: 4px 4px 0 0 {{ $color }};">
+          <span class="text-2xl font-bold" style="color: {{ $color }}; font-family: monospace;">{{ $nn }}</span>
+          <span class="text-xs uppercase tracking-widest opacity-60">lecture</span>
+        </div>
+      </div>
+    </div>
+
+  {{ else if eq $style 5 }}
+    <div class="aspect-[16/10] relative overflow-hidden bg-base-200/50">
+      <div class="absolute -top-10 -right-10 w-48 h-48 rounded-full blur-3xl opacity-50" style="background: {{ $color }};"></div>
+      <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full blur-3xl opacity-40" style="background: {{ $color2 }};"></div>
+      <div class="absolute inset-0 flex flex-col justify-between p-5">
+        <span class="text-xs font-bold tracking-widest" style="color: {{ $color }}; font-family: monospace;">№ {{ $nn }}</span>
+      </div>
+    </div>
+
   {{ else }}
-    <div class="h-1.5 w-full bg-gradient-to-r from-primary/40 to-secondary/40"></div>
+    <div class="aspect-[16/10] relative overflow-hidden bg-base-100" style="background-image: linear-gradient(to right, transparent 38px, {{ $color }}55 38px 39px, transparent 39px), repeating-linear-gradient(0deg, transparent 0 23px, {{ $color }}22 23px 24px);">
+      <div class="absolute inset-0 flex items-center p-4 pl-14">
+        <span class="text-5xl font-black select-none" style="color: {{ $color }};">{{ $nn }}</span>
+        <div class="ml-4 flex flex-col">
+          <span class="text-xs uppercase tracking-widest font-bold" style="color: {{ $color }}">Лекция</span>
+          <span class="text-sm font-medium opacity-80" style="color: {{ $color }}">{{ .Date | time.Format "02 Jan" }}</span>
+        </div>
+      </div>
+      <div class="absolute left-4 top-6 w-2 h-2 rounded-full border border-base-300 bg-base-200"></div>
+      <div class="absolute left-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full border border-base-300 bg-base-200"></div>
+      <div class="absolute left-4 bottom-6 w-2 h-2 rounded-full border border-base-300 bg-base-200"></div>
+    </div>
   {{ end }}
 
-  <div class="p-5 flex-1 flex flex-col">
-    
-    <h2 class="text-xl font-bold text-base-content mb-2 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+  <div class="p-5 flex flex-col flex-1">
+    <h3 class="text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-2">
       {{ .Title }}
-    </h2>
+    </h3>
 
-    <div class="text-sm text-base-content/60 leading-relaxed mb-4 line-clamp-3">
-      {{ or .Description (.Summary | plainify | htmlUnescape) }}
-    </div>
-    
+    <p class="text-sm text-base-content/60 leading-relaxed line-clamp-2 mb-4">
+      {{ or .Params.description (.Summary | plainify) }}
+    </p>
+
     <div class="mt-auto"></div>
 
-  </div>
+    <div class="pt-4 mt-2 flex items-start justify-between border-t border-dashed border-base-300 text-xs text-base-content/50">
 
-  <div class="px-5 py-3 border-t border-base-300/50 bg-base-200/30 flex flex-wrap items-center justify-between gap-3 text-xs text-base-content/50">
-    
-    <div class="flex items-center gap-2">
-      <ion-icon name="calendar-outline" class="text-sm"></ion-icon>
-      {{ if site.Params.Experimental.jsDate }}
-        <span data-format="luxon" class="font-medium">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
-      {{ else }}
-        <span class="font-medium">{{ .Date | time.Format "02 Jan 2006" }}</span>
-      {{ end }}
-    </div>
+      <div class="flex items-center gap-1.5 font-medium mt-1 shrink-0">
+        <ion-icon name="calendar-outline"></ion-icon>
+        {{ if site.Params.Experimental.jsDate }}
+          <span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
+        {{ else }}
+          {{ .Date | time.Format "02 Jan" }}
+        {{ end }}
+      </div>
 
-    <div class="flex items-center">
-      {{ $hasAuthor := or .Params.author site.Params.author }}
-      {{ if $hasAuthor }}
-        <span class="flex items-center gap-1.5 font-medium hover:text-primary transition-colors">
+      <div class="flex flex-col items-end text-right gap-1.5 min-w-0">
+        {{ $hasAuthor := or .Params.author site.Params.author }}
+        {{ if $hasAuthor }}
           {{ partial "post/author.html" (dict "Params" .Params "template" "summary") }}
-        </span>
-      {{ else if .Params.tags }}
-        <span class="px-2 py-1 rounded-md bg-base-300 text-[10px] font-bold uppercase tracking-wider text-base-content/60">
-          #{{ index .Params.tags 0 }}
-        </span>
-      {{ end }}
-    </div>
+        {{ end }}
+      </div>
 
+    </div>
   </div>
 </a>

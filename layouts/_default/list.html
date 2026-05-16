@@ -1,54 +1,62 @@
 {{ define "main" }}
-<div class="container px-4 py-6 md:py-10 mx-auto max-w-7xl">
-  
-  <nav class="text-sm font-medium text-base-content/50 mb-6 flex items-center gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
+<div class="container mx-auto px-4 py-6 md:py-8 max-w-7xl">
+
+  <nav class="flex items-center gap-2 text-xs md:text-sm text-base-content/50 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
     <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
       <ion-icon name="home-outline"></ion-icon> Главная
     </a>
-    <span class="opacity-50">/</span>
-    <span class="text-base-content/80">{{ .Title }}</span>
+    {{ if .Params.semester }}
+      <span class="opacity-40">/</span>
+      <span>Семестр {{ .Params.semester }}</span>
+    {{ end }}
+    <span class="opacity-40">/</span>
+    <span class="font-medium text-base-content">{{ .Title }}</span>
   </nav>
 
-  <div class="bg-base-200/40 border border-base-300/50 rounded-[2rem] p-6 md:p-10 mb-10 relative overflow-hidden shadow-sm">
-    
-    <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+  {{ $validPages := slice }}
+  {{ range .Pages }}
+    {{ if and (not .Draft) (not (strings.Contains .File.LogicalName "_index")) }}
+      {{ $validPages = $validPages | append . }}
+    {{ end }}
+  {{ end }}
 
-    <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+  {{ $count := len $validPages }}
+  {{ $mod10 := mod $count 10 }}
+  {{ $mod100 := mod $count 100 }}
+  {{ $word := "лекций" }}
+  {{ if and (ge $mod100 11) (le $mod100 14) }}{{ $word = "лекций" }}
+  {{ else if eq $mod10 1 }}{{ $word = "лекция" }}
+  {{ else if and (ge $mod10 2) (le $mod10 4) }}{{ $word = "лекции" }}
+  {{ end }}
+
+  <div class="bg-base-200/40 border border-base-300/50 rounded-3xl md:rounded-[2rem] p-6 md:p-10 mb-10 relative overflow-hidden shadow-sm">
+    
+    <div class="absolute -top-20 -right-20 w-48 h-48 md:w-64 md:h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
       
       <div class="flex-1">
-        <h1 class="text-3xl md:text-5xl font-extrabold text-base-content mb-4 tracking-tight">
+        <h1 class="text-3xl md:text-5xl font-black text-base-content mb-4 tracking-tight leading-tight">
           {{ .Title }}
         </h1>
         
-        {{ if .Content }}
-          <div class="prose prose-sm md:prose-base dark:prose-invert text-base-content/70 max-w-3xl leading-relaxed">
-            {{ .Content }}
+        {{ with .Params.description }}
+          <div class="flex items-start gap-3 bg-base-100/50 p-4 rounded-xl border border-base-300/50 max-w-2xl">
+            <ion-icon name="information-circle" class="text-primary text-xl shrink-0 mt-0.5"></ion-icon>
+            <p class="text-sm md:text-base text-base-content/80 m-0 leading-relaxed font-medium">
+              {{ . }}
+            </p>
           </div>
-        {{ else if .Params.description }}
-          <p class="text-base-content/70 text-sm md:text-base max-w-2xl m-0 leading-relaxed">
-            {{ .Params.description }}
-          </p>
         {{ end }}
       </div>
 
-      {{/* Hugo магия: .RegularPages автоматически берет только лекции (без папок) */}}
-      {{ $validPages := where .RegularPages "Draft" false }}
-      {{ $count := len $validPages }}
-      
-      {{ $mod10 := mod $count 10 }}
-      {{ $mod100 := mod $count 100 }}
-      {{ $word := "лекций" }}
-      {{ if and (ge $mod100 11) (le $mod100 14) }}{{ $word = "лекций" }}
-      {{ else if eq $mod10 1 }}{{ $word = "лекция" }}
-      {{ else if and (ge $mod10 2) (le $mod10 4) }}{{ $word = "лекции" }}
-      {{ end }}
-
-      <div class="shrink-0">
-        <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-base-100 border border-base-300 shadow-sm">
-          <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-lg">
+      <div class="shrink-0 self-start md:self-auto w-full md:w-auto">
+        <div class="flex items-center gap-3 px-5 py-3 rounded-2xl bg-base-100 border border-base-300 shadow-sm w-full md:w-auto justify-center md:justify-start">
+          <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl shrink-0">
             <ion-icon name="library"></ion-icon>
           </div>
-          <div class="flex flex-col">
+          <div class="flex flex-col text-left">
+            <span class="text-[10px] text-base-content/50 uppercase tracking-widest leading-none mb-1">Всего</span>
             <span class="text-sm font-bold text-base-content leading-none">{{ $count }} {{ $word }}</span>
           </div>
         </div>
@@ -57,19 +65,26 @@
     </div>
   </div>
 
+  {{ if .Content }}
+    <div class="mb-12 p-6 md:p-8 bg-base-100 border border-base-300 rounded-3xl shadow-sm relative overflow-hidden">
+      <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/50 to-secondary/50"></div>
+      
+      <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none text-base-content/80 leading-relaxed prose-headings:mt-0">
+        {{ .Content }}
+      </div>
+    </div>
+  {{ end }}
+
   {{ if gt $count 0 }}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
       {{ range $validPages.ByWeight }}
         {{ .Render "summary" }}
       {{ end }}
     </div>
   {{ else }}
-    <div class="py-20 flex flex-col items-center justify-center text-center">
-      <div class="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center text-4xl mb-4 opacity-50">
-        📭
-      </div>
-      <h3 class="text-xl font-bold text-base-content mb-2">Здесь пока пусто</h3>
-      <p class="text-base-content/50">Лекции для этого курса еще не загружены.</p>
+    <div class="py-16 md:py-20 text-center flex flex-col items-center justify-center border border-dashed border-base-300 rounded-3xl bg-base-200/20 mx-2">
+      <ion-icon name="folder-open-outline" class="text-5xl md:text-6xl text-base-content/20 mb-4"></ion-icon>
+      <span class="text-base md:text-lg font-bold text-base-content/60">Здесь пока пусто…</span>
     </div>
   {{ end }}
 
