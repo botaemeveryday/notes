@@ -39,7 +39,7 @@
             {{ .Date | time.Format "02.01.2006" }}
             {{ end }}
 
-            {{ if ne .Params.nolastmod true }}
+            {{ if .Params.lastmod }}
             <span class="mx-2">•</span>
             <span class="italic">Обновлено:
                 {{ if site.Params.Experimental.jsDate }}

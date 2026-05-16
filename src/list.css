@@ -1,0 +1,40 @@
+.cn-list-head {}
+.cn-list-abbr {
+  font-family: 'Pangolin', cursive;
+  font-size: 44px; line-height: 1;
+  color: var(--cn-primary);
+  flex-shrink: 0;
+  transform: translateY(2px);
+}
+.cn-list-title {
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+  color: var(--cn-text);
+  margin: 0;
+}
+.cn-list-desc {
+  font-size: 15px; color: var(--cn-text-muted);
+  line-height: 1.6; max-width: 56ch;
+  margin: 0;
+}
+.cn-list-meta {
+  display: flex; flex-wrap: wrap;
+  align-items: center; gap: 14px;
+  margin-top: 16px;
+  font-size: 13px; color: var(--cn-text-muted);
+}
+.cn-list-term, .cn-list-count {
+  font-family: 'Pangolin', cursive;
+  font-size: 15px;
+  color: var(--cn-text);
+}
+.cn-list-side {
+  display: flex; flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  flex-shrink: 0;
+}
+@media (min-width: 768px) { .cn-list-side { align-items: flex-end; } }
+.cn-list-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.cn-lectures .cn-card { min-height: 0; }

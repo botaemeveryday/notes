@@ -1,25 +1,21 @@
 <div id="normal-view" class="max-w-7xl mx-auto">
-  
-  {{/* ==============================================================
-       1. ЗАКРЕПЛЕННЫЕ ПОСТЫ (PINNED)
-  ============================================================== */}}
   {{ $pinnedPages := where site.RegularPages "Params.pinned" true }}
   {{ if gt (len $pinnedPages) 0 }}
-    
+
     <div class="mt-8 mb-6">
       <h2 class="text-xs font-bold text-base-content/40 uppercase tracking-widest mb-4 flex items-center gap-2 pl-2">
         <ion-icon name="pin" class="text-primary text-base -mt-0.5"></ion-icon>
         Закреплено
       </h2>
-      
+
       <div class="flex flex-wrap gap-3 pl-1">
         {{ range $pinnedPages }}
           <a href="{{ .RelPermalink }}" class="group flex items-center gap-3 pr-5 pl-1.5 py-1.5 bg-base-100 hover:bg-base-200 border border-base-300 hover:border-base-content/20 rounded-full shadow-sm hover:shadow transition-all no-underline">
-            
+
             <div class="w-8 h-8 rounded-full bg-base-200 group-hover:bg-primary group-hover:text-primary-content flex items-center justify-center text-sm transition-colors shrink-0">
               {{ .Params.icon | default "📚" }}
             </div>
-            
+
             <div class="flex flex-col justify-center">
               <span class="text-sm font-bold text-base-content group-hover:text-primary transition-colors leading-none">
                 {{ .Title }}
@@ -34,14 +30,11 @@
         {{ end }}
       </div>
     </div>
-    
+
     <div class="w-full h-px bg-gradient-to-r from-base-content/10 to-transparent my-10"></div>
   {{ end }}
 
 
-  {{/* ==============================================================
-       2. ПАПКИ ПО СЕМЕСТРАМ
-  ============================================================== */}}
   {{ $subjects := slice }}
   {{ with site.GetPage "section" "posts" }}
     {{ range .Sections }}

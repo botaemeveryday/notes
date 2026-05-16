@@ -1,58 +1,75 @@
-<div class="flex items-center gap-1">
-  {{ $authors := slice }}
+{{ $authors := slice }}
+
+{{ if .Params.authors }}
+  {{ $authors = .Params.authors }}
+{{ else if .Params.author }}
+  {{ $authorStr := .Params.author }}
+  {{ $authorNames := slice }}
   
-  {{ if .Params.authors }}
-    {{ $authors = .Params.authors }}
-  {{ else if .Params.author }}
-    {{ $authorStr := .Params.author }}
-    {{ $authorNames := slice }}
-    
-    {{ if (findRE " & " $authorStr) }}
-      {{ $authorNames = split $authorStr " & " }}
-    {{ else if (findRE ", " $authorStr) }}
-      {{ $authorNames = split $authorStr ", " }}
-    {{ else if (findRE " и " $authorStr) }}
-      {{ $authorNames = split $authorStr " и " }}
-    {{ else }}
-      {{ $authorNames = slice $authorStr }}
-    {{ end }}
-    
-    {{ range $authorNames }}
-      {{ $name := trim . " " }}
-      {{ $authors = $authors | append (dict "name" $name) }}
-    {{ end }}
+  {{ if (findRE " & " $authorStr) }}
+    {{ $authorNames = split $authorStr " & " }}
+  {{ else if (findRE ", " $authorStr) }}
+    {{ $authorNames = split $authorStr ", " }}
+  {{ else if (findRE " и " $authorStr) }}
+    {{ $authorNames = split $authorStr " и " }}
+  {{ else }}
+    {{ $authorNames = slice $authorStr }}
   {{ end }}
   
-  {{ if gt (len $authors) 0 }}
-    {{ range $i, $author := $authors }}
-      {{ if $i }}
-        <span class="text-base-content/40 mx-0.5"></span>
-      {{ end }}
-      
-      {{ if $author.avatar }}
-        <div class="avatar mr-1">
-          <div class="w-8 rounded-full">
-            <img class="my-0!" src="{{ $author.avatar }}" alt="{{ $author.name }}" />
-          </div>
-        </div>
-      {{ else if $.Params.avatar }}
-        <div class="avatar mr-1">
-          <div class="w-8 rounded-full">
-            <img class="my-0!" src="{{ $.Params.avatar }}" alt="{{ $author.name }}" />
-          </div>
-        </div>
-      {{ end }}
-      
-      <span itemprop="author" itemscope itemtype="https://schema.org/Person">
-        {{ $authorLink := $author.link | default $.Params.authorlink }}
-        {{ if and $authorLink (eq $.template "single") }}
-          <a itemprop="url" href="{{ $authorLink }}" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-colors no-underline">
+  {{ range $authorNames }}
+    {{ $name := trim . " " }}
+    {{ $authors = $authors | append (dict "name" $name) }}
+  {{ end }}
+{{ end }}
+
+
+
+{{ if gt (len $authors) 0 }}
+  {{ if eq $.template "summary" }}
+    <div class="flex flex-col items-end gap-1.5 w-full">
+      {{ range $author := $authors }}
+        <div class="flex items-center gap-1.5 group/author max-w-full">
+          {{ if $author.avatar }}
+            <img class="w-4 h-4 rounded-full object-cover shrink-0" src="{{ $author.avatar }}" alt="{{ $author.name }}" />
+          {{ else if $.Params.avatar }}
+            <img class="w-4 h-4 rounded-full object-cover shrink-0" src="{{ $.Params.avatar }}" alt="{{ $author.name }}" />
+          {{ else }}
+            <ion-icon name="person-outline" class="text-sm shrink-0"></ion-icon>
+          {{ end }}
+
+          <span itemprop="author" itemscope itemtype="https://schema.org/Person" class="truncate font-medium text-base-content/70 group-hover/author:text-primary transition-colors">
             <span itemprop="name" class="whitespace-nowrap">{{ $author.name }}</span>
-          </a>
-        {{ else }}
-          <span itemprop="name" class="whitespace-nowrap">{{ $author.name }}</span>
-        {{ end }}
-      </span>
-    {{ end }}
+          </span>
+        </div>
+      {{ end }}
+    </div>
+
+  {{ else }}
+    <div class="flex flex-wrap items-center gap-2 md:gap-3">
+      {{ range $i, $author := $authors }}
+
+        {{ if $i }}<span class="text-base-content/30">•</span>{{ end }}
+
+        <div class="flex items-center gap-1.5">
+          {{ if $author.avatar }}
+            <img class="w-6 h-6 rounded-full object-cover shrink-0 shadow-sm" src="{{ $author.avatar }}" alt="{{ $author.name }}" />
+          {{ else if $.Params.avatar }}
+            <img class="w-6 h-6 rounded-full object-cover shrink-0 shadow-sm" src="{{ $.Params.avatar }}" alt="{{ $author.name }}" />
+          {{ else }}
+          {{ end }}
+
+          <span itemprop="author" itemscope itemtype="https://schema.org/Person" class="font-medium text-base-content/80 hover:text-primary transition-colors">
+            {{ $authorLink := $author.link | default $.Params.authorlink }}
+            {{ if $authorLink }}
+              <a itemprop="url" href="{{ $authorLink }}" target="_blank" rel="noopener noreferrer" class="no-underline text-inherit">
+                <span itemprop="name" class="whitespace-nowrap">{{ $author.name }}</span>
+              </a>
+            {{ else }}
+              <span itemprop="name" class="whitespace-nowrap">{{ $author.name }}</span>
+            {{ end }}
+          </span>
+        </div>
+      {{ end }}
+    </div>
   {{ end }}
-</div>
+{{ end }}

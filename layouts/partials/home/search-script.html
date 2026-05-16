@@ -19,7 +19,7 @@
     } catch (error) {
       console.error('❌ Ошибка загрузки базы для поиска:', error);
       document.getElementById('search-results').classList.remove('hidden');
-      document.getElementById('search-results').innerHTML = `<span class="text-red-500">Ошибка инициализации поиска. Проверь консоль (F12).</span>`;
+      document.getElementById('search-results').innerHTML = `<span class="text-error font-medium">Ошибка инициализации поиска. Проверьте консоль.</span>`;
       return;
     }
 
@@ -75,18 +75,20 @@
         element.style.opacity = '1';
         element.style.transform = 'none';
         
+        // НОВАЯ ЗАПАСНАЯ КАРТОЧКА (В едином стиле сайта)
         let htmlToInsert = item.html || "";
         if (htmlToInsert.trim() === "") {
+          // Очищаем контент от Markdown/HTML тегов для красивого превью
+          const cleanContent = (item.content || '').replace(/<[^>]*>?/gm, '').substring(0, 120);
+          
           htmlToInsert = `
-            <div class="card bg-base-100 shadow-xl border border-base-300 h-full">
-              <div class="card-body">
-                <h2 class="card-title text-base-content">${item.title || 'Документ'}</h2>
-                <p class="text-base-content/70 text-sm mt-2">${(item.content || '').substring(0, 150)}...</p>
-                <div class="card-actions justify-end mt-4">
-                  <a href="${item.id}" class="btn btn-primary btn-sm">Перейти</a>
-                </div>
+            <a href="${item.id}" class="group flex flex-col h-full bg-base-100 border border-base-300 rounded-2xl overflow-hidden no-underline text-base-content hover:bg-base-200/50 hover:border-primary/50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div class="h-1.5 w-full bg-gradient-to-r from-primary/40 to-secondary/40"></div>
+              <div class="p-5 flex-1 flex flex-col">
+                <h3 class="text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-2">${item.title || 'Документ'}</h3>
+                <p class="text-sm text-base-content/60 leading-relaxed line-clamp-3 mb-4">${cleanContent}...</p>
               </div>
-            </div>
+            </a>
           `;
         }
 
@@ -121,7 +123,7 @@
         node.textContent.split(regex).forEach(part => {
           if (regex.test(part)) {
             const span = document.createElement('span');
-            span.className = 'search-highlight text-primary font-bold bg-primary/20 rounded px-1';
+            span.className = 'bg-primary/20 text-primary font-bold rounded px-1';
             span.textContent = part;
             fragment.appendChild(span);
           } else if (part) {

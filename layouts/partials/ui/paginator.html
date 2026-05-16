@@ -1,6 +1,5 @@
 <div class="flex items-center justify-center gap-3 md:gap-6 w-full my-4">
 
-  <!-- Кнопка "Назад" -->
   {{ if .paginator.HasPrev }}
   <a href="{{ .paginator.Prev.URL }}" title="{{ T "prevPage" }}" class="btn btn-ghost border border-base-300 hover:border-primary hover:bg-primary/5 hover:text-primary rounded-full px-4 sm:px-6 transition-all group no-underline">
     <ion-icon name="arrow-back-outline" class="text-lg group-hover:-translate-x-1 transition-transform"></ion-icon>
@@ -13,7 +12,6 @@
   </button>
   {{ end }}
 
-  <!-- Индикатор текущей страницы -->
   <div class="flex items-center justify-center px-4 py-2 bg-base-200/50 rounded-full border border-base-300/50">
     <span class="text-sm font-bold text-base-content">
       {{ .paginator.PageNumber }} 
@@ -22,7 +20,6 @@
     </span>
   </div>
 
-  <!-- Кнопка "Вперед" -->
   {{ if .paginator.HasNext }}
   <a href="{{ .paginator.Next.URL }}" title="{{ T "nextPage" }}" class="btn btn-ghost border border-base-300 hover:border-primary hover:bg-primary/5 hover:text-primary rounded-full px-4 sm:px-6 transition-all group no-underline">
     <span class="hidden sm:inline font-medium">{{ T "nextPage" | default "Вперед" }}</span>

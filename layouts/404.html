@@ -1,95 +1,103 @@
-{{ define "title" }}404 — Заблудились в мыслях?{{ end }}
+{{ define "title" }}404 — страница пропала{{ end }}
 
 {{ define "main" }}
+
 <style>
-  .err-bg::before {
-    content: "";
-    position: fixed; inset: 0;
-    background-image: radial-gradient(rgba(128, 128, 128, 0.15) 1px, transparent 1px);
-    background-size: 24px 24px;
-    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 75%);
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 75%);
-    pointer-events: none;
-    z-index: 0;
+  /* Анимация рисования SVG-линий */
+  @keyframes cn-scribble  { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
+  
+  /* Плавное "парение" (левитация) цифр 4 */
+  @keyframes cn-float-a   { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-6px) rotate(-2deg); } }
+  @keyframes cn-float-b   { 0%,100% { transform: translateY(0) rotate(3deg); }  50% { transform: translateY(-4px) rotate(5deg); } }
+  
+  .cn-draw { 
+    stroke-dasharray: 600; 
+    stroke-dashoffset: 600; 
+    animation: cn-scribble 2s ease-out 0.3s forwards; 
   }
-  .err-content { position: relative; z-index: 1; }
-
-  @keyframes err-thread-draw {
-    from { stroke-dashoffset: 400; }
-    to   { stroke-dashoffset: 0; }
-  }
-  .err-thread {
-    stroke-dasharray: 400;
-    stroke-dashoffset: 400;
-    animation: err-thread-draw 2.5s ease-out 0.5s forwards;
-  }
-
-  @keyframes err-spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-  }
-  .err-maze { 
-    animation: err-spin 120s linear infinite; 
-    transform-origin: center; 
-    transform-box: fill-box; 
-  }
+  .cn-float-a { animation: cn-float-a 6s ease-in-out infinite; }
+  .cn-float-b { animation: cn-float-b 7s ease-in-out infinite; }
 </style>
 
-<div class="err-bg"></div>
+<main class="min-h-[80vh] flex flex-col justify-center items-center px-4 py-16 relative overflow-hidden">
 
-<main class="err-content min-h-[75vh] flex flex-col justify-center items-center px-4 py-16">
+  {{/* Угловые метки (как на листах или в терминалах) */}}
+  <span class="absolute top-6 right-8 text-[11px] uppercase tracking-[0.18em] font-semibold text-base-content/30">404</span>
+  <span class="absolute top-6 left-8 text-[11px] uppercase tracking-[0.18em] font-semibold text-base-content/30 hidden sm:inline">страница пропала</span>
 
-  <div class="text-3xl -mb-6 -translate-x-12 -rotate-12 select-none text-primary/60 font-serif italic">
-    ой...
-  </div>
+  {{/* Верхняя «черта» как от пера (Рисуется при загрузке) */}}
+  <svg class="absolute top-4 left-1/2 -translate-x-1/2 w-[280px] h-[60px] text-primary opacity-30" viewBox="0 0 280 80" fill="none" aria-hidden="true">
+    <path class="cn-draw" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+          d="M 5 70 C 20 30, 60 50, 70 30 C 75 18, 90 25, 95 50 C 100 70, 130 60, 140 35 C 150 12, 180 28, 175 55 C 172 75, 200 75, 215 50 C 230 25, 260 35, 275 18"/>
+  </svg>
 
-  <div class="flex items-center gap-2 md:gap-4 leading-none select-none">
-    <span class="text-[120px] md:text-[200px] font-black tracking-tighter text-base-content/90">4</span>
+  {{/* ОГРОМНЫЕ ЦИФРЫ «4 ? 4» */}}
+  <div class="flex items-center gap-3 md:gap-6 leading-none select-none">
+    <span class="text-[140px] md:text-[220px] font-black tracking-tighter text-base-content opacity-90 cn-float-a">4</span>
 
-    <svg viewBox="0 0 200 200" class="w-[110px] h-[110px] md:w-[180px] md:h-[180px] shrink-0 overflow-visible" fill="none" aria-hidden="true">
-      
-      <g class="err-maze text-base-content/30" stroke="currentColor" stroke-width="4" stroke-linecap="round">
-        <path d="M 10 100 A 90 90 0 1 1 190 100 A 90 90 0 0 1 60 180" />
-        <path d="M 30 100 A 70 70 0 1 0 140 40 A 70 70 0 0 0 50 149" />
-        <path d="M 50 100 A 50 50 0 1 1 150 100 A 50 50 0 0 1 120 145" />
-        <path d="M 70 100 A 30 30 0 1 0 100 70" />
-        <line x1="100" y1="10" x2="100" y2="30" />
-        <line x1="170" y1="100" x2="190" y2="100" />
-        <line x1="100" y1="150" x2="100" y2="190" />
-        <circle cx="100" cy="100" r="5" fill="currentColor" stroke="none" />
-      </g>
-
-      <path class="err-thread text-primary"
-            d="M 100 100 Q 110 80, 80 80 Q 50 80, 60 120 Q 70 160, 120 140 Q 160 120, 150 50 Q 140 -20, 220 -20"
-            stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"
-            stroke-dasharray="8 6"/>
+    <!-- Центральный "Клубок" (Вопросительный знак из одной линии) -->
+    <svg viewBox="0 0 200 200" class="w-[120px] md:w-[200px] h-[120px] md:h-[200px] shrink-0 overflow-visible text-primary" fill="none" aria-hidden="true">
+      <circle cx="100" cy="100" r="84" stroke="currentColor" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="4 8" fill="none"/>
+      <path class="cn-draw" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"
+            d="M 70 60
+               C 90 45, 130 50, 140 80
+               C 150 110, 110 130, 90 110
+               C 70 90, 100 80, 115 95
+               Q 130 110, 100 130
+               C 70 150, 80 165, 100 162"/>
+      <circle cx="100" cy="162" r="5" fill="currentColor"/>
+      <circle cx="100" cy="180" r="3.5" fill="currentColor"/>
     </svg>
 
-    <span class="text-[120px] md:text-[200px] font-black tracking-tighter text-base-content/90">4</span>
+    <span class="text-[140px] md:text-[220px] font-black tracking-tighter text-base-content opacity-90 cn-float-b">4</span>
   </div>
 
-  <div class="mt-8 max-w-lg text-center z-10">
-    <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-base-content mb-3">
-      Заблудились в лабиринте мыслей?
+  {{/* Надпись «хмм…» */}}
+  <span class="mt-6 text-[28px] -rotate-3 select-none text-primary opacity-80" style="font-family:'Pangolin',cursive;">
+    хмм…
+  </span>
+
+  {{/* Текстовая часть */}}
+  <div class="mt-4 max-w-xl text-center z-10">
+    <h1 class="text-2xl md:text-[34px] font-extrabold tracking-tight text-base-content mb-3 leading-tight">
+      Этой страницы нет ни в одном конспекте
     </h1>
-    <p class="text-base-content/60 leading-relaxed text-sm md:text-base mb-1">
-      Мы перерыли все конспекты, но не смогли найти эту страницу. Возможно, она была удалена или вы опечатались в адресе.
+    <p class="text-[15px] md:text-base text-base-content/60 leading-relaxed px-4">
+      Возможно, лекция была переименована, удалена, или мы просто опечатались. Попробуй с главной — оттуда видно все курсы.
     </p>
   </div>
 
-  <div class="mt-10 group z-10">
-    <a href="{{ site.BaseURL }}"
-       class="inline-flex items-center gap-3 px-8 py-3.5 rounded-full
-              bg-base-100 text-base-content border border-base-300
-              hover:border-primary hover:text-primary hover:bg-primary/5 hover:shadow-md
-              transition-all duration-300 font-semibold no-underline">
-      <svg class="w-5 h-5 group-hover:-translate-x-1.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  {{/* Кнопка "На главную" */}}
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-3 z-10">
+    <a href="{{ site.BaseURL }}" class="group inline-flex items-center gap-3 px-8 py-3.5 rounded-full font-semibold text-[14.5px] no-underline btn shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+      <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
-      Вернуться на главную
+      На главную
     </a>
   </div>
+
+  {{/* Подсказки: Ссылки на реальные предметы */}}
+  {{ $sections := slice }}
+  {{ with site.GetPage "section" "posts" }}
+    {{ range first 5 .Sections }}
+      {{ if not .Draft }}{{ $sections = $sections | append . }}{{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{ if gt (len $sections) 0 }}
+    <div class="mt-12 flex flex-wrap items-center justify-center gap-2 max-w-3xl z-10 px-4">
+      <span class="text-[11px] uppercase tracking-[0.15em] text-base-content/40 font-bold mr-2">
+        а может ты искал:
+      </span>
+      {{ range $sections }}
+        <a href="{{ .RelPermalink }}" class="px-4 py-1.5 rounded-full text-xs font-semibold no-underline transition-all duration-200 border border-base-300 bg-base-100 text-base-content/70 hover:border-primary/50 hover:text-primary hover:bg-primary/5">
+          {{ .Title }}
+        </a>
+      {{ end }}
+    </div>
+  {{ end }}
 
 </main>
 {{ end }}

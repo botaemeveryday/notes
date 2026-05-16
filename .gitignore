@@ -4,9 +4,8 @@
 node_modules
 
 public
-resources
+/resources/
 .hugo_build.lock
 output.css
-
-docs/.next
-docs/out
+/static/covers
+.cache

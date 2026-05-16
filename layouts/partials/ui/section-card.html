@@ -1,4 +1,3 @@
-{{/* ---- 1. Сокращение (abbr) ---- */}}
 {{ $abbr := .Params.abbr }}
 {{ if not $abbr }}
   {{ $clean := replaceRE `[^A-Za-zА-Яа-яЁё ]+` "" .Title }}
@@ -13,7 +12,6 @@
   {{ if not $abbr }}{{ $abbr = "?" }}{{ end }}
 {{ end }}
 
-{{/* ---- 2. Цвет акцента (accent 1-6) ---- */}}
 {{ $accent := string (.Params.accent | default 1) }}
 {{ $colors := dict
   "1" "text-blue-500 bg-blue-500/10 border-blue-500 hover:shadow-blue-500/20"
@@ -25,7 +23,6 @@
 }}
 {{ $accentClass := index $colors $accent | default (index $colors "1") }}
 
-{{/* ---- 3. Склонение «лекция/лекции/лекций» ---- */}}
 {{ $count := len (where .Pages "File.LogicalName" "ne" "_index.md") }}
 {{ $mod10 := mod $count 10 }}
 {{ $mod100 := mod $count 100 }}

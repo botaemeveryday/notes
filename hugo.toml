@@ -39,6 +39,7 @@ hasCJKLanguage = true
   showSummaryCoverInPost = true
   imageZoomableInPost = true
   showPrevNextPost = true
+  coverStyle = 1
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

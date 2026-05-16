@@ -13,6 +13,7 @@
 
 @import "./css/syntax.css";
 @import "./shortcodes.css";
+@import "./list.css"
 
 #disqus_thread iframe[src*='ads-iframe'] {
   display: none;
@@ -171,5 +172,30 @@
   
   .highlight:hover .copy-code-btn {
     @apply opacity-100;
+  }
+}
+
+
+@layer components {
+  /* Плавный переход фильтров */
+  .prose img {
+    @apply transition-all duration-300;
+  }
+
+  /* 
+    МАГИЯ: Инвертируем картинки ТОЛЬКО когда система в темном режиме!
+    invert(1) делает черное белым.
+    hue-rotate(180deg) возвращает правильные цветные оттенки (чтобы красный маркер остался красным).
+    brightness(0.9) чуть приглушает чисто белый цвет, чтобы он не слепил на темном фоне.
+  */
+  @media (prefers-color-scheme: dark) {
+    .prose img {
+      filter: invert(1) hue-rotate(180deg) brightness(0.9);
+    }
+    
+    /* Класс-исключение: если фотку нельзя инвертировать (например, фото экрана) */
+    .prose img.no-invert {
+      filter: none;
+    }
   }
 }
