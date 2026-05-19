@@ -64,6 +64,17 @@ def read_title_from_md(md_path: Path, fallback: str) -> str:
     m = re.search(r"^title\s*[:=]\s*[\"']?(.+?)[\"']?\s*$", content, re.MULTILINE)
     return m.group(1).strip() if m else fallback
 
+def md_to_html(text: str) -> str:
+    """Конвертирует базовый Markdown в HTML для Anki."""
+    text = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', text)
+    text = re.sub(r'__(.+?)__',     r'<b>\1</b>', text)
+    text = re.sub(r'\*(.+?)\*',     r'<i>\1</i>', text)
+    text = re.sub(r'_(.+?)_',       r'<i>\1</i>', text)
+    text = re.sub(r'`(.+?)`',       r'<code>\1</code>', text)
+    text = re.sub(r'  \n',  r'<br>', text)
+    text = re.sub(r'\n\n+', r'<br><br>', text)
+    text = re.sub(r'\n',    r' ', text)
+    return text
 
 def read_csv_cards(csv_path: Path) -> list[tuple[str, str]]:
     """Читает CSV/TSV с колонками Front / Back."""
@@ -79,8 +90,8 @@ def read_csv_cards(csv_path: Path) -> list[tuple[str, str]]:
     with csv_path.open(encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f, delimiter=delimiter)
         for row in reader:
-            front = row.get("Front", "").strip()
-            back = row.get("Back", "").strip()
+            front = md_to_html(row.get("Front", "").strip())
+            back  = md_to_html(row.get("Back",  "").strip())
             if front:
                 cards.append((front, back))
     return cards
