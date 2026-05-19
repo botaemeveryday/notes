@@ -1,10 +1,14 @@
 baseURL = "https://botaemeveryday.github.io/notes/"
 locale = "ru-RU"
 title = "botaemeveryday"
-theme = "dream"
 
 defaultContentLanguage = "ru"
 hasCJKLanguage = true
+
+[module]
+  [module.hugoVersion]
+  min = "0.97.0"
+  extended = true
 
 [markup]
   [markup.goldmark]
