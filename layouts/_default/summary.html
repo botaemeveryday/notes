@@ -80,6 +80,7 @@
   <span class="absolute left-0 top-0 bottom-0 w-[4px] opacity-0 group-hover:opacity-100 transition-opacity z-20"
         style="background: {{ $color }}"></span>
 
+        <div class="hidden sm:block w-full">
   {{ if eq $style 1 }}
     <div class="aspect-[16/10] relative overflow-hidden flex items-center justify-center" style="background: {{ $soft }}">
       <span class="absolute top-3 left-4 text-xs font-bold tracking-widest opacity-80" style="color: {{ $color }}; font-family: monospace;">№ {{ $nn }}</span>
@@ -140,6 +141,7 @@
       <div class="absolute left-4 bottom-6 w-2 h-2 rounded-full border border-base-300 bg-base-200"></div>
     </div>
   {{ end }}
+  </div>
 
   <div class="p-5 flex flex-col flex-1">
     <h3 class="text-lg font-bold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-2">
