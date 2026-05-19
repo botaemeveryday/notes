@@ -2,9 +2,12 @@
 
 <div class="not-prose">
   <div class="my-8 rounded-2xl bg-gradient-to-br from-base-300/50 to-base-100 border border-base-300 shadow-sm overflow-hidden">
-    <div class="p-5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-5">      
-      <div class="flex items-center gap-4 w-full md:w-auto text-center md:text-left">
-        <div class="hidden sm:flex w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 items-center justify-center shrink-0">
+    <div class="p-6 md:p-6 flex flex-col md:flex-row items-center justify-between gap-5 md:gap-5">      
+      
+      <!-- Текст и иконка -->
+      <div class="flex flex-col md:flex-row items-center gap-3 md:gap-4 w-full md:w-auto text-center md:text-left">
+        <!-- На мобилке иконка по центру, на ПК слева -->
+        <div class="flex w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 items-center justify-center shrink-0">
           <ion-icon name="copy" class="text-2xl"></ion-icon>
         </div>
         <div>
@@ -12,9 +15,12 @@
           <p class="text-sm text-base-content/60 m-0 mt-1">Скачайте колоды для интервального повторения</p>
         </div>
       </div>
+      
+      <!-- Кнопка -->
       <button class="btn hover:bg-blue-500/5 rounded-full px-8 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all w-full md:w-auto" onclick="document.getElementById('{{ $modal_id }}').showModal()">
         Скачать
       </button>
+
     </div>
   </div>
 
