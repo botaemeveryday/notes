@@ -156,11 +156,7 @@
 
       <div class="flex items-center gap-1.5 font-medium mt-1 shrink-0">
         <ion-icon name="calendar-outline"></ion-icon>
-        {{ if site.Params.Experimental.jsDate }}
-          <span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
-        {{ else }}
           {{ .Date | time.Format "02 Jan" }}
-        {{ end }}
       </div>
 
       <div class="flex flex-col items-end text-right gap-1.5 min-w-0">
