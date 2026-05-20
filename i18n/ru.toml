@@ -4,9 +4,6 @@ other = "Главная"
 [backToHome]
 other = "На главную"
 
-[flip]
-other = "Повернуть!"
-
 [archives]
 other = "Архивы"
 
