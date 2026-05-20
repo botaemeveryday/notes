@@ -1,0 +1,56 @@
+{{ $type  := .Get "type"  | default "Теорема" }}
+{{ $title := .Get "title" }}
+{{ $qedParam := .Get "qed" }}
+
+{{/* □ по умолчанию для доказательств, для остальных — только если явно указан qed="true" */}}
+{{ $showQed := false }}
+{{ if eq $type "Доказательство" }}
+  {{ $showQed = true }}
+{{ end }}
+{{ if eq $qedParam "true"  }}{{ $showQed = true  }}{{ end }}
+{{ if eq $qedParam "false" }}{{ $showQed = false }}{{ end }}
+
+{{/* Цвет акцента по типу */}}
+{{ $accent := "var(--color-base-content, currentColor)" }}
+{{ $bgAlpha := "bg-base-200/30" }}
+{{ if or (eq $type "Теорема") (eq $type "Лемма") }}
+  {{ $accent = "oklch(var(--p))" }}
+  {{ $bgAlpha = "bg-primary/5" }}
+{{ else if eq $type "Определение" }}
+  {{ $accent = "oklch(var(--s))" }}
+  {{ $bgAlpha = "bg-secondary/5" }}
+{{ else if eq $type "Следствие" }}
+  {{ $accent = "oklch(var(--a))" }}
+  {{ $bgAlpha = "bg-accent/5" }}
+{{ else if eq $type "Доказательство" }}
+  {{ $accent = "oklch(var(--bc) / 0.4)" }}
+  {{ $bgAlpha = "bg-base-200/20" }}
+{{ end }}
+
+<div class="math-box my-8 rounded-r-xl overflow-hidden not-prose" style="border-left: 3px solid {{ $accent }};">
+  <div class="{{ $bgAlpha }} px-5 py-4">
+
+    <!-- Шапка: тип + название -->
+    <div class="flex items-baseline gap-2 mb-2">
+      <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 font-sans select-none">
+        {{ $type }}
+      </span>
+      {{ if $title }}
+        <span class="text-sm font-semibold italic" style="color: {{ $accent }}">{{ $title }}</span>
+      {{ end }}
+    </div>
+
+    <!-- Тело: prose для правильного рендера MathJax -->
+    <div class="prose dark:prose-invert max-w-none prose-p:my-1 prose-p:leading-relaxed text-base-content/85 text-[0.95em]">
+      {{- .Inner | markdownify -}}
+    </div>
+
+    <!-- □ QED -->
+    {{ if $showQed }}
+    <div class="flex justify-end mt-3">
+      <span class="text-base-content/30 text-lg select-none" title="Q.E.D.">□</span>
+    </div>
+    {{ end }}
+
+  </div>
+</div>

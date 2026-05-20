@@ -1,0 +1,9 @@
+<div class="my-8 relative bg-error/5 border border-error/20 rounded-2xl p-6 shadow-sm">
+  <div class="absolute -top-4 -right-4 text-5xl opacity-20 rotate-12">🪤</div>
+  <h4 class="font-bold text-error flex items-center gap-2 mt-0 mb-3 uppercase tracking-wider text-sm">
+    <ion-icon name="skull"></ion-icon> Частая ошибка на экзамене
+  </h4>
+  <div class="text-base-content/80 text-sm md:text-base font-medium">
+    {{ .Inner | markdownify }}
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="my-6 p-5 bg-base-200/30 border border-base-300 rounded-xl font-mono text-sm text-base-content/80 shadow-sm overflow-x-auto">
+  <div class="font-bold text-base-content mb-3 flex items-center gap-2 border-b border-base-300 pb-2">
+    <ion-icon name="folder-open" class="text-primary text-lg"></ion-icon>
+    {{ .Get "name" | default "Project Structure" }}
+  </div>
+  <div class="leading-loose whitespace-pre">
+{{ .Inner }}
+  </div>
+</div>

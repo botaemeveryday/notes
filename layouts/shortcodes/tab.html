@@ -1,0 +1,15 @@
+{{ $title := .Get "title" }}
+{{ $tabs := $.Parent.Store.Get "tabs" | default slice }}
+{{ $.Parent.Store.Set "tabs" ($tabs | append (dict "title" $title)) }}
+{{ $index := len $tabs }}
+
+<div
+  x-show="activeTab === {{ $index }}"
+  x-cloak
+  style="display:none"
+  class="p-5 md:p-6"
+>
+  <div class="prose dark:prose-invert max-w-none prose-pre:my-0 prose-pre:shadow-none prose-pre:border-none prose-pre:rounded-xl">
+    {{ .Inner | markdownify }}
+  </div>
+</div>
