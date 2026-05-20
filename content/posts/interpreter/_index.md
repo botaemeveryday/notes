@@ -2,6 +2,10 @@
 title: "Строим интерпретатор"
 description: "Перевод статей Руслана Спивака"
 accent: 6
+generate:
+  pdf: false
+  ai: false
+  anki: false
 ---
 
 {{< disclaimer >}}
