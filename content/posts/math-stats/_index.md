@@ -36,3 +36,5 @@ accent: 2
     <ion-icon name="code-slash-outline"></ion-icon>
     Контекст для LLM
 </a>
+
+{{< disclaimer >}}{{< /disclaimer >}}

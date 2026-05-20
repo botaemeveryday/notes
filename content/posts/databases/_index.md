@@ -5,4 +5,4 @@ semester: 3
 accent: 4
 ---
 
-фотки скоро будут починены...
+{{< disclaimer >}}{{< /disclaimer >}}
