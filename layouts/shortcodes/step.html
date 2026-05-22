@@ -1,0 +1,36 @@
+{{/*
+  step.html — один шаг внутри {{< timeline >}}.
+
+  BUG FIX: last:hidden не работал — линия рисовалась у последнего шага.
+  Причина: `last:hidden` применялся к div.absolute внутри <li>,
+  но Tailwind :last-child смотрит "последний ли этот div среди детей <li>?" —
+  нет, он второй из трёх. Всегда false → линия всегда видна.
+
+  Решение: линия получает класс `timeline-line`, а timeline.html убирает её
+  через CSS `li:last-child .timeline-line { display: none }`.
+
+  Дополнительно убрано магическое число bottom-[-24px] — заменено на
+  bottom-0 с отрицательным margin через CSS, что надёжнее при изменении mb-6.
+*/}}
+
+<li class="relative pl-10 pb-6 last:pb-0">
+
+  <!-- Кружок с номером -->
+  <div class="absolute left-0 top-0 w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-xs font-bold font-mono z-10">
+    {{ .Get "num" }}
+  </div>
+
+  <!-- Вертикальная линия вниз (скрывается у последнего шага через CSS в timeline.html) -->
+  <div class="timeline-line absolute left-[11px] top-6 bottom-0 w-[2px] bg-base-300"></div>
+
+  <!-- Заголовок -->
+  {{ with .Get "title" }}
+  <h4 class="font-bold text-base-content mt-0 mb-1 leading-snug">{{ . }}</h4>
+  {{ end }}
+
+  <!-- Контент -->
+  <div class="text-sm text-base-content/70 prose prose-sm dark:prose-invert max-w-none">
+    {{ .Inner | markdownify }}
+  </div>
+
+</li>

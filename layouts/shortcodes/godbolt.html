@@ -1,0 +1,7 @@
+<div class="my-8 rounded-xl overflow-hidden shadow-md border border-base-300">
+  <div class="bg-base-200 px-4 py-2 text-xs font-bold text-base-content/60 flex items-center gap-2">
+    <ion-icon name="code-slash"></ion-icon> Compiler Explorer
+  </div>
+  <!-- Ссылка берется из "Share -> Embed" на сайте godbolt.org -->
+  <iframe src="{{ .Get "src" }}" width="100%" height="{{ .Get "h" | default "400px" }}" frameborder="0" style="background-color: #1e1e1e;"></iframe>
+</div>

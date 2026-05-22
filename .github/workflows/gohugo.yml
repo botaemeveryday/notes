@@ -21,11 +21,24 @@ jobs:
     steps:
       - name: Install Hugo CLI
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+          wget -O ${{ runner.temp }}/hugo.deb \
+            https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
 
       - name: Install Dart Sass
-        run: sudo snap install dart-sass
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q sass
+
+      - name: Install pandoc + XeLaTeX
+        run: |
+          sudo apt-get install -y -q \
+            pandoc \
+            texlive-xetex \
+            texlive-lang-cyrillic \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            fonts-dejavu
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,11 +72,45 @@ jobs:
           key: covers-markers-${{ github.sha }}
           restore-keys: covers-markers-
 
+      - name: Cache PDF хеши
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/pdf
+            static/posts/*/resources/*.pdf
+          key: pdf-v1-${{ hashFiles('content/posts/**/*.md') }}
+          restore-keys: pdf-v1-
+
+      - name: Cache AI merged хеши
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/ai
+            static/posts/*/resources/*_merged.md
+          key: ai-v1-${{ hashFiles('content/posts/**/*.md') }}
+          restore-keys: ai-v1-
+
+      - name: Cache Anki хеши
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/anki
+            static/posts/*/resources/*.apkg
+            static/posts/*/*/resources/*.apkg
+          key: anki-v1-${{ hashFiles('content/posts/**/*.md', 'content/posts/**/*.csv') }}
+          restore-keys: anki-v1-
+
       - name: Generate OG covers
         run: python scripts/generate-covers.py
 
       - name: Generate Anki decks
         run: python scripts/generate-anki.py
+
+      - name: Generate merged MD for AI
+        run: python scripts/merge_md_for_ai.py
+
+      - name: Generate PDF конспекты
+        run: python scripts/generate-pdf.py
 
       - name: Setup Pages
         id: pages

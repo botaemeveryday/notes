@@ -1,7 +1,3 @@
-{{ if site.Params.Experimental.jsDate }}
-  {{ partial "core/luxon.html" . }}
-{{ end }}
-
 {{ $tocJs := resources.Get "js/toc.js" }}
 {{ if hugo.IsProduction }}{{ $tocJs = $tocJs | minify }}{{ end }}
 <script src="{{ $tocJs.RelPermalink }}"></script>

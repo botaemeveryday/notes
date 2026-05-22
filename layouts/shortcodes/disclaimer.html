@@ -1,0 +1,25 @@
+<div class="my-10 p-5 rounded-2xl border border-base-content/10 bg-base-200/50 flex gap-4 md:gap-5 shadow-sm">
+  
+  <!-- Иконка предупреждения (Щит) -->
+  <div class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-base-content/10 text-base-content/70 text-xl">
+    <ion-icon name="shield-checkmark-outline"></ion-icon>
+  </div>
+  
+  <!-- Текстовая часть -->
+  <div class="flex-1 min-w-0">
+    <!-- Заголовок -->
+    <div class="font-bold text-base-content/90 text-sm md:text-base mb-1.5 leading-tight uppercase tracking-widest text-[10px]">
+      Отказ от ответственности
+    </div>
+    
+    <!-- Само содержимое. Если текст не передан, используется дефолтный -->
+    <div class="prose-p:my-0 prose-p:leading-relaxed text-sm md:text-base text-base-content/70 italic">
+      {{ if .Inner }}
+        {{ .Inner | markdownify }}
+      {{ else }}
+        Конспекты предоставляются «как есть» — это студенческие записи, а не официальные материалы. Они могут содержать неточности, пропуски и субъективные интерпретации. Перед экзаменом сверяйтесь с первоисточниками и лекциями преподавателя.
+      {{ end }}
+    </div>
+  </div>
+  
+</div>

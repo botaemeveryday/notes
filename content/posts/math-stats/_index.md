@@ -3,6 +3,9 @@ title: "Математическая статистика"
 description: "Лимар Иван Александрович"
 semester: 4
 accent: 2
+generate:
+  pdf: false
+  ai: false
 ---
 
 Конспекты лекций по Математической статистике **Ивана Александровича Лимара**.\
@@ -36,3 +39,5 @@ accent: 2
     <ion-icon name="code-slash-outline"></ion-icon>
     Контекст для LLM
 </a>
+
+{{< disclaimer >}}{{< /disclaimer >}}

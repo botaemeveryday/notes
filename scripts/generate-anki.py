@@ -36,6 +36,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from cache_utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
+
 # ──────────────────────────────────────────────
 # Попытка импорта genanki
 # ──────────────────────────────────────────────
@@ -65,6 +68,49 @@ def read_title_from_md(md_path: Path, fallback: str) -> str:
     return m.group(1).strip() if m else fallback
 
 
+def is_generation_enabled(index_md: Path, key: str) -> bool:
+    """
+    Проверяет блок generate: в front matter _index.md.
+
+    Пример _index.md:
+        generate:
+          anki: false   # не генерировать Anki-колоды для этого курса
+
+    Если поля нет — генерация разрешена (дефолт = True).
+    """
+    if not index_md.exists():
+        return True
+    content = index_md.read_text(encoding="utf-8")
+    fm_match = re.match(r"\A---\s*\n(.*?)\n---\s*\n", content, re.DOTALL)
+    if not fm_match:
+        return True
+    frontmatter = fm_match.group(1)
+    block_match = re.search(
+        r'^\s{0,8}generate\s*:\s*\n((?:[ \t]+\S[^\n]*\n?)*)',
+        frontmatter, re.MULTILINE,
+    )
+    if not block_match:
+        return True
+    key_match = re.search(
+        rf'^\s+{re.escape(key)}\s*:\s*(true|false|yes|no|1|0)\s*$',
+        block_match.group(1), re.MULTILINE | re.IGNORECASE,
+    )
+    if not key_match:
+        return True
+    return key_match.group(1).lower() not in ("false", "no", "0")
+
+def md_to_html(text: str) -> str:
+    """Конвертирует базовый Markdown в HTML для Anki."""
+    text = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', text)
+    text = re.sub(r'__(.+?)__',     r'<b>\1</b>', text)
+    text = re.sub(r'\*(.+?)\*',     r'<i>\1</i>', text)
+    text = re.sub(r'_(.+?)_',       r'<i>\1</i>', text)
+    text = re.sub(r'`(.+?)`',       r'<code>\1</code>', text)
+    text = re.sub(r'  \n',  r'<br>', text)
+    text = re.sub(r'\n\n+', r'<br><br>', text)
+    text = re.sub(r'\n',    r' ', text)
+    return text
+
 def read_csv_cards(csv_path: Path) -> list[tuple[str, str]]:
     """Читает CSV/TSV с колонками Front / Back."""
     if not csv_path.exists():
@@ -79,8 +125,8 @@ def read_csv_cards(csv_path: Path) -> list[tuple[str, str]]:
     with csv_path.open(encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f, delimiter=delimiter)
         for row in reader:
-            front = row.get("Front", "").strip()
-            back = row.get("Back", "").strip()
+            front = md_to_html(row.get("Front", "").strip())
+            back  = md_to_html(row.get("Back",  "").strip())
             if front:
                 cards.append((front, back))
     return cards
@@ -225,6 +271,26 @@ def generate_course(
     print(f"Курс: {course_title} ({course_slug})")
     print(f"{'='*60}")
 
+    if not is_generation_enabled(index_md, "anki"):
+        print("  [SKIP] generate.anki: false в _index.md")
+        return
+
+    # Хешируем .md + все CSV (карточки меняются независимо от лекций)
+    csv_files = list(course_dir.rglob("*.csv"))
+    course_hash = compute_course_hash(course_dir, extra_files=csv_files)
+
+    master_apkg = static_base / course_slug / "resources" / f"{course_slug}.apkg"
+
+    if dry_run:
+        cached = is_cache_valid("anki", course_slug, course_hash)
+        status = "кеш актуален, пропустим" if cached else "будет сгенерировано"
+        print(f"  [DRY] {status} → {master_apkg}")
+        return
+
+    if is_cache_valid("anki", course_slug, course_hash) and master_apkg.exists():
+        print("  [CACHE] Контент не изменился, пропускаем")
+        return
+
     model = make_model(f"Model::{course_slug}")
     lecture_dirs = find_lecture_dirs(course_dir)
 
@@ -250,24 +316,17 @@ def generate_course(
         print("  [WARN] Нет колод для общего .apkg")
         return
 
-    # Общая колода (корневая)
     master_deck_name = course_title
     master_deck = genanki.Deck(stable_id(master_deck_name), master_deck_name)
-
-    # В Anki иерархия строится через "::" в имени.
-    # Все карточки уже добавлены в sub-decks с именем "Курс::Лекция N",
-    # поэтому пакуем все колоды вместе — Anki покажет дерево.
     package = genanki.Package([master_deck] + all_decks)
 
     out_dir = static_base / course_slug / "resources"
     apkg_path = out_dir / f"{course_slug}.apkg"
 
-    if not dry_run:
-        out_dir.mkdir(parents=True, exist_ok=True)
-        package.write_to_file(str(apkg_path))
-        print(f"\n[MASTER] {len(all_decks)} колод → {apkg_path}")
-    else:
-        print(f"\n[DRY MASTER] {len(all_decks)} колод → {apkg_path}")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    package.write_to_file(str(apkg_path))
+    write_cache("anki", course_slug, course_hash)
+    print(f"\n[MASTER] {len(all_decks)} колод → {apkg_path}")
 
 
 def discover_courses(content_base: Path) -> list[str]:

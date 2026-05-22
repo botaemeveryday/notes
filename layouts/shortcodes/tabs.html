@@ -1,0 +1,42 @@
+{{ $id := printf "tabs-%d" .Ordinal }}
+
+<style>
+  [x-cloak] { display: none !important; }
+</style>
+
+<div
+  x-data="{ activeTab: 0 }"
+  class="my-8 overflow-hidden rounded-2xl border border-base-300 shadow-sm bg-base-100"
+>
+  <!-- Рендерим Inner первым (заполняет .Store "tabs"), потом заголовки -->
+  <!-- Скрытый контейнер для вложенных tab-шорткодов -->
+  <template x-if="false">{{ .Inner }}</template>
+
+  {{/*
+    Hugo рендерит .Inner синхронно до того, как продолжает рендер этого шаблона.
+    Значит к моменту range .Store.Get "tabs" список уже заполнен вкладками.
+  */}}
+
+  <!-- Заголовки (кнопки) -->
+  <div class="flex overflow-x-auto border-b border-base-300 bg-base-200/50 custom-scrollbar">
+    {{ range $i, $tab := .Store.Get "tabs" }}
+      <button
+        @click="activeTab = {{ $i }}"
+        class="relative px-6 py-3.5 text-sm font-semibold whitespace-nowrap transition-all duration-200 focus:outline-none"
+        :class="activeTab === {{ $i }} ? 'text-primary' : 'text-base-content/50 hover:text-base-content hover:bg-base-200/50'"
+      >
+        {{ $tab.title }}
+        <!-- Индикатор активной вкладки -->
+        <div
+          class="absolute bottom-0 left-0 w-full h-0.5 bg-primary origin-left transition-transform duration-300"
+          :class="activeTab === {{ $i }} ? 'scale-x-100' : 'scale-x-0'"
+        ></div>
+      </button>
+    {{ end }}
+  </div>
+
+  <!-- Содержимое -->
+  <div class="relative">
+    {{ .Inner }}
+  </div>
+</div>

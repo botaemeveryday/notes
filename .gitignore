@@ -1,11 +1,14 @@
 .DS_Store
 .history
 
+.cache
 node_modules
 
-public
-/resources/
 .hugo_build.lock
 output.css
+public
+/resources/
 /static/covers
-.cache
+/static/**/*_merged.txt
+/static/**/*.apkg
+/static/**/*_gen.pdf

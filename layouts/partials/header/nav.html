@@ -11,10 +11,10 @@
 <nav class="mt-4 lg:mt-8 py-4">
 {{ end }}
 
-  <div class="container flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 mx-auto">
+  <div class="container flex items-center justify-between gap-4 px-4 mx-auto">
 
     <section class="flex items-center gap-4 whitespace-nowrap">
-      <div class="avatar" title="{{ T "!flip" }}">
+      <div class="avatar">
         <div class="h-10 rounded-full">
           <img src="{{ site.Params.avatar | relURL }}" alt="{{ site.Params.headerTitle }}" />
         </div>
@@ -34,9 +34,10 @@
       {{ end }}
     </section>
 
-    <section class="hidden lg:flex items-center gap-1.5 group cursor-pointer">
+    <section class="flex items-center gap-2 lg:gap-1.5 group cursor-pointer">
 
-      <div class="relative pt-2 pr-1 pb-0">
+      <!-- Надпись и стрелочка (скрыты на мобильных, видны на lg) -->
+      <div class="hidden lg:block relative pt-2 pr-1 pb-0">
         <span class="text-[12px] leading-none text-base-content/55 group-hover:text-base-content/85 transition-colors duration-500 select-none">
           полезно?
         </span>
@@ -47,7 +48,7 @@
         </svg>
       </div>
 
-      <svg class="w-12 h-10 text-base-content/40 group-hover:text-base-content/75 transition-colors duration-500 -mb-1 flex-shrink-0"
+      <svg class="hidden lg:block w-12 h-10 text-base-content/40 group-hover:text-base-content/75 transition-colors duration-500 -mb-1 flex-shrink-0"
            viewBox="0 0 52 44" fill="none" style="overflow: visible;">
         <path d="M 2 34 C 4 28, 10 18, 22 18 C 30 18, 28 30, 22 28 C 16 26, 22 18, 34 18 L 44 18"
               stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" />
@@ -55,23 +56,25 @@
               stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
       </svg>
 
+      <!-- Сама кнопка со звездой (видна всегда) -->
       <a
         href="https://github.com/botaemeveryday/notes"
         target="_blank"
         rel="noopener noreferrer"
         class="
           flex items-center gap-1.5
-          px-2.5 py-1.5 rounded-xl
-          text-base-content/45 hover:text-yellow-500
+          px-3 py-2 lg:px-2.5 lg:py-1.5 rounded-xl
+          bg-base-200/50 lg:bg-transparent
+          text-base-content/60 lg:text-base-content/45 hover:text-yellow-500
           hover:bg-yellow-400/10
-          border border-transparent hover:border-yellow-400/20
+          border border-base-300 lg:border-transparent hover:border-yellow-400/20
           transition-all duration-300 ease-out
           font-medium text-sm
           group/btn
         "
         title="Поставить звезду на GitHub"
       >
-        <svg class="w-4 h-4 transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:fill-yellow-400 group-hover/btn:stroke-yellow-400 stroke-current fill-none flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="w-4 h-4 lg:w-4 lg:h-4 transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:fill-yellow-400 group-hover/btn:stroke-yellow-400 stroke-current fill-none flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
         </svg>
 
