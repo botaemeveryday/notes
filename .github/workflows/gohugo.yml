@@ -107,7 +107,7 @@ jobs:
         run: python scripts/generate-anki.py
 
       - name: Generate merged MD for AI
-        run: python scripts/merge_md_for_ai.py
+        run: python scripts/merge-md-for-ai.py
 
       - name: Generate PDF конспекты
         run: python scripts/generate-pdf.py
