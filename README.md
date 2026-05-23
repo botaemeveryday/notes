@@ -19,7 +19,7 @@
 | [Математическая статистика](https://botaemeveryday.github.io/notes/posts/math-stats/) | Лимар И. А. |
 | [Операционные системы](https://botaemeveryday.github.io/notes/posts/operation-systems/) | Маятин А. В. |
 | [Базы данных](https://botaemeveryday.github.io/notes/posts/databases/) | Мацнев Н. И. |
-| [Технологии программирования на Java](https://botaemeveryday.github.io/notes/posts/databases/) | Макаревич Р. Д. |
+| [Технологии программирования на Java](https://botaemeveryday.github.io/notes/posts/java/) | Макаревич Р. Д. |
 | [C++ (семестр 1)](https://botaemeveryday.github.io/notes/posts/cpp-sem1/) | Хвастунов А. П. |
 | [C++ (семестр 2)](https://botaemeveryday.github.io/notes/posts/cpp-sem2/) | Хвастунов А. П. |
 

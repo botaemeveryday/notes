@@ -10,7 +10,7 @@ merge-md-for-ai.py — объединяет лекции курса в один 
     ...
 
 Вывод:
-  static/posts/<course>/resources/<course>_merged.md
+  static/posts/<course>/resources/<course>_merged.txt
 
 Использование:
   python scripts/merge-md-for-ai.py                    # все курсы
@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from cache_utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
+from cache-utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
 
 # ── настройки ─────────────────────────────────────────────────────────────────
 
@@ -197,7 +197,7 @@ def merge_course(
     course_title = read_title_from_md(index_md, course_slug)
 
     out_dir  = static_base / course_slug / "resources"
-    out_file = out_dir / f"{course_slug}_merged.md"
+    out_file = out_dir / f"{course_slug}_merged.txt"
 
     print(f"\n{'='*60}")
     print(f"Курс: {course_title} ({course_slug})")
