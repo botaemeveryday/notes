@@ -27,9 +27,9 @@ import sys
 import tempfile
 from pathlib import Path
 
-# cache-utils.py должен лежать рядом со скриптом
+# cache_utils.py должен лежать рядом со скриптом
 sys.path.insert(0, str(Path(__file__).parent))
-from cache-utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
+from cache_utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
 
 # ── настройки ─────────────────────────────────────────────────────────────────
 

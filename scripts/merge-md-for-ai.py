@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from cache-utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
+from cache_utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
 
 # ── настройки ─────────────────────────────────────────────────────────────────
 
