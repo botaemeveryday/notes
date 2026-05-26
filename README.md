@@ -67,4 +67,4 @@ hugo server -D     # локальный сервер на http://localhost:1313/
 
 ## Лицензия
 
-Распространяется под лицензией MIT. См. [LICENSE](LICENSE).
+Распространяется под лицензией MIT. См. [LICENSE.md](LICENSE.md).
