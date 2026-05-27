@@ -1,0 +1,70 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap');
+  
+  .nav-logo-inner {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 10px; /* Отступы для линий */
+  }
+  .nav-ruled-lines {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8; /* Чуть прозрачнее, чтобы не спорило с текстом */
+  }
+  .nav-logo-text {
+    position: relative;
+    font-family: 'Inter', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 18px; /* Уменьшили с 64px для шапки */
+    color: currentColor; /* Автоматически меняет цвет в темной/светлой теме! */
+    letter-spacing: -0.5px;
+    line-height: 1;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .nav-highlight-b {
+    position: relative;
+    display: inline-block;
+  }
+  .nav-highlight-b::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    bottom: 0px;
+    height: 6px;
+    background: #FFE134;
+    z-index: -1;
+    border-radius: 2px;
+  }
+  .nav-wavy-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .nav-wavy-wrap svg {
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    overflow: visible;
+  }
+</style>
+
+<div class="nav-logo-inner">
+  <svg class="nav-ruled-lines" preserveAspectRatio="none" viewBox="0 0 600 80" xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="22%" x2="100%" y2="22%" stroke="#f0dfc0" stroke-width="2"/>
+    <line x1="0" y1="44%" x2="100%" y2="44%" stroke="#f0dfc0" stroke-width="2"/>
+    <line x1="0" y1="66%" x2="100%" y2="66%" stroke="#f0dfc0" stroke-width="2"/>
+    <line x1="0" y1="88%" x2="100%" y2="88%" stroke="#f0dfc0" stroke-width="2"/>
+  </svg>
+  <span class="nav-logo-text">
+    <span class="nav-highlight-b">b</span>otaem<span class="nav-wavy-wrap">everyday<svg viewBox="0 0 220 12" xmlns="http://www.w3.org/2000/svg" height="8"><path d="M0 6 Q14 0 28 6 Q42 12 56 6 Q70 0 84 6 Q98 12 112 6 Q126 0 140 6 Q154 12 168 6 Q182 0 196 6 Q210 12 220 6" fill="none" stroke="#FF6B4A" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+  </span>
+</div>
