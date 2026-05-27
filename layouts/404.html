@@ -21,21 +21,17 @@
 
 <main class="min-h-[80vh] flex flex-col justify-center items-center px-4 py-16 relative overflow-hidden">
 
-  {{/* Угловые метки (как на листах или в терминалах) */}}
   <span class="absolute top-6 right-8 text-[11px] uppercase tracking-[0.18em] font-semibold text-base-content/30">404</span>
   <span class="absolute top-6 left-8 text-[11px] uppercase tracking-[0.18em] font-semibold text-base-content/30 hidden sm:inline">страница пропала</span>
 
-  {{/* Верхняя «черта» как от пера (Рисуется при загрузке) */}}
   <svg class="absolute top-4 left-1/2 -translate-x-1/2 w-[280px] h-[60px] text-primary opacity-30" viewBox="0 0 280 80" fill="none" aria-hidden="true">
     <path class="cn-draw" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
           d="M 5 70 C 20 30, 60 50, 70 30 C 75 18, 90 25, 95 50 C 100 70, 130 60, 140 35 C 150 12, 180 28, 175 55 C 172 75, 200 75, 215 50 C 230 25, 260 35, 275 18"/>
   </svg>
 
-  {{/* ОГРОМНЫЕ ЦИФРЫ «4 ? 4» */}}
   <div class="flex items-center gap-3 md:gap-6 leading-none select-none">
     <span class="text-[140px] md:text-[220px] font-black tracking-tighter text-base-content opacity-90 cn-float-a">4</span>
 
-    <!-- Центральный "Клубок" (Вопросительный знак из одной линии) -->
     <svg viewBox="0 0 200 200" class="w-[120px] md:w-[200px] h-[120px] md:h-[200px] shrink-0 overflow-visible text-primary" fill="none" aria-hidden="true">
       <circle cx="100" cy="100" r="84" stroke="currentColor" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="4 8" fill="none"/>
       <path class="cn-draw" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"
@@ -52,12 +48,10 @@
     <span class="text-[140px] md:text-[220px] font-black tracking-tighter text-base-content opacity-90 cn-float-b">4</span>
   </div>
 
-  {{/* Надпись «хмм…» */}}
   <span class="mt-6 text-[28px] -rotate-3 select-none text-primary opacity-80" style="font-family:'Pangolin',cursive;">
     хмм…
   </span>
 
-  {{/* Текстовая часть */}}
   <div class="mt-4 max-w-xl text-center z-10">
     <h1 class="text-2xl md:text-[34px] font-extrabold tracking-tight text-base-content mb-3 leading-tight">
       Этой страницы нет ни в одном конспекте
@@ -67,7 +61,6 @@
     </p>
   </div>
 
-  {{/* Кнопка "На главную" */}}
   <div class="mt-8 flex flex-wrap items-center justify-center gap-3 z-10">
     <a href="{{ site.BaseURL }}" class="group inline-flex items-center gap-3 px-8 py-3.5 rounded-full font-semibold text-[14.5px] no-underline btn shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
       <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -78,7 +71,6 @@
     </a>
   </div>
 
-  {{/* Подсказки: Ссылки на реальные предметы */}}
   {{ $sections := slice }}
   {{ with site.GetPage "section" "posts" }}
     {{ range first 5 .Sections }}

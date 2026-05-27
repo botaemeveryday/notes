@@ -2,7 +2,6 @@
 {{- $prompt := .Get "prompt" | default "" -}}
 
 <div class="terminal-wrap my-8 rounded-xl overflow-hidden shadow-xl font-mono text-sm">
-  <!-- Шапка -->
   <div class="terminal-header flex items-center px-4 py-3 border-b">
     <div class="flex gap-1.5 shrink-0">
       <div class="w-3 h-3 rounded-full" style="background:#ff5f57"></div>
@@ -13,7 +12,6 @@
     <div class="w-16 shrink-0"></div>
   </div>
 
-  <!-- Тело -->
   <div class="terminal-body p-5 overflow-x-auto">
     {{- if $prompt -}}
     <div class="terminal-prompt mb-2 flex items-center gap-2">

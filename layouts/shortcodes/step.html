@@ -1,18 +1,3 @@
-{{/*
-  step.html — один шаг внутри {{< timeline >}}.
-
-  BUG FIX: last:hidden не работал — линия рисовалась у последнего шага.
-  Причина: `last:hidden` применялся к div.absolute внутри <li>,
-  но Tailwind :last-child смотрит "последний ли этот div среди детей <li>?" —
-  нет, он второй из трёх. Всегда false → линия всегда видна.
-
-  Решение: линия получает класс `timeline-line`, а timeline.html убирает её
-  через CSS `li:last-child .timeline-line { display: none }`.
-
-  Дополнительно убрано магическое число bottom-[-24px] — заменено на
-  bottom-0 с отрицательным margin через CSS, что надёжнее при изменении mb-6.
-*/}}
-
 <li class="relative pl-10 pb-6 last:pb-0">
 
   <!-- Кружок с номером -->

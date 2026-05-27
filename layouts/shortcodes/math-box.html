@@ -2,7 +2,6 @@
 {{ $title := .Get "title" }}
 {{ $qedParam := .Get "qed" }}
 
-{{/* □ по умолчанию для доказательств, для остальных — только если явно указан qed="true" */}}
 {{ $showQed := false }}
 {{ if eq $type "Доказательство" }}
   {{ $showQed = true }}
@@ -10,7 +9,6 @@
 {{ if eq $qedParam "true"  }}{{ $showQed = true  }}{{ end }}
 {{ if eq $qedParam "false" }}{{ $showQed = false }}{{ end }}
 
-{{/* Цвет акцента по типу */}}
 {{ $accent := "var(--color-base-content, currentColor)" }}
 {{ $bgAlpha := "bg-base-200/30" }}
 {{ if or (eq $type "Теорема") (eq $type "Лемма") }}

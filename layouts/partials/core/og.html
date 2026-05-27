@@ -1,21 +1,3 @@
-{{/*
-  Open Graph + Twitter Card meta tags.
-
-  Picks the share image:
-    - single page  →  /covers/<course>/<file-base-name>.png
-    - section page →  /covers/<course>/index.png
-    - fallback     →  /images/avatar.jpg
-
-  Content layout assumption:
-    content/posts/<course>/<lecture>/index.md   ← lecture
-    content/posts/<course>/_index.md            ← course landing
-
-  So the "section" we care about for the cover path is the SECOND path
-  segment ("operation-systems"), not the first ("posts").
-
-  An explicit `cover` param in the page frontmatter overrides everything.
-*/}}
-
 {{- $cover := "" -}}
 
 {{- /* Extract the course slug from the file path. We split File.Dir
