@@ -1,7 +1,7 @@
 # Computer Science Notes
 
 [![Hugo](https://img.shields.io/badge/Hugo-FF4088?style=flat-square&logo=hugo&logoColor=white)](https://gohugo.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 Открытая база конспектов по дисциплинам computer science: лекции, переводы, разборы. Сайт собирается на Hugo и публикуется через GitHub Pages.
@@ -39,31 +39,6 @@
 - **Новый курс** — создайте директорию в `content/posts/` с файлом `_index.md` и лекциями внутри. Перед публикацией ознакомьтесь с правилами оформления.
 
 Все требования к структуре файлов, front matter и шорткодам описаны в **[CONTRIBUTING.md](CONTRIBUTING.md)**.
-
-## Структура репозитория
-
-```
-content/posts/      # конспекты, сгруппированные по дисциплинам
-layouts/            # шаблоны Hugo
-  ├── _default/     # базовые шаблоны (list, single, baseof)
-  ├── partials/     # переиспользуемые блоки (header, footer, post)
-  └── shortcodes/   # callout, card, compare, spoiler, key и др.
-```
-
-## Локальная разработка
-
-Требования: Hugo (extended), Node.js, npm.
-
-```bash
-git clone https://github.com/botaemeveryday/notes.git
-cd notes
-
-npm install        # зависимости Tailwind
-npm run build        # сборка стилей
-hugo server -D     # локальный сервер на http://localhost:1313/
-```
-
-Флаг `-D` включает рендеринг черновиков (`draft: true` в front matter).
 
 ## Лицензия
 
