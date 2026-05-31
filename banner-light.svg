@@ -4,9 +4,13 @@
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&amp;display=swap');
       .logo { font-family: 'Inter', 'Arial Black', sans-serif; font-weight: 900; }
     </style>
+    <clipPath id="markerReveal">
+      <rect x="50" y="112" width="0" height="32">
+        <animate attributeName="width" from="0" to="48" dur="0.5s" begin="0.3s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/>
+      </rect>
+    </clipPath>
   </defs>
 
-  <!-- ruled paper lines -->
   <g stroke="#f0dfc0" stroke-width="1.2">
     <line x1="40" y1="78" x2="600" y2="78"/>
     <line x1="40" y1="100" x2="600" y2="100"/>
@@ -14,13 +18,22 @@
     <line x1="40" y1="144" x2="600" y2="144"/>
   </g>
 
-  <!-- yellow highlight behind 'b' -->
-  <rect x="58" y="108" width="34" height="14" fill="#FFE134"/>
+  <!-- imperfect marker highlight at the BOTTOM of 'b', like an underline swipe -->
+  <g clip-path="url(#markerReveal)">
+    <path d="M55 119
+             C 62 117, 70 118, 78 117
+             C 86 116.5, 94 118, 99 119
+             C 100 124, 99.5 130, 99 135
+             C 92 136, 82 135.5, 73 136
+             C 65 136.3, 59 135, 54 135
+             C 53.5 130, 54 124, 55 119 Z"
+          fill="#FFE134"/>
+    <path d="M58 121 C 70 120, 86 120, 96 121 C 96.5 126, 96 132, 95 134 C 82 134.5, 68 134, 57 134 C 56.5 129, 57 124, 58 121 Z"
+          fill="#FFE134" fill-opacity="0.45"/>
+  </g>
 
-  <!-- wordmark -->
   <text x="56" y="124" class="logo" font-size="64" letter-spacing="-2" fill="#111111">botaemeveryday</text>
 
-  <!-- wavy underline beneath 'everyday' -->
-  <path d="M392 150 Q406 144 420 150 Q434 156 448 150 Q462 144 476 150 Q490 156 504 150 Q518 144 532 150 Q546 156 560 150 Q574 144 588 150"
+  <path d="M392 142 Q406 136 420 142 Q434 148 448 142 Q462 136 476 142 Q490 148 504 142 Q518 136 532 142 Q546 148 560 142 Q574 136 588 142"
         fill="none" stroke="#FF6B4A" stroke-width="3" stroke-linecap="round"/>
 </svg>
