@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&amp;display=swap');
+      .logo { font-family: 'Inter', 'Arial Black', sans-serif; font-weight: 900; }
+    </style>
+  </defs>
+
+  <!-- ruled paper lines -->
+  <g stroke="#f0dfc0" stroke-width="1.2">
+    <line x1="40" y1="78" x2="600" y2="78"/>
+    <line x1="40" y1="100" x2="600" y2="100"/>
+    <line x1="40" y1="122" x2="600" y2="122"/>
+    <line x1="40" y1="144" x2="600" y2="144"/>
+  </g>
+
+  <!-- yellow highlight behind 'b' -->
+  <rect x="58" y="108" width="34" height="14" fill="#FFE134"/>
+
+  <!-- wordmark -->
+  <text x="56" y="124" class="logo" font-size="64" letter-spacing="-2" fill="#111111">botaemeveryday</text>
+
+  <!-- wavy underline beneath 'everyday' -->
+  <path d="M392 150 Q406 144 420 150 Q434 156 448 150 Q462 144 476 150 Q490 156 504 150 Q518 144 532 150 Q546 156 560 150 Q574 144 588 150"
+        fill="none" stroke="#FF6B4A" stroke-width="3" stroke-linecap="round"/>
+</svg>

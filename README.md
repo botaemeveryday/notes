@@ -1,18 +1,19 @@
-# Computer Science Notes
+<div align="center">
+    <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="banner-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="banner-light.svg">
+    <img alt="ITMOScript preview" src="banner-light.svg">
+    </picture>
+</div>
 
 [![Hugo](https://img.shields.io/badge/Hugo-FF4088?style=flat-square&logo=hugo&logoColor=white)](https://gohugo.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE.md)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 Открытая база конспектов по дисциплинам computer science: лекции, переводы, разборы. Сайт собирается на Hugo и публикуется через GitHub Pages.
 
-## [botaemeveryday.github.io/notes](https://botaemeveryday.github.io/notes/)
- 
 > **Дисклеймер.** Конспекты предоставляются «как есть» — это студенческие записи, не официальные материалы курсов. Они могут содержать неточности, пропуски и субъективные интерпретации. Перед экзаменом сверяйтесь с первоисточниками и лекциями преподавателя.
 
 ## Содержание
-
-База регулярно пополняется. Текущий состав:
 
 ### Учебные курсы
 
