@@ -1,12 +1,14 @@
 .DS_Store
-.history
 
-.cache
-node_modules
+/.history
+/.claude
+/.cache
+/node_modules
 
 .hugo_build.lock
 output.css
-public
+
+/public
 /resources/
 /static/covers
 /static/**/*_merged.txt
