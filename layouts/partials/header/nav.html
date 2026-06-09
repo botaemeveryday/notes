@@ -1,68 +1,64 @@
 {{ if site.Params.stickyNav }}
-<nav x-data="{ isSticky: false }"
-  x-init="window.addEventListener('scroll', () => { isSticky = window.scrollY > 30 })"
+<nav x-data="{ isSticky: false }" x-init="window.addEventListener('scroll', () => { isSticky = window.scrollY > 30 })"
   class="sticky top-0 z-30 mt-4 lg:mt-8 py-4 transition-all duration-300
          shadow-transparent border-b border-transparent
-         dark:border-transparent"
-  :class="{
+         dark:border-transparent" :class="{
     'bg-base-100/95 backdrop-blur-sm shadow-md shadow-black/5 border-base-content/10 dark:border-base-content/20 !mt-0': isSticky
   }">
-{{ else }}
-<nav class="mt-4 lg:mt-8 py-4">
-{{ end }}
+  {{ else }}
+  <nav class="mt-4 lg:mt-8 py-4">
+    {{ end }}
 
-  <div class="container flex items-center justify-between gap-4 px-4 mx-auto">
+    <div class="container flex items-center justify-between gap-4 px-4 mx-auto">
 
-    <section class="flex items-center gap-4 whitespace-nowrap">
-      <div class="avatar">
-        <div class="w-10 h-10 rounded-full overflow-hidden">
-          <img src="{{ site.Params.avatar | relURL }}" 
-               alt="{{ site.Params.headerTitle }}" 
-               width="40" 
-               height="40" 
-               class="w-full h-full object-cover" 
-               style="width: 40px; height: 40px;" />
+      <section class="flex items-center gap-4 whitespace-nowrap">
+        <div class="avatar">
+          <div class="w-10 h-10 rounded-full overflow-hidden">
+            <a href="{{ site.BaseURL }}" class="cursor-pointer hover:opacity-80 transition-opacity">
+              <img src="{{ site.Params.avatar | relURL }}" alt="{{ site.Params.headerTitle }}" width="40" height="40"
+                class="w-full h-full object-cover" style="width: 40px; height: 40px;" />
+            </a>
+          </div>
         </div>
-      </div>
 
-     <div class="-ml-2 mt-1">
-        <a href="{{ site.BaseURL }}" class="cursor-pointer hover:opacity-80 transition-opacity flex flex-col justify-center">
-          {{ partial "header/logo.html" . }}
-        </a>
-        {{ if site.Params.motto }}
-        <div class="text-base-content/50 text-[11px] font-medium tracking-wide uppercase mt-1 hidden sm:block ml-2">
-          {{ site.Params.motto }}
+        <div class="-ml-2 mt-1">
+          <a href="{{ site.BaseURL }}"
+            class="cursor-pointer hover:opacity-80 transition-opacity flex flex-col justify-center">
+            {{ partial "header/logo.html" . }}
+          </a>
+          {{ if site.Params.motto }}
+          <div class="text-base-content/50 text-[11px] font-medium tracking-wide uppercase mt-1 hidden sm:block ml-2">
+            {{ site.Params.motto }}
+          </div>
+          {{ end }}
         </div>
-        {{ end }}
-      </div>
-    </section>
+      </section>
 
-    <section class="flex items-center gap-2 lg:gap-1.5 group cursor-pointer">
+      <section class="flex items-center gap-2 lg:gap-1.5 group cursor-pointer">
 
-      <div class="hidden lg:block relative pt-2 pr-1 pb-0">
-        <span class="text-[12px] leading-none text-base-content/55 group-hover:text-base-content/85 transition-colors duration-500 select-none">
-          полезно?
-        </span>
-        <svg class="absolute left-0 right-0 -bottom-2 w-full h-3 text-base-content/40 group-hover:text-base-content/70 transition-colors duration-500"
-             viewBox="0 0 130 12" fill="none" preserveAspectRatio="none" style="overflow: visible;">
-          <path d="M 2 6 C 25 10, 60 9, 118 6"
-                stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" />
+        <div class="hidden lg:block relative pt-2 pr-1 pb-0">
+          <span
+            class="text-[12px] leading-none text-base-content/55 group-hover:text-base-content/85 transition-colors duration-500 select-none" style="font-family: 'Comic Sans MS';">
+            полезно?
+          </span>
+          <svg
+            class="absolute left-0 right-0 -bottom-2 w-full h-3 text-base-content/40 group-hover:text-base-content/70 transition-colors duration-500"
+            viewBox="0 0 130 12" fill="none" preserveAspectRatio="none" style="overflow: visible;">
+            <path d="M 2 6 C 25 10, 60 9, 118 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+              fill="none" />
+          </svg>
+        </div>
+
+        <svg
+          class="hidden lg:block w-12 h-10 text-base-content/40 group-hover:text-base-content/75 transition-colors duration-500 -mb-1 flex-shrink-0"
+          viewBox="0 0 52 44" fill="none" style="overflow: visible;">
+          <path d="M 2 34 C 4 28, 10 18, 22 18 C 30 18, 28 30, 22 28 C 16 26, 22 18, 34 18 L 44 18"
+            stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" />
+          <path d="M 38 12 L 45 18 L 38 24" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+            stroke-linejoin="round" fill="none" />
         </svg>
-      </div>
 
-      <svg class="hidden lg:block w-12 h-10 text-base-content/40 group-hover:text-base-content/75 transition-colors duration-500 -mb-1 flex-shrink-0"
-           viewBox="0 0 52 44" fill="none" style="overflow: visible;">
-        <path d="M 2 34 C 4 28, 10 18, 22 18 C 30 18, 28 30, 22 28 C 16 26, 22 18, 34 18 L 44 18"
-              stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" />
-        <path d="M 38 12 L 45 18 L 38 24"
-              stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-      </svg>
-
-      <a
-        href="https://github.com/botaemeveryday/notes"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="
+        <a href="https://github.com/botaemeveryday/notes" target="_blank" rel="noopener noreferrer" class="
           flex items-center gap-1.5
           px-3 py-2 lg:px-2.5 lg:py-1.5 rounded-xl
           bg-base-200/50 lg:bg-transparent
@@ -72,40 +68,42 @@
           transition-all duration-300 ease-out
           font-medium text-sm
           group/btn
-        "
-        title="Поставить звезду на GitHub"
-      >
-        <svg class="w-4 h-4 lg:w-4 lg:h-4 transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:fill-yellow-400 group-hover/btn:stroke-yellow-400 stroke-current fill-none flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-        </svg>
+        " title="Поставить звезду на GitHub">
+          <svg
+            class="w-4 h-4 lg:w-4 lg:h-4 transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:fill-yellow-400 group-hover/btn:stroke-yellow-400 stroke-current fill-none flex-shrink-0"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
 
-        <span id="nav-star-count" class="tabular-nums min-w-[2ch] text-center">·</span>
-      </a>
+          <span id="nav-star-count" class="tabular-nums min-w-[2ch] text-center">·</span>
+        </a>
 
-    </section>
-  </div>
-</nav>
+      </section>
+    </div>
+  </nav>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    fetch('https://api.github.com/repos/botaemeveryday/notes')
-      .then(r => r.json())
-      .then(data => {
-        const el = document.getElementById('nav-star-count');
-        if (el && data.stargazers_count !== undefined) {
-          el.style.transition = 'opacity 0.4s ease';
-          el.style.opacity = '0';
-          setTimeout(() => {
-            el.innerText = data.stargazers_count >= 1000
-              ? (data.stargazers_count / 1000).toFixed(1) + 'k'
-              : data.stargazers_count;
-            el.style.opacity = '1';
-          }, 200);
-        }
-      })
-      .catch(() => {
-        const el = document.getElementById('nav-star-count');
-        if (el) el.innerText = '★';
-      });
-  });
-</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('https://api.github.com/repos/botaemeveryday/notes')
+        .then(r => r.json())
+        .then(data => {
+          const el = document.getElementById('nav-star-count');
+          if (el && data.stargazers_count !== undefined) {
+            el.style.transition = 'opacity 0.4s ease';
+            el.style.opacity = '0';
+            setTimeout(() => {
+              el.innerText = data.stargazers_count >= 1000
+                ? (data.stargazers_count / 1000).toFixed(1) + 'k'
+                : data.stargazers_count;
+              el.style.opacity = '1';
+            }, 200);
+          }
+        })
+        .catch(() => {
+          const el = document.getElementById('nav-star-count');
+          if (el) el.innerText = '★';
+        });
+    });
+  </script>
