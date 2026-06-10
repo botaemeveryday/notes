@@ -4,20 +4,21 @@
 
     <div class="mt-8 mb-6">
       <h2 class="text-xs font-bold text-base-content/40 uppercase tracking-widest mb-4 flex items-center gap-2 pl-2">
-        <ion-icon name="pin" class="text-primary text-base -mt-0.5"></ion-icon>
         Закреплено
       </h2>
 
       <div class="flex flex-wrap gap-3 pl-1">
         {{ range $pinnedPages }}
-          <a href="{{ .RelPermalink }}" class="group flex items-center gap-3 pr-5 pl-1.5 py-1.5 bg-base-100 hover:bg-base-200 border border-base-300 hover:border-base-content/20 rounded-full shadow-sm hover:shadow transition-all no-underline">
+          <a href="{{ .Params.href | default .RelPermalink }}" class="group flex items-center pr-5 pl-1.5 py-1.5 bg-base-100 border border-base-300 rounded-full shadow-sm hover:border-primary/50 hover:-translate-y-1 hover:shadow-xl transition-all no-underline">
 
-            <div class="w-8 h-8 rounded-full bg-base-200 group-hover:bg-primary group-hover:text-primary-content flex items-center justify-center text-sm transition-colors shrink-0">
-              {{ .Params.icon | default "📚" }}
+            {{ if .Params.icon}}
+            <div class="w-8 h-8 rounded-full group-hover:text-primary flex items-center justify-center text-sm transition-colors shrink-0">
+              <ion-icon name="{{ .Params.icon }}"></ion-icon>
             </div>
+            {{ end }}
 
             <div class="flex flex-col justify-center">
-              <span class="text-sm font-bold text-base-content group-hover:text-primary transition-colors leading-none">
+              <span class="text-sm text-base-content group-hover:text-primary transition-colors leading-none">
                 {{ .Title }}
               </span>
               {{ if .Params.pinned_text }}
@@ -30,8 +31,6 @@
         {{ end }}
       </div>
     </div>
-
-    <div class="w-full h-px bg-gradient-to-r from-base-content/10 to-transparent my-10"></div>
   {{ end }}
 
 
@@ -59,7 +58,7 @@
     {{ $semNum := . }}
     {{ $semSubjects := index $semesterMap (string $semNum) }}
     
-    <div class="mt-12 mb-6 bg-base-200/40 rounded-xl p-3 md:px-5 border border-base-300/50 flex items-center justify-between shadow-sm">
+    <div class="mt-6 mb-6 bg-base-200/40 rounded-xl p-3 md:px-5 border border-base-300/50 flex items-center justify-between shadow-sm">
       <h2 class="text-lg md:text-xl font-bold text-base-content flex items-center gap-3 m-0">
         <div class="w-2 h-6 rounded-full bg-primary/50"></div>
         {{ if gt $semNum 0 }}{{ $semNum }} Семестр {{ else }}Прочие материалы{{ end }}
