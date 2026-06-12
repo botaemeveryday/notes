@@ -52,9 +52,9 @@
 
         <div class="flex items-center gap-1.5">
           {{ if $author.avatar }}
-            <img class="w-6 h-6 rounded-full object-cover shrink-0 shadow-sm" src="{{ $author.avatar }}" alt="{{ $author.name }}" />
+            <img class="w-6 h-6 rounded-full object-cover shrink-0 shadow-sm m-0" src="{{ $author.avatar }}" alt="{{ $author.name }}" style="margin: 0px;" />
           {{ else if $.Params.avatar }}
-            <img class="w-6 h-6 rounded-full object-cover shrink-0 shadow-sm" src="{{ $.Params.avatar }}" alt="{{ $author.name }}" />
+            <img class="w-6 h-6 rounded-full object-cover shrink-0 shadow-sm m-0" src="{{ $.Params.avatar }}" alt="{{ $author.name }}" style="margin: 0px;" />
           {{ else }}
           {{ end }}
 
