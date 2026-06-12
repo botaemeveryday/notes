@@ -34,10 +34,10 @@ hasCJKLanguage = true
 [params]
   author = "notakeith & salt-caramel"
   description = "botaemeveryday Конспектики"
-  avatar = "images/avatar.jpg"
+  avatar = "https://avatars.githubusercontent.com/u/210124742"
   headerTitle = "botaemeveryday"
   motto = "Конспектики"
-  favicon = "favicon.ico"
+  favicon = "https://avatars.githubusercontent.com/u/210124742"
   stickyNav = false
   showTableOfContents = true
   showSummaryCoverInPost = true
