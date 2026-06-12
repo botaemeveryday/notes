@@ -1,5 +1,5 @@
 ---
-title: Exceptions
+title: Лекция 6
 date: 2025-03-12
 
 tags:
