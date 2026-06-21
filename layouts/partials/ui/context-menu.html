@@ -1,0 +1,107 @@
+<div id="custom-context-menu" class="fixed z-[9999] hidden flex-col gap-1 p-2 bg-base-100/80 backdrop-blur-xl border border-base-300 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl w-60 origin-top-left transition-opacity duration-150 opacity-0 select-none">
+  
+  <button id="ctx-copy-text" class="hidden items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
+    <ion-icon name="copy-outline" class="text-lg opacity-70"></ion-icon> Копировать текст
+  </button>
+
+  <hr id="ctx-divider" class="hidden border-base-300 my-1">
+
+  <button onclick="ctxCopyUrl()" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
+    <ion-icon name="link-outline" class="text-lg opacity-70"></ion-icon> Скопировать ссылку
+  </button>
+
+  <button onclick="ctxShare()" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
+    <ion-icon name="share-social-outline" class="text-lg opacity-70"></ion-icon> Поделиться
+  </button>
+
+  <hr class="border-base-300 my-1">
+
+  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors">
+    <ion-icon name="arrow-up-outline" class="text-lg opacity-70"></ion-icon> Наверх страницы
+  </button>
+
+  <a href="{{ site.BaseURL }}" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors no-underline text-base-content">
+    <ion-icon name="home-outline" class="text-lg opacity-70"></ion-icon> На главную
+  </a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const menu = document.getElementById('custom-context-menu');
+  const copyTextBtn = document.getElementById('ctx-copy-text');
+  const divider = document.getElementById('ctx-divider');
+
+  const hideMenu = () => {
+    menu.classList.add('opacity-0');
+    setTimeout(() => {
+      menu.classList.add('hidden');
+    }, 150);
+  };
+
+  document.addEventListener('contextmenu', (e) => {
+    if (e.shiftKey) return;
+    
+    e.preventDefault();
+
+    const selectedText = window.getSelection().toString().trim();
+    if (selectedText.length > 0) {
+      copyTextBtn.style.display = 'flex';
+      divider.style.display = 'block';
+      copyTextBtn.onclick = () => {
+        navigator.clipboard.writeText(selectedText);
+        hideMenu();
+      };
+    } else {
+      copyTextBtn.style.display = 'none';
+      divider.style.display = 'none';
+    }
+
+    menu.classList.remove('hidden');
+
+    const menuWidth = menu.offsetWidth;
+    const menuHeight = menu.offsetHeight;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    let x = e.clientX;
+    let y = e.clientY;
+
+    if (x + menuWidth > windowWidth) {
+      x = windowWidth - menuWidth - 10;
+    }
+    if (y + menuHeight > windowHeight) {
+      y = windowHeight - menuHeight - 10;
+    }
+
+    menu.style.left = `${x}px`;
+    menu.style.top = `${y}px`;
+
+    setTimeout(() => {
+      menu.classList.remove('opacity-0');
+    }, 10);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.button !== 2) hideMenu();
+  });
+  window.addEventListener('scroll', hideMenu);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hideMenu();
+  });
+});
+
+function ctxCopyUrl() {
+  navigator.clipboard.writeText(window.location.href);
+}
+
+function ctxShare() {
+  if (navigator.share) {
+    navigator.share({
+      title: document.title,
+      url: window.location.href
+    });
+  } else {
+    ctxCopyUrl();
+  }
+}
+</script>
