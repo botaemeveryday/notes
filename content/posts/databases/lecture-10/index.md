@@ -31,7 +31,7 @@ authors:
 - **Аутентификация** — процесс, когда пользователь вводит ключ (пароль, пин-код и т.п.), подтверждая своё право на доступ к учётной записи.
 - **Авторизация** — процесс определения того, какие действия позволено совершать аутентифицированному пользователю.
 
-![](src/6d93f9e7413f9373bd4ca1e7c0c3dd65.png)
+![](images/6d93f9e7413f9373bd4ca1e7c0c3dd65.jpg)
 
 ## Факторы идентификации (аутентификации)
 
@@ -45,7 +45,7 @@ authors:
 
 ## Авторизация
 
-![](src/7936d56cd41e67ca9f0124429541c55d.png)
+![](images/7936d56cd41e67ca9f0124429541c55d.jpg)
 
 ---
 
@@ -156,7 +156,7 @@ ALTER {obj} OWNER TO {role1};
 
 ## Мандатная модель доступа (MAC)
 
-![](src/3bc2253a66e0928abedf5c0bbe5ef244.png)
+![](images/3bc2253a66e0928abedf5c0bbe5ef244.jpg)
 
 **Mandatory Access Control (MAC)** используется в системах, где требуется высший уровень безопасности и централизованный контроль. В отличие от дискреционной модели, где владелец решает, кому предоставить доступ, в MAC доступ определяется **системными политиками**.
 
@@ -183,11 +183,32 @@ ALTER {obj} OWNER TO {role1};
 
 ### Подпрограммы PL/pgSQL
 
-![](src/5e82b4c9a1d47e8282a68e2f0feef944.png)
+```sql
+CREATE [OR REPLACE] FUNCTION name(param1 type1, param2 type2, ...)
+RETURNS return_type AS $$
+DECLARE
+    -- объявление переменных
+BEGIN
+    -- тело функции
+    RETURN value;
+END;
+$$ LANGUAGE plpgsql;
+```
 
 ### Использование `OUT`-аргумента
 
-![](src/257d6b912d0623c8a25a301e39a6fa16.png)
+```sql
+CREATE OR REPLACE FUNCTION get_user_info(IN p_id INT, OUT p_name TEXT, OUT p_email TEXT)
+AS $$
+BEGIN
+    SELECT name, email INTO p_name, p_email
+    FROM users
+    WHERE id = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM get_user_info(1);
+```
 
 ### Условные операторы
 
@@ -196,7 +217,15 @@ ALTER {obj} OWNER TO {role1};
 
 #### `IF`
 
-![](src/935c6ffdc982b8c49c1a08c73eb4e8fa.png)
+```sql
+IF condition THEN
+    -- операторы
+ELSIF condition2 THEN
+    -- операторы
+ELSE
+    -- операторы
+END IF;
+```
 
 ### Циклы
 
@@ -208,7 +237,15 @@ ALTER {obj} OWNER TO {role1};
 
 #### `FOR`
 
-![](src/57cc710bf262bbde44b5a45ec6fdc06a.png)
+```sql
+FOR counter IN 1..10 LOOP
+    RAISE NOTICE 'counter: %', counter;
+END LOOP;
+
+FOR row IN SELECT * FROM users LOOP
+    RAISE NOTICE 'user: %', row.name;
+END LOOP;
+```
 
 ---
 
@@ -216,7 +253,14 @@ ALTER {obj} OWNER TO {role1};
 
 > Триггеры используются, когда мы хотим выполнить действия **в момент изменения данных**.
 
-![](src/55fc70c3894f9d7cbb43c6ca1207db06.png)
+```sql
+CREATE TRIGGER trigger_name
+{BEFORE | AFTER} {INSERT | UPDATE | DELETE}
+ON table_name
+[FOR EACH {ROW | STATEMENT}]
+[WHEN (condition)]
+EXECUTE FUNCTION function_name();
+```
 
 Опции триггера:
 - **`BEFORE` / `AFTER`** — выполняется перед действием или после. Если используем `BEFORE`, можно менять данные.
@@ -234,7 +278,20 @@ ALTER {obj} OWNER TO {role1};
 
 ### Пример триггера
 
-![](src/d8a639b02c9deb2807d4b0ffe6eae872.png)
+```sql
+CREATE OR REPLACE FUNCTION log_changes() RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO audit_log(table_name, operation, changed_at)
+    VALUES (TG_TABLE_NAME, TG_OP, now());
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_log_changes
+AFTER INSERT OR UPDATE OR DELETE ON users
+FOR EACH ROW
+EXECUTE FUNCTION log_changes();
+```
 
 ### Плюсы хранимых процедур и триггеров
 
@@ -249,10 +306,51 @@ ALTER {obj} OWNER TO {role1};
 
 ### Состояние, Strict, Diagnostics
 
-![](src/1b2453b6f0c33222754fe69ebe32a419.png)
-![](src/9cc7c113c2e6a0422a1ae2671a191558.png)
-![](src/8363b139d0ee1e708390cfc22f5da9ec.png)
-![](src/298a7d5b11386c7f856c730bb4e70844.png)
+```sql
+-- STRICT: функция не вызывается, если хотя бы один аргумент NULL —
+-- сразу возвращается NULL без выполнения тела
+CREATE OR REPLACE FUNCTION safe_divide(a INT, b INT)
+RETURNS INT AS $$
+BEGIN
+    RETURN a / b;
+END;
+$$ LANGUAGE plpgsql STRICT;
+```
+
+```sql
+-- GET DIAGNOSTICS: получение информации о результате последней операции
+DO $$
+DECLARE
+    rows_affected INT;
+BEGIN
+    UPDATE users SET active = true WHERE id > 0;
+    GET DIAGNOSTICS rows_affected = ROW_COUNT;
+    RAISE NOTICE 'Изменено строк: %', rows_affected;
+END $$;
+```
+
+```sql
+-- FOUND: булева переменная, показывающая,
+-- вернул ли последний оператор хотя бы одну строку
+BEGIN
+    SELECT * INTO rec FROM users WHERE id = 1;
+    IF NOT FOUND THEN
+        RAISE NOTICE 'Пользователь не найден';
+    END IF;
+END;
+```
+
+```sql
+-- Обработка исключений
+BEGIN
+    -- операторы
+EXCEPTION
+    WHEN division_by_zero THEN
+        RAISE NOTICE 'Деление на ноль';
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Ошибка: %', SQLERRM;
+END;
+```
 
 ---
 
@@ -267,8 +365,29 @@ ALTER {obj} OWNER TO {role1};
 
 ### Создание функции
 
-![](src/b90553efcac22168931383a8c4c09321.png)
-![](src/43b75bd7acb677f9cd755bed0b2bcb84.png)
+```sql
+CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT)
+RETURNS INT AS $$
+BEGIN
+    RETURN a + b;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT add_numbers(2, 3);
+```
+
+```sql
+CREATE OR REPLACE PROCEDURE transfer_funds(from_id INT, to_id INT, amount NUMERIC)
+AS $$
+BEGIN
+    UPDATE accounts SET balance = balance - amount WHERE id = from_id;
+    UPDATE accounts SET balance = balance + amount WHERE id = to_id;
+    COMMIT;
+END;
+$$ LANGUAGE plpgsql;
+
+CALL transfer_funds(1, 2, 100);
+```
 
 **Особенности функций:**
 - Могут состоять из нескольких операторов SQL.
@@ -276,8 +395,19 @@ ALTER {obj} OWNER TO {role1};
 - **Нельзя** использовать операторы управления транзакциями (`BEGIN`, `COMMIT`, `ROLLBACK`).
 - **Нельзя** использовать служебные команды (например, `CREATE INDEX`).
 
-![](src/7fa4269c09dbb8f6b493fa58f5f566d1.png)
-![](src/526328252ffaf598eabe55cc66a72e26.png)
+```sql
+CREATE OR REPLACE FUNCTION get_full_name(first_name TEXT, last_name TEXT)
+RETURNS TEXT AS $$
+BEGIN
+    RETURN first_name || ' ' || last_name;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+```sql
+DROP FUNCTION IF EXISTS get_full_name(TEXT, TEXT);
+DROP PROCEDURE IF EXISTS transfer_funds(INT, INT, NUMERIC);
+```
 
 ### Типы параметров
 
@@ -291,11 +421,27 @@ ALTER {obj} OWNER TO {role1};
 - **`SECURITY DEFINER`** — функция выполняется с правами **создателя** (definer).
 - **`SECURITY INVOKER`** — функция выполняется с правами **вызывающего** (invoker), по умолчанию.
 
-![](src/2fd675d2ec92631d64355ee7ccb152c3.png)
+```sql
+CREATE OR REPLACE FUNCTION admin_only_action()
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM sensitive_table;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+```
 
 > Это **перегрузка процедур**, а не функций; в процедурах нет `RETURN`, только `IN` и `OUT`.
 
-![](src/52430441069874575082370bb62f358d.png)
+```sql
+CREATE OR REPLACE PROCEDURE process(p INT)
+AS $$ BEGIN RAISE NOTICE 'int: %', p; END; $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE process(p TEXT)
+AS $$ BEGIN RAISE NOTICE 'text: %', p; END; $$ LANGUAGE plpgsql;
+
+CALL process(5);
+CALL process('hello');
+```
 
 ### Категории изменчивости
 
@@ -303,9 +449,32 @@ ALTER {obj} OWNER TO {role1};
 - **`STABLE`** — значение не меняется в рамках одного оператора, функция не может менять таблицы. Оптимизатор может кешировать результаты в пределах команды.
 - **`IMMUTABLE`** — значение не меняется, функция детерминирована, функция не может менять таблицы. Может вызываться на этапе планирования запроса.
 
-![](src/1e0748d30fb0e3f942f31b6997486e51.png)
-![](src/c57222f065afb3b861822632f7f26487.png)
-![](src/a51dd5e302db741c8ae3bebdaca0b849.png)
+```sql
+CREATE OR REPLACE FUNCTION random_value()
+RETURNS FLOAT AS $$
+BEGIN
+    RETURN random();
+END;
+$$ LANGUAGE plpgsql VOLATILE;
+```
+
+```sql
+CREATE OR REPLACE FUNCTION get_current_setting(key TEXT)
+RETURNS TEXT AS $$
+BEGIN
+    RETURN current_setting(key);
+END;
+$$ LANGUAGE plpgsql STABLE;
+```
+
+```sql
+CREATE OR REPLACE FUNCTION square(x NUMERIC)
+RETURNS NUMERIC AS $$
+BEGIN
+    RETURN x * x;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+```
 
 ---
 
@@ -326,4 +495,14 @@ ALTER {obj} OWNER TO {role1};
 
 ### Форма блока
 
-![](src/44451473ed66dff746b22d3b8d71b264.png)
+```sql
+[<<label>>]
+[DECLARE
+    declarations]
+BEGIN
+    statements
+[EXCEPTION
+    WHEN condition THEN
+        handler_statements]
+END [label];
+```
