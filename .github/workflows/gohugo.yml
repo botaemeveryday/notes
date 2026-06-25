@@ -30,14 +30,18 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -y -q sass
 
+      - name: Cache apt-пакеты
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives/*.deb
+          key: apt-xetex-v1-${{ runner.os }}
+
       - name: Install pandoc + XeLaTeX
         run: |
           sudo apt-get install -y -q \
             pandoc \
             texlive-xetex \
             texlive-lang-cyrillic \
-            texlive-fonts-recommended \
-            texlive-fonts-extra \
             fonts-dejavu
 
       - name: Checkout
