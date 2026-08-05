@@ -23,13 +23,12 @@
   }
 
   #ai-widget-menu {
-    background-color: white !important;
     margin-bottom: 0.75rem;
     width: 15rem;
     border-radius: 1.25rem;
     padding: 0.5rem;
-    background: oklch(var(--b1));
-    border: 1px solid oklch(var(--b3));
+    background: var(--color-base-100);
+    border: 1px solid var(--color-base-300);
     box-shadow: 0 20px 60px -10px rgb(0 0 0 / 0.25), 0 4px 20px rgb(0 0 0 / 0.08);
     transform-origin: bottom right;
 
@@ -52,7 +51,7 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: oklch(var(--bc) / 0.4);
+    color: color-mix(in oklab, var(--color-base-content) 40%, transparent);
     padding: 0.5rem 0.75rem 0.25rem;
   }
 
@@ -65,7 +64,7 @@
     border-radius: 0.875rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: oklch(var(--bc));
+    color: var(--color-base-content);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -76,7 +75,7 @@
   }
 
   .ai-menu-btn:hover {
-    background: oklch(var(--b2));
+    background: var(--color-base-200);
     transform: translateX(2px);
   }
 
@@ -88,7 +87,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent 0%, oklch(var(--p) / 0.15) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--color-primary) 15%, transparent) 50%, transparent 100%);
     animation: ai-shimmer 0.8s ease-in-out;
   }
 
@@ -108,7 +107,7 @@
 
   .ai-menu-btn .ai-status {
     font-size: 0.75rem;
-    color: oklch(var(--su));
+    color: var(--color-success);
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -120,7 +119,7 @@
 
   .ai-menu-divider {
     height: 1px;
-    background: oklch(var(--b3));
+    background: var(--color-base-300);
     margin: 0.35rem 0.5rem;
   }
 
@@ -128,13 +127,13 @@
     width: 3.25rem;
     height: 3.25rem;
     border-radius: 50%;
-    border: 1px solid oklch(var(--b3));
+    border: 1px solid var(--color-base-300);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: oklch(var(--b1));
-    color: oklch(var(--bc));
+    background: var(--color-base-100);
+    color: var(--color-base-content);
     box-shadow:
       0 2px 8px rgb(0 0 0 / 0.08),
       0 1px 2px rgb(0 0 0 / 0.04);
@@ -151,7 +150,7 @@
     box-shadow:
       0 6px 20px rgb(0 0 0 / 0.12),
       0 2px 6px rgb(0 0 0 / 0.06);
-    border-color: oklch(var(--b2));
+    border-color: var(--color-base-200);
   }
 
   #ai-widget-btn:active {
@@ -163,7 +162,7 @@
     font-size: 1.35rem;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
     display: flex;
-    color: oklch(var(--bc));
+    color: var(--color-base-content);
   }
 
   #ai-widget-btn:not(.is-open)::after {
@@ -171,7 +170,7 @@
     position: absolute;
     inset: -5px;
     border-radius: 50%;
-    border: 1px solid oklch(var(--bc) / 0.2);
+    border: 1px solid color-mix(in oklab, var(--color-base-content) 20%, transparent);
     animation: ai-pulse-ring 3s ease-out infinite;
   }
 
@@ -346,7 +345,7 @@ ${excerpt}
     navigator.clipboard.writeText(prompt).then(function () {
       btn.innerHTML = `
         <span class="ai-brand-icon">
-          <ion-icon name="checkmark-circle" style="color:oklch(var(--su));font-size:1.25rem"></ion-icon>
+          <ion-icon name="checkmark-circle" style="color:var(--color-success);font-size:1.25rem"></ion-icon>
         </span>
         <span class="ai-status">
           <span>Скопировано!</span>
@@ -375,7 +374,7 @@ ${excerpt}
 
         btn.innerHTML = `
           <span class="ai-brand-icon">
-            <ion-icon name="checkmark-circle" style="color:oklch(var(--su));font-size:1.25rem"></ion-icon>
+            <ion-icon name="checkmark-circle" style="color:var(--color-success);font-size:1.25rem"></ion-icon>
           </span>
           <span class="ai-status">Скопировано!</span>`;
 
