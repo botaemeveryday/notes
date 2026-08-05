@@ -1,13 +1,13 @@
 {{ define "main" }}
 <div class="container px-4 mx-auto">
-
   {{ partial "home/search-bar.html" . }}
-
   {{ partial "home/semester-view.html" . }}
-
   {{ partial "home/search-results.html" . }}
-
 </div>
+{{ end }}
 
-{{ partial "home/search-script.html" . }}
+{{ define "js" }}
+  {{ $search := resources.Get "js/search.js" }}
+  {{ if hugo.IsProduction }}{{ $search = $search | minify | fingerprint }}{{ end }}
+  <script defer src="{{ $search.RelPermalink }}"></script>
 {{ end }}

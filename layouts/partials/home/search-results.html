@@ -7,34 +7,14 @@
     <div class="text-6xl opacity-50 mb-4">🔍</div>
     <h3 class="text-xl font-bold mb-2 text-base-content">Ничего не найдено</h3>
     <p class="text-base-content/60 mb-6 text-sm">Мы перерыли все конспекты, но ничего не нашли. Попробуйте изменить запрос.</p>
-    <button onclick="clearSearch()" class="btn btn-outline rounded-full font-medium px-8 hover:bg-base-300 hover:text-base-content">
+    <button type="button" onclick="clearSearch()" class="btn btn-outline rounded-full font-medium px-8 hover:bg-base-300 hover:text-base-content">
       Очистить поиск
     </button>
   </div>
 </div>
 
 <template id="search-item-template">
-  <div class="search-result-item transition-all duration-300 h-full">
+  <div class="search-result-item h-full">
     <div class="card-content h-full"></div>
   </div>
 </template>
-
-<style>
-  .search-result-item {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeIn 0.3s ease forwards;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .search-highlight {
-    background-color: oklch(var(--p) / 0.2);
-    color: oklch(var(--p));
-    font-weight: 700;
-    border-radius: 4px;
-    padding: 0 4px;
-  }
-</style>

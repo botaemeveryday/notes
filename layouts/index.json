@@ -1,35 +1,32 @@
-{{- $searchIndex := slice -}}
+{{- /* Поисковый индекс.
+       html — уже отрендеренная карточка: результаты выглядят ровно так же,
+       как обычные карточки, без дублирования вёрстки в JS.
+       content — сплющенный plain-text (без переводов строк и лишних пробелов),
+       это заметно уменьшает JSON без потери полнотекстового поиска. */ -}}
+{{- $index := slice -}}
 
 {{- with site.GetPage "section" "posts" -}}
   {{- range .Sections -}}
-    {{- if not .Draft -}}
-      {{- $html := partial "ui/section-card.html" . -}}
-      {{- $searchIndex = $searchIndex | append (dict
+    {{- if and (not .Draft) (gt (len .RegularPages) 0) -}}
+      {{- $index = $index | append (dict
         "id" .RelPermalink
-        "kind" "section"
         "title" .Title
-        "content" (.Plain | default .Description)
+        "content" (replaceRE `\s+` " " (or .Plain .Description) | chomp)
         "tags" (.Params.tags | default slice)
-        "html" $html
+        "html" (partial "ui/section-card.html" .)
       ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
 
-{{- $allPosts := where site.RegularPages "Type" "posts" -}}
-{{- $allPosts = where $allPosts "IsSection" false -}}
-{{- $allPosts = where $allPosts "Draft" false -}}
-
-{{- range $allPosts -}}
-  {{- $html := .Render "summary" -}}
-  {{- $searchIndex = $searchIndex | append (dict
+{{- range where (where site.RegularPages "Type" "posts") "Draft" false -}}
+  {{- $index = $index | append (dict
     "id" .RelPermalink
-    "kind" "post"
     "title" .Title
-    "content" .Plain
+    "content" (replaceRE `\s+` " " .Plain | chomp)
     "tags" (.Params.tags | default slice)
-    "html" $html
+    "html" (.Render "summary")
   ) -}}
 {{- end -}}
 
-{{- $searchIndex | jsonify -}}
+{{- $index | jsonify -}}
