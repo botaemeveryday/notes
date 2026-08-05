@@ -1,9 +1,3 @@
-{{- /*
-  Русская плюрализация. Заменяет три копипасты в list / section-card / semester-view.
-
-  Вызов:
-    {{ partial "utils/plural.html" (dict "count" 5 "forms" (slice "лекция" "лекции" "лекций")) }}
-*/ -}}
 {{- $n := .count -}}
 {{- $f := .forms -}}
 {{- $mod10 := mod $n 10 -}}

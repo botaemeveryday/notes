@@ -1,8 +1,4 @@
 {{- if not .Params.hidePrevNext -}}
-{{- /* Было .PrevInSection / .NextInSection — они идут по внутреннему порядку Hugo
-       (по умолчанию дата по убыванию), из-за чего «Предыдущая» указывала на
-       следующую лекцию. Теперь prev/next берутся из того же общего порядка,
-       что и список курса с сайдбаром. */ -}}
 {{- $siblings := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink -}}
 {{- $i := -1 -}}
 {{- range $k, $p := $siblings -}}

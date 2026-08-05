@@ -21,9 +21,6 @@
 }}
 {{ $accentClass := index $colors (string (.Params.accent | default 1)) | default (index $colors "1") }}
 
-{{- /* Было: where .Pages "File.LogicalName" "ne" "_index.md" — .Pages и так не
-       содержит собственный _index, а вложенные лекции наоборот терялись.
-       .RegularPages считает то же, что показывает list.html. */ -}}
 {{ $count := len .RegularPages }}
 {{ $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "лекция" "лекции" "лекций")) }}
 

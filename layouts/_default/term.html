@@ -22,9 +22,6 @@
   <div class="flex-1">
     {{ $paginator := .Paginate .Pages }}
 
-    {{- /* Была Masonry-раскладка (masonry.pkgd + imagesloaded, ~30 КБ на КАЖДОЙ
-           странице сайта ради одного этого шаблона). Теперь обычный CSS grid —
-           такой же, как в list.html и terms.html. */ -}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {{ range $paginator.Pages }}
         {{ .Render "summary" }}

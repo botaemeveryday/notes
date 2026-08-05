@@ -1,5 +1,3 @@
-{{- /* Активный пункт теперь считается на сборке, а не Alpine'ом в рантайме.
-       Порядок — общий для всего сайта (partials/utils/section-pages.html). */ -}}
 {{ $pages := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink }}
 {{ $current := .RelPermalink }}
 

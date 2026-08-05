@@ -1,6 +1,5 @@
 <div id="normal-view" class="max-w-7xl mx-auto">
 
-  {{- /* ---------- Закреплённое ---------- */ -}}
   {{ with where site.RegularPages "Params.pinned" true }}
     <div class="mt-8 mb-6">
       <h2 class="text-xs font-bold text-base-content/40 uppercase tracking-widest mb-4 flex items-center gap-2 pl-2">
@@ -28,9 +27,6 @@
     </div>
   {{ end }}
 
-  {{- /* ---------- Предметы по семестрам ----------
-         Семестры — по убыванию (текущий сверху), предметы внутри семестра —
-         в порядке Hugo по умолчанию (weight, затем дата). */ -}}
   {{- $bySemester := dict -}}
   {{- with site.GetPage "section" "posts" -}}
     {{- range .Sections -}}

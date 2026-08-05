@@ -1,13 +1,10 @@
 {{ partial "core/og.html" . }}
 
-{{- /* Ранние коннекты к CDN — экономят ~100-200 мс на первом рендере. */}}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-{{- /* Шрифт логотипа. Раньше он тянулся через @import внутри <style> в <body>:
-       браузер узнавал о нём в самом конце и блокировал рендер. */}}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Pangolin&display=swap">
 
 {{ with site.Params.favicon }}
   {{ if hasPrefix . "<link" }}
@@ -45,8 +42,6 @@
 
 {{ hugo.Generator }}
 
-{{- /* fingerprint даёт имя файла с хешем → можно ставить Cache-Control: immutable
-       и больше не думать о сбросе кеша при деплое. */}}
 {{ $css := resources.Get "css/output.css" }}
 {{ if hugo.IsProduction }}
   {{ $css = $css | minify | fingerprint }}
