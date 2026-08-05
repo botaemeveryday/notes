@@ -1,25 +1,14 @@
-<script>
-  window.lightTheme = {{ site.Params.lightTheme }}
-  window.darkTheme = {{ site.Params.darkTheme }}
-</script>
+{{- /* Один общий бандл вместо трёх отдельных файлов + двух CDN-библиотек.
+       Masonry и imagesLoaded (~30 КБ) убраны: сетки теперь на CSS grid.
+       main.js (стор тёмной темы) убран целиком: темой рулит ОС через daisyUI. */}}
+{{ $site := resources.Get "js/site.js" }}
+{{ if hugo.IsProduction }}{{ $site = $site | minify | fingerprint }}{{ end }}
+<script defer src="{{ $site.RelPermalink }}"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+{{- /* Alpine нужен только шорткоду tabs. Если однажды добавите
+       в shortcodes/tabs.html строку {{ .Page.Store.Set "hasAlpine" true }},
+       здесь достаточно будет обернуть скрипт в {{ if .Store.Get "hasAlpine" }}. */}}
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js" integrity="sha256-PtHu0lJIiSHfZeNj1nFd6wTX+Squ255SGZ/fc8seCtM=" crossorigin="anonymous"></script>
 
-{{ $gridJs := resources.Get "js/grid.js" }}
-{{ if hugo.IsProduction }}
-  {{ $gridJs = $gridJs | minify }}
-{{ end }}
-<script src="{{ $gridJs.RelPermalink }}"></script>
-
-{{ $mainJs := resources.Get "js/main.js" }}
-{{ if hugo.IsProduction }}
-  {{ $mainJs = $mainJs | minify }}
-{{ end }}
-<script src="{{ $mainJs.RelPermalink }}"></script>
-
-{{ $codeCopyJs := resources.Get "js/code-copy.js" }}
-{{ if hugo.IsProduction }}
-  {{ $codeCopyJs = $codeCopyJs | minify }}
-{{ end }}
-<script src="{{ $codeCopyJs.RelPermalink }}"></script>
+{{- /* ionicons остаётся: его использует половина шорткодов. */}}
+<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.4.0/dist/ionicons/ionicons.esm.js" integrity="sha256-/IFmi82bIhdYWctu0UddSlJqpnzWm7Vh2C4CM32wF/k=" crossorigin="anonymous"></script>

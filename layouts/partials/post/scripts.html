@@ -1,17 +1,13 @@
-{{ $tocJs := resources.Get "js/toc.js" }}
-{{ if hugo.IsProduction }}{{ $tocJs = $tocJs | minify }}{{ end }}
-<script src="{{ $tocJs.RelPermalink }}"></script>
+{{ $post := resources.Get "js/post.js" }}
+{{ if hugo.IsProduction }}{{ $post = $post | minify | fingerprint }}{{ end }}
+<script defer src="{{ $post.RelPermalink }}"></script>
 
 {{ if site.Params.imageZoomableInPost }}
-  {{ if fileExists "layouts/partials/ui/medium-zoom.html" }}
-    {{ partialCached "ui/medium-zoom.html" . }}
-  {{ else }}
-    <script type="module">
-      import mediumZoom from 'https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/+esm';
-      mediumZoom('#dream-single-post-content img', {
-        background: 'oklch(var(--b1))',
-        margin: 24,
-      })
-    </script>
-  {{ end }}
+  <script type="module">
+    import mediumZoom from 'https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/+esm';
+    mediumZoom('#dream-single-post-content img', {
+      background: getComputedStyle(document.documentElement).getPropertyValue('--color-base-100').trim() || '#fff',
+      margin: 24,
+    });
+  </script>
 {{ end }}
