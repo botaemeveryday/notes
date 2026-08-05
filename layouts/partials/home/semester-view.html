@@ -1,30 +1,25 @@
 <div id="normal-view" class="max-w-7xl mx-auto">
-  {{ $pinnedPages := where site.RegularPages "Params.pinned" true }}
-  {{ if gt (len $pinnedPages) 0 }}
 
+  {{- /* ---------- Закреплённое ---------- */ -}}
+  {{ with where site.RegularPages "Params.pinned" true }}
     <div class="mt-8 mb-6">
       <h2 class="text-xs font-bold text-base-content/40 uppercase tracking-widest mb-4 flex items-center gap-2 pl-2">
         Закреплено
       </h2>
 
       <div class="flex flex-wrap gap-3 pl-1">
-        {{ range $pinnedPages }}
+        {{ range . }}
           <a href="{{ .Params.href | default .RelPermalink }}" class="group flex items-center pr-5 pl-1.5 py-1.5 bg-base-100 border border-base-300 rounded-full shadow-sm hover:border-primary/50 hover:-translate-y-1 hover:shadow-xl transition-all no-underline">
-
-            {{ if .Params.icon}}
-            <div class="w-8 h-8 rounded-full group-hover:text-primary flex items-center justify-center text-sm transition-colors shrink-0">
-              <ion-icon name="{{ .Params.icon }}"></ion-icon>
-            </div>
+            {{ with .Params.icon }}
+              <div class="w-8 h-8 rounded-full group-hover:text-primary flex items-center justify-center text-sm transition-colors shrink-0">
+                <ion-icon name="{{ . }}"></ion-icon>
+              </div>
             {{ end }}
 
             <div class="flex flex-col justify-center">
-              <span class="text-sm text-base-content group-hover:text-primary transition-colors leading-none">
-                {{ .Title }}
-              </span>
-              {{ if .Params.pinned_text }}
-                <span class="text-[10px] text-base-content/50 uppercase tracking-wider mt-1 leading-none">
-                  {{ .Params.pinned_text }}
-                </span>
+              <span class="text-sm text-base-content group-hover:text-primary transition-colors leading-none">{{ .Title }}</span>
+              {{ with .Params.pinned_text }}
+                <span class="text-[10px] text-base-content/50 uppercase tracking-wider mt-1 leading-none">{{ . }}</span>
               {{ end }}
             </div>
           </a>
@@ -33,59 +28,48 @@
     </div>
   {{ end }}
 
+  {{- /* ---------- Предметы по семестрам ----------
+         Семестры — по убыванию (текущий сверху), предметы внутри семестра —
+         в порядке Hugo по умолчанию (weight, затем дата). */ -}}
+  {{- $bySemester := dict -}}
+  {{- with site.GetPage "section" "posts" -}}
+    {{- range .Sections -}}
+      {{- if and (not .Draft) (gt (len .RegularPages) 0) -}}
+        {{- $key := string (.Params.semester | default 0) -}}
+        {{- $existing := index $bySemester $key | default slice -}}
+        {{- $bySemester = merge $bySemester (dict $key ($existing | append .)) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
 
-  {{ $subjects := slice }}
-  {{ with site.GetPage "section" "posts" }}
-    {{ range .Sections }}
-      {{ if not .Draft }}{{ $subjects = $subjects | append . }}{{ end }}
-    {{ end }}
-  {{ end }}
+  {{- $semesters := slice -}}
+  {{- range $key, $_ := $bySemester -}}
+    {{- $semesters = $semesters | append (int $key) -}}
+  {{- end -}}
+  {{- $semesters = sort $semesters "value" "desc" -}}
 
-  {{ $semesterMap := dict }}
-  {{ range $subjects }}
-    {{ $sem := .Params.semester | default 0 }}
-    {{ $existing := index $semesterMap (string $sem) | default slice }}
-    {{ $semesterMap = merge $semesterMap (dict (string $sem) ($existing | append .)) }}
-  {{ end }}
-
-  {{ $semesterKeys := slice }}
-  {{ range $key, $_ := $semesterMap }}
-    {{ $semesterKeys = $semesterKeys | append ($key | int) }}
-  {{ end }}
-  {{ $semesterKeys = sort $semesterKeys "value" "desc" }}
-
-  {{ range $semesterKeys }}
+  {{ range $semesters }}
     {{ $semNum := . }}
-    {{ $semSubjects := index $semesterMap (string $semNum) }}
-    
+    {{ $subjects := index $bySemester (string $semNum) }}
+    {{ $count := len $subjects }}
+    {{ $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "предмет" "предмета" "предметов")) }}
+
     <div class="mt-6 mb-6 bg-base-200/40 rounded-xl p-3 md:px-5 border border-base-300/50 flex items-center justify-between shadow-sm">
       <h2 class="text-lg md:text-xl font-bold text-base-content flex items-center gap-3 m-0">
         <div class="w-2 h-6 rounded-full bg-primary/50"></div>
-        {{ if gt $semNum 0 }}{{ $semNum }} Семестр {{ else }}Прочие материалы{{ end }}
+        {{ if gt $semNum 0 }}{{ $semNum }} Семестр{{ else }}Прочие материалы{{ end }}
       </h2>
-      
-      {{ $count := len $semSubjects }}
-      {{ $mod10 := mod $count 10 }}
-      {{ $mod100 := mod $count 100 }}
-      {{ $word := "предметов" }}
-      {{ if and (ge $mod100 11) (le $mod100 14) }}{{ $word = "предметов" }}
-      {{ else if eq $mod10 1 }}{{ $word = "предмет" }}
-      {{ else if and (ge $mod10 2) (le $mod10 4) }}{{ $word = "предмета" }}
-      {{ end }}
 
       <span class="text-xs font-semibold bg-base-100 border border-base-300 text-base-content/60 px-3 py-1 rounded-full">
         {{ $count }} {{ $word }}
       </span>
     </div>
-    
+
     <div class="flex flex-wrap -mx-3 mb-10">
-      {{ range $semSubjects }}
-        {{ $publishedPages := where .Pages "Draft" false }}
-        {{ if gt (len $publishedPages) 0 }}
-          <div class="w-full md:w-1/2 lg:w-1/3 p-3">
-            {{ partial "ui/section-card.html" . }}
-          </div>
-        {{ end }}
+      {{ range $subjects }}
+        <div class="w-full md:w-1/2 lg:w-1/3 p-3">
+          {{ partial "ui/section-card.html" . }}
+        </div>
       {{ end }}
     </div>
 

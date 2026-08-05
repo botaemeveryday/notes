@@ -1,9 +1,8 @@
 {{ $abbr := .Params.abbr }}
 {{ if not $abbr }}
   {{ $clean := replaceRE `[^A-Za-zА-Яа-яЁё ]+` "" .Title }}
-  {{ $words := split $clean " " }}
   {{ $tmp := "" }}
-  {{ range first 4 $words }}
+  {{ range first 4 (split $clean " ") }}
     {{ if and . (lt (len $tmp) 4) }}
       {{ $tmp = printf "%s%s" $tmp (substr . 0 1) }}
     {{ end }}
@@ -12,7 +11,6 @@
   {{ if not $abbr }}{{ $abbr = "?" }}{{ end }}
 {{ end }}
 
-{{ $accent := string (.Params.accent | default 1) }}
 {{ $colors := dict
   "1" "text-blue-500 bg-blue-500/10 border-blue-500 hover:shadow-blue-500/20"
   "2" "text-emerald-500 bg-emerald-500/10 border-emerald-500 hover:shadow-emerald-500/20"
@@ -21,32 +19,26 @@
   "5" "text-amber-500 bg-amber-500/10 border-amber-500 hover:shadow-amber-500/20"
   "6" "text-cyan-500 bg-cyan-500/10 border-cyan-500 hover:shadow-cyan-500/20"
 }}
-{{ $accentClass := index $colors $accent | default (index $colors "1") }}
+{{ $accentClass := index $colors (string (.Params.accent | default 1)) | default (index $colors "1") }}
 
-{{ $count := len (where .Pages "File.LogicalName" "ne" "_index.md") }}
-{{ $mod10 := mod $count 10 }}
-{{ $mod100 := mod $count 100 }}
-{{ $word := "лекций" }}
-{{ if and (ge $mod100 11) (le $mod100 14) }}
-  {{ $word = "лекций" }}
-{{ else if eq $mod10 1 }}
-  {{ $word = "лекция" }}
-{{ else if and (ge $mod10 2) (le $mod10 4) }}
-  {{ $word = "лекции" }}
-{{ end }}
+{{- /* Было: where .Pages "File.LogicalName" "ne" "_index.md" — .Pages и так не
+       содержит собственный _index, а вложенные лекции наоборот терялись.
+       .RegularPages считает то же, что показывает list.html. */ -}}
+{{ $count := len .RegularPages }}
+{{ $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "лекция" "лекции" "лекций")) }}
 
 <a href="{{ .RelPermalink }}" class="group relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-300 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden no-underline hover:-translate-y-1">
-  
+
   <div class="absolute left-0 top-0 bottom-0 w-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 {{ $accentClass }} !bg-current !border-none"></div>
 
   <div class="p-5 flex-1 flex flex-col z-10">
-    
+
     <div class="flex justify-between items-start mb-4">
-      
+
       <div class="flex items-center justify-center w-10 h-10 rounded-xl font-black text-xs tracking-widest transition-colors duration-300 {{ $accentClass }} !border-transparent">
         {{ $abbr }}
       </div>
-      
+
       {{ with .Params.tag }}
         <span class="px-2 py-1 text-[9px] font-bold uppercase tracking-wider bg-base-200 text-base-content/50 rounded-md group-hover:bg-base-300 transition-colors">
           {{ . }}
@@ -59,20 +51,17 @@
     </h3>
 
     {{ with .Params.description }}
-      <p class="text-sm text-base-content/60 leading-relaxed m-0 line-clamp-3">
-        {{ . }}
-      </p>
+      <p class="text-sm text-base-content/60 leading-relaxed m-0 line-clamp-3">{{ . }}</p>
     {{ end }}
   </div>
 
   <div class="px-5 py-3 border-t border-base-300/50 bg-base-200/30 flex items-center justify-between text-xs text-base-content/50 z-10">
-    
+
     <div class="flex items-center">
-      {{ $hasAuthor := or .Params.author }}
-      {{ if $hasAuthor }}
+      {{ with .Params.author }}
         <span class="font-medium text-base-content/70 flex items-center gap-1.5">
           <ion-icon name="person-outline"></ion-icon>
-          {{ .Params.author }}
+          {{ . }}
         </span>
       {{ end }}
     </div>

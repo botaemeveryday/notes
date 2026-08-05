@@ -1,44 +1,47 @@
-{{ if not .Params.hidePrevNext }}
+{{- if not .Params.hidePrevNext -}}
+{{- /* Было .PrevInSection / .NextInSection — они идут по внутреннему порядку Hugo
+       (по умолчанию дата по убыванию), из-за чего «Предыдущая» указывала на
+       следующую лекцию. Теперь prev/next берутся из того же общего порядка,
+       что и список курса с сайдбаром. */ -}}
+{{- $siblings := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink -}}
+{{- $i := -1 -}}
+{{- range $k, $p := $siblings -}}
+  {{- if eq $p.RelPermalink $.RelPermalink }}{{ $i = $k }}{{ end -}}
+{{- end -}}
+{{- $prev := "" -}}
+{{- $next := "" -}}
+{{- if ge $i 0 -}}
+  {{- if gt $i 0 }}{{ $prev = index $siblings (sub $i 1) }}{{ end -}}
+  {{- if lt $i (sub (len $siblings) 1) }}{{ $next = index $siblings (add $i 1) }}{{ end -}}
+{{- end -}}
+
 <div class="divider my-12 opacity-30"></div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
-  
-  {{ with .PrevInSection }}
+
+  {{ with $prev }}
   <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-start p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-primary/40 hover:bg-primary/5 hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
-    
     <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors group-hover:text-primary">
       <ion-icon name="arrow-back" class="text-sm transition-transform duration-300 group-hover:-translate-x-1"></ion-icon>
       Предыдущая
     </span>
-    
-    <span class="font-bold text-base-content md:text-lg leading-tight line-clamp-2">
-      {{ .Title }}
-    </span>
-    
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/5 transition-all duration-500 -z-10"></div>
+    <span class="font-bold text-base-content md:text-lg leading-tight line-clamp-2">{{ .Title }}</span>
   </a>
   {{ else }}
   <div></div>
   {{ end }}
 
-
-  {{ with .NextInSection }}
+  {{ with $next }}
   <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-end text-right p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-primary/40 hover:bg-primary/5 hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
-    
     <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors group-hover:text-primary">
       Следующая
       <ion-icon name="arrow-forward" class="text-sm transition-transform duration-300 group-hover:translate-x-1"></ion-icon>
     </span>
-    
-    <span class="font-bold text-base-content md:text-lg leading-tight line-clamp-2">
-      {{ .Title }}
-    </span>
-    
-    <div class="absolute inset-0 bg-gradient-to-l from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/5 transition-all duration-500 -z-10"></div>
+    <span class="font-bold text-base-content md:text-lg leading-tight line-clamp-2">{{ .Title }}</span>
   </a>
   {{ else }}
   <div></div>
   {{ end }}
 
 </div>
-{{ end }}
+{{- end -}}

@@ -14,9 +14,7 @@
   {{ $color = $customColor }}
   {{ $soft = "#F0F0F0" }}
   {{ range $i, $c := $palette }}
-    {{ if eq $c $customColor }}
-      {{ $soft = index $paletteSoft $i }}
-    {{ end }}
+    {{ if eq $c $customColor }}{{ $soft = index $paletteSoft $i }}{{ end }}
   {{ end }}
 {{ else }}
   {{ $hash := 0 }}
@@ -30,49 +28,27 @@
 
 {{ $idx2 := 0 }}
 {{ range $i, $c := $palette }}
-  {{ if eq $c $color }}
-    {{ $idx2 = mod (add $i 2) 6 }}
-  {{ end }}
+  {{ if eq $c $color }}{{ $idx2 = mod (add $i 2) 6 }}{{ end }}
 {{ end }}
 {{ $color2 := index $palette $idx2 }}
 
 {{ $style := int (.Params.cover_style | default site.Params.coverStyle | default 1) }}
 
-{{ $allPages := slice }}
-{{ if .CurrentSection }}
-  {{ range .CurrentSection.RegularPages.ByWeight }}
-    {{ if and (not .Draft) (not (strings.Contains .File.LogicalName "_info")) }}
-      {{ $allPages = $allPages | append . }}
-    {{ end }}
-  {{ end }}
-{{ end }}
+{{- /* НУМЕРАЦИЯ.
+       Было: список брался как .CurrentSection.RegularPages.ByWeight, а номер
+       считался «с конца» ($total - $i) — из-за чего №01 доставался последней
+       лекции, а порядок карточек в list.html (ByWeight.Reverse) не совпадал
+       ни с сайдбаром (ByDate), ни с этой нумерацией.
 
-{{ $total := len $allPages }}
+       Стало: один общий порядок из utils/section-pages.html, номер = позиция.
+       partialCached считает список один раз на секцию, а не на каждую карточку. */ -}}
+{{ $siblings := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink }}
+{{ $total := len $siblings }}
 {{ $n := 1 }}
-{{ range $i, $p := $allPages }}
-  {{ $indexFromEnd := sub $total $i }}
-  {{ if eq $p.RelPermalink $.RelPermalink }}
-    {{ $n = $indexFromEnd }}
-  {{ end }}
+{{ range $i, $p := $siblings }}
+  {{ if eq $p.RelPermalink $.RelPermalink }}{{ $n = add $i 1 }}{{ end }}
 {{ end }}
 {{ $nn := printf "%02d" $n }}
-
-{{ $clean := replaceRE `[^A-Za-zА-Яа-яЁё0-9 ]+` "" .Title }}
-{{ $words := split (trim $clean " ") " " }}
-{{ $initials := "" }}
-{{ $count := 0 }}
-{{ range $words }}
-  {{ if and (gt (len .) 0) (lt $count 2) }}
-    {{ $firstChar := substr . 0 1 }}
-    {{ $upper := upper $firstChar }}
-    {{ $initials = printf "%s%s" $initials $upper }}
-    {{ $count = add $count 1 }}
-  {{ end }}
-{{ end }}
-{{ if eq $initials "" }}
-  {{ $initials = "L" }}
-{{ end }}
-
 
 <a href="{{ .RelPermalink }}"
    class="group flex flex-col h-full bg-base-100 border border-base-300 rounded-2xl overflow-hidden no-underline text-base-content hover:bg-base-200/50 hover:border-primary/50 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative">
@@ -80,7 +56,7 @@
   <span class="absolute left-0 top-0 bottom-0 w-[4px] opacity-0 group-hover:opacity-100 transition-opacity z-20"
         style="background: {{ $color }}"></span>
 
-        <div class="hidden sm:block w-full">
+  <div class="hidden sm:block w-full">
   {{ if eq $style 1 }}
     <div class="aspect-[16/10] relative overflow-hidden flex items-center justify-center" style="background: {{ $soft }}">
       <span class="absolute top-3 left-4 text-xs font-bold tracking-widest opacity-80" style="color: {{ $color }}; font-family: monospace;">№ {{ $nn }}</span>
@@ -158,12 +134,11 @@
 
       <div class="flex items-center gap-1.5 font-medium mt-1 shrink-0">
         <ion-icon name="calendar-outline"></ion-icon>
-          {{ .Date | time.Format "02 Jan" }}
+        {{ .Date | time.Format "02 Jan" }}
       </div>
 
       <div class="flex flex-col items-end text-right gap-1.5 min-w-0">
-        {{ $hasAuthor := or .Params.author site.Params.author }}
-        {{ if $hasAuthor }}
+        {{ if or .Params.author site.Params.author }}
           {{ partial "post/author.html" (dict "Params" .Params "template" "summary") }}
         {{ end }}
       </div>

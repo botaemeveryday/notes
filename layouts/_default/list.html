@@ -1,45 +1,33 @@
 {{ define "main" }}
+{{- $pages := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink -}}
+{{- $count := len $pages -}}
+{{- $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "лекция" "лекции" "лекций")) -}}
+
 <div class="container mx-auto px-4 py-6 md:py-8 max-w-7xl">
 
   <nav class="flex items-center gap-2 text-xs md:text-sm text-base-content/50 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
     <a href="{{ site.Home.RelPermalink }}" class="hover:text-primary transition-colors flex items-center gap-1">
       <ion-icon name="home-outline"></ion-icon> Главная
     </a>
-    {{ if .Params.semester }}
+    {{ with .Params.semester }}
       <span class="opacity-40">/</span>
-      <span>Семестр {{ .Params.semester }}</span>
+      <span>Семестр {{ . }}</span>
     {{ end }}
     <span class="opacity-40">/</span>
     <span class="font-medium text-base-content">{{ .Title }}</span>
   </nav>
 
-  {{ $validPages := slice }}
-  {{ range .Pages }}
-    {{ if and (not .Draft) (not (strings.Contains .File.LogicalName "_index")) }}
-      {{ $validPages = $validPages | append . }}
-    {{ end }}
-  {{ end }}
-
-  {{ $count := len $validPages }}
-  {{ $mod10 := mod $count 10 }}
-  {{ $mod100 := mod $count 100 }}
-  {{ $word := "лекций" }}
-  {{ if and (ge $mod100 11) (le $mod100 14) }}{{ $word = "лекций" }}
-  {{ else if eq $mod10 1 }}{{ $word = "лекция" }}
-  {{ else if and (ge $mod10 2) (le $mod10 4) }}{{ $word = "лекции" }}
-  {{ end }}
-
   <div class="bg-base-200/40 border border-base-300/50 rounded-3xl md:rounded-[2rem] p-6 md:p-10 mb-10 relative overflow-hidden shadow-sm">
-    
+
     <div class="absolute -top-20 -right-20 w-48 h-48 md:w-64 md:h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
-      
+
       <div class="flex-1">
         <h1 class="text-3xl md:text-5xl font-black text-base-content mb-4 tracking-tight leading-tight">
           {{ .Title }}
         </h1>
-        
+
         {{ with .Params.description }}
           <div class="flex items-start gap-3 bg-base-100/50 p-4 rounded-xl border border-base-300/50 max-w-2xl">
             <ion-icon name="information-circle" class="text-primary text-xl shrink-0 mt-0.5"></ion-icon>
@@ -61,23 +49,22 @@
           </div>
         </div>
       </div>
-      
+
     </div>
   </div>
 
-  {{ if .Content }}
+  {{ with .Content }}
     <div class="mb-12 p-6 md:p-8 bg-base-100 border border-base-300 rounded-3xl shadow-sm relative overflow-hidden">
       <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/50 to-secondary/50"></div>
-      
       <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none text-base-content/80 leading-relaxed prose-headings:mt-0">
-        {{ .Content }}
+        {{ . }}
       </div>
     </div>
   {{ end }}
 
   {{ if gt $count 0 }}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-      {{ range $validPages.ByWeight.Reverse }}
+      {{ range $pages }}
         {{ .Render "summary" }}
       {{ end }}
     </div>
