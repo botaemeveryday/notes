@@ -1,5 +1,14 @@
 {{ partial "core/og.html" . }}
 
+{{- /* Ранние коннекты к CDN — экономят ~100-200 мс на первом рендере. */}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+{{- /* Шрифт логотипа. Раньше он тянулся через @import внутри <style> в <body>:
+       браузер узнавал о нём в самом конце и блокировал рендер. */}}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap">
+
 {{ with site.Params.favicon }}
   {{ if hasPrefix . "<link" }}
     {{ . | safeHTML }}
@@ -11,48 +20,47 @@
 <link rel="canonical" href="{{ .Permalink }}" />
 
 {{ if eq .Type "posts" }}
-<meta name="author" content="{{ if isset .Params "author" }}{{ .Params.author }}{{ else }}{{ site.Params.author }}{{ end }}" />
-<meta name="description" content="{{ (or .Description .Summary) | plainify }}" />
+  <meta name="author" content="{{ .Params.author | default site.Params.author }}" />
+  <meta name="description" content="{{ (or .Description .Summary) | plainify }}" />
 
-{{- $keywords := slice }}
-{{- with .Keywords }}
-  {{- $keywords = . }}
-{{- else }}
-  {{- range .GetTerms "tags" }}
-    {{- $keywords = $keywords | append .Title }}
+  {{- $keywords := slice }}
+  {{- with .Keywords }}
+    {{- $keywords = . }}
   {{- else }}
-    {{- range $taxonomy, $_ := site.Taxonomies }}
-      {{- range $.GetTerms $taxonomy }}
-        {{- $keywords = $keywords | append .Title }}
+    {{- range .GetTerms "tags" }}
+      {{- $keywords = $keywords | append .Title }}
+    {{- else }}
+      {{- range $taxonomy, $_ := site.Taxonomies }}
+        {{- range $.GetTerms $taxonomy }}
+          {{- $keywords = $keywords | append .Title }}
+        {{- end }}
       {{- end }}
     {{- end }}
   {{- end }}
-{{- end }}
-<meta name="keywords" content="{{ delimit $keywords `,` }}">
+  <meta name="keywords" content="{{ delimit $keywords `,` }}">
 {{ else }}
-<meta name="author" content="{{ site.Params.author }}" />
-<meta name="description" content="{{ site.Params.description | plainify }}" />
+  <meta name="author" content="{{ site.Params.author }}" />
+  <meta name="description" content="{{ site.Params.description | plainify }}" />
 {{ end }}
 
 {{ hugo.Generator }}
 
-{{ $outputCss := resources.Get "css/output.css" }}
+{{- /* fingerprint даёт имя файла с хешем → можно ставить Cache-Control: immutable
+       и больше не думать о сбросе кеша при деплое. */}}
+{{ $css := resources.Get "css/output.css" }}
 {{ if hugo.IsProduction }}
-  {{ $outputCss = $outputCss | minify }}
+  {{ $css = $css | minify | fingerprint }}
 {{ end }}
-<link rel="stylesheet" href="{{ $outputCss.RelPermalink }}" />
+<link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }} />
 
 {{ if or site.Params.backgroundImage site.Params.backgroundImageDark }}
 <style>
-{{ if site.Params.backgroundImage }}
-#dream-global-bg {
-  background-image: url({{ site.Params.backgroundImage | relURL }});
-}
+{{ with site.Params.backgroundImage }}
+#dream-global-bg { background-image: url({{ . | relURL }}); }
 {{ end }}
-
-{{ if site.Params.backgroundImageDark }}
-html.dark #dream-global-bg {
-  background-image: url({{ site.Params.backgroundImageDark | relURL }});
+{{ with site.Params.backgroundImageDark }}
+@media (prefers-color-scheme: dark) {
+  #dream-global-bg { background-image: url({{ . | relURL }}); }
 }
 {{ end }}
 </style>
