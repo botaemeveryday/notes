@@ -1,11 +1,3 @@
-/*
- * Общий скрипт сайта: липкая шапка, счётчик звёзд, копирование кода,
- * кастомное контекстное меню.
- *
- * Раньше это были: main.js (стор тёмной темы — удалён, темой рулит ОС),
- * grid.js + masonry + imagesLoaded (удалены, сетки на CSS grid),
- * code-copy.js и два инлайновых <script> в партиалах.
- */
 (function () {
   'use strict';
 
@@ -17,7 +9,6 @@
     }
   };
 
-  /* ---------------------------------------------------------------- шапка */
   function initStickyNav() {
     var nav = document.getElementById('site-nav');
     if (!nav || !nav.dataset.stickyClass) return;
@@ -45,7 +36,6 @@
     apply();
   }
 
-  /* --------------------------------------------------- счётчик звёзд GitHub */
   function initStarCount() {
     var el = document.getElementById('nav-star-count');
     if (!el || !el.dataset.repo) return;
@@ -62,14 +52,13 @@
       }, 200);
     };
 
-    // Из кеша — мгновенно и без сетевого запроса на каждой странице.
     try {
       var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
       if (cached && Date.now() - cached.t < TTL) {
         el.textContent = cached.n >= 1000 ? (cached.n / 1000).toFixed(1) + 'k' : String(cached.n);
         return;
       }
-    } catch (e) { /* приватный режим — просто идём в сеть */ }
+    } catch (e) { }
 
     fetch('https://api.github.com/repos/' + el.dataset.repo)
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
@@ -77,13 +66,12 @@
         if (typeof data.stargazers_count !== 'number') return;
         try {
           sessionStorage.setItem(CACHE_KEY, JSON.stringify({ n: data.stargazers_count, t: Date.now() }));
-        } catch (e) { /* ignore */ }
+        } catch (e) { }
         render(data.stargazers_count);
       })
       .catch(function () { el.textContent = '★'; });
   }
 
-  /* ------------------------------------------------------ копирование кода */
   var ICON_COPY =
     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
   var ICON_CHECK =
@@ -121,7 +109,6 @@
     });
   }
 
-  /* Клипборд с фолбэком: navigator.clipboard недоступен по http:// */
   function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) {
       return navigator.clipboard.writeText(text).then(function () { return true; }, fallback);
@@ -146,7 +133,6 @@
   }
   window.cnCopyText = copyText;
 
-  /* ------------------------------------------------- контекстное меню */
   function initContextMenu() {
     var menu = document.getElementById('custom-context-menu');
     if (!menu) return;

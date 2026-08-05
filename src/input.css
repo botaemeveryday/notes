@@ -1,7 +1,6 @@
 @import 'tailwindcss' source(none);
 
 @source "../layouts";
-/* JS теперь тоже содержит классы (сообщения поиска, состояния кнопок) — сканируем и его. */
 @source "./js";
 
 @plugin '@tailwindcss/typography';
@@ -9,12 +8,8 @@
   themes: emerald --default, forest --prefersdark;
 }
 
-/* Тёмная тема целиком на ОС: и утилиты dark:*, и сама daisyUI-тема forest
-   переключаются через prefers-color-scheme. JS в этом не участвует. */
 @custom-variant dark (@media (prefers-color-scheme: dark));
 
-/* В Tailwind v4 legacy-конфиг обычно уже не нужен — проверьте, что в
-   tailwind.config.js осталось что-то кроме content/darkMode, иначе строку можно убрать. */
 @config '../tailwind.config.js';
 
 @import "./css/syntax.css";
@@ -35,9 +30,6 @@
   @apply menu menu-sm;
 }
 
-/* ---------------------------------------------------------------- логотип */
-/* Переехало из partials/header/logo.html: раньше <style> с @import шрифта
-   рендерился в <body> на каждой странице. Шрифт теперь грузится из <head>. */
 @layer components {
   .nav-logo-inner {
     position: relative;
@@ -98,26 +90,22 @@
   }
 }
 
-/* ------------------------------------------------------------ блоки кода */
 @layer components {
-  /* Обертка кода */
   .highlight {
     @apply relative rounded-xl overflow-hidden my-6 shadow-lg border;
-    @apply bg-base-200 border-base-300; /* Светлая тема */
-    @apply dark:bg-[#282a36] dark:border-[#44475a] dark:shadow-2xl; /* Темная тема (Dracula) */
+    @apply bg-base-200 border-base-300;
+    @apply dark:bg-[#282a36] dark:border-[#44475a] dark:shadow-2xl;
   }
 
-  /* Верхняя панель мака (с точками) */
   .highlight::before {
     content: "";
     display: block;
     height: 36px;
     width: 100%;
     @apply border-b;
-    @apply bg-base-300/50 border-base-300; /* Светлая тема */
-    @apply dark:bg-white/5 dark:border-black/30; /* Темная тема */
+    @apply bg-base-300/50 border-base-300;
+    @apply dark:bg-white/5 dark:border-black/30;
 
-    /* Три точки */
     background-image:
       radial-gradient(circle, #ff5f56 50%, transparent 55%),
       radial-gradient(circle, #ffbd2e 50%, transparent 55%),
@@ -127,25 +115,19 @@
     background-repeat: no-repeat;
   }
 
-  /* САМОЕ ВАЖНОЕ: УПРАВЛЕНИЕ ЦВЕТОМ ТЕКСТА */
   .highlight pre {
     @apply p-4 overflow-x-auto text-sm leading-relaxed;
     margin: 0 !important;
     background: transparent !important;
-    /* Принудительно делаем базовый текст темным в светлой теме и белым в темной */
     @apply text-gray-800 dark:text-[#f8f8f2];
   }
 
-  /* Скроллбар */
   .highlight pre::-webkit-scrollbar { height: 8px; }
   .highlight pre::-webkit-scrollbar-track { background: transparent; }
   .highlight pre::-webkit-scrollbar-thumb {
     @apply bg-base-content/20 rounded-full hover:bg-base-content/40 transition-colors;
   }
 
-  /* Кнопка копирования.
-     Раньше половина классов приезжала из code-copy.js и переопределяла эти
-     правила — теперь весь стиль живёт здесь, а JS вешает только класс. */
   .copy-code-btn {
     @apply absolute top-3 right-3 p-2 rounded-lg backdrop-blur-sm;
     @apply bg-base-content/10 text-base-content/50;
@@ -163,7 +145,6 @@
   }
 }
 
-/* ------------------------------------------------------ результаты поиска */
 @layer components {
   .search-result-item {
     opacity: 0;
@@ -177,26 +158,17 @@
   }
 }
 
-/* ----------------------------------------- картинки конспектов в темноте */
 @layer components {
-  /* Плавный переход фильтров */
   .prose img {
     @apply transition-all duration-300;
   }
 
-  /*
-    МАГИЯ: Инвертируем картинки ТОЛЬКО когда система в темном режиме!
-    invert(1) делает черное белым.
-    hue-rotate(180deg) возвращает правильные цветные оттенки (чтобы красный маркер остался красным).
-    brightness(0.9) чуть приглушает чисто белый цвет, чтобы он не слепил на темном фоне.
-  */
   @media (prefers-color-scheme: dark) {
-    .prose img {
+    .prose img.invert {
       filter: invert(1) hue-rotate(180deg) brightness(0.9);
     }
 
-    /* Класс-исключение: если фотку нельзя инвертировать (например, фото экрана) */
-    .prose img.no-invert {
+    .prose img {
       filter: none;
     }
   }
