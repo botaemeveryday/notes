@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.Locale }}"
-  x-data
-  :class="$store.darkMode.class()"
-  :data-theme="$store.darkMode.theme()">
+<html lang="{{ site.Language.LanguageCode | default site.Language.Lang }}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
     <title>
       {{- block "title" . -}}
         {{- if .IsHome }}{{ site.Params.motto }} | {{ site.Title }}
@@ -14,10 +13,7 @@
     </title>
 
     {{ partial "core/head.html" . }}
-
-    {{ block "css" . }} {{ end }}
-
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js" integrity="sha256-PtHu0lJIiSHfZeNj1nFd6wTX+Squ255SGZ/fc8seCtM=" crossorigin="anonymous"></script>
+    {{ block "css" . }}{{ end }}
   </head>
 
   <body>
