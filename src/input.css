@@ -1,14 +1,20 @@
 @import 'tailwindcss' source(none);
 
 @source "../layouts";
+/* JS теперь тоже содержит классы (сообщения поиска, состояния кнопок) — сканируем и его. */
+@source "./js";
 
 @plugin '@tailwindcss/typography';
 @plugin "daisyui" {
   themes: emerald --default, forest --prefersdark;
 }
 
+/* Тёмная тема целиком на ОС: и утилиты dark:*, и сама daisyUI-тема forest
+   переключаются через prefers-color-scheme. JS в этом не участвует. */
 @custom-variant dark (@media (prefers-color-scheme: dark));
 
+/* В Tailwind v4 legacy-конфиг обычно уже не нужен — проверьте, что в
+   tailwind.config.js осталось что-то кроме content/darkMode, иначе строку можно убрать. */
 @config '../tailwind.config.js';
 
 @import "./css/syntax.css";
@@ -29,6 +35,70 @@
   @apply menu menu-sm;
 }
 
+/* ---------------------------------------------------------------- логотип */
+/* Переехало из partials/header/logo.html: раньше <style> с @import шрифта
+   рендерился в <body> на каждой странице. Шрифт теперь грузится из <head>. */
+@layer components {
+  .nav-logo-inner {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  .nav-ruled-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+
+  .nav-logo-text {
+    position: relative;
+    font-family: 'Inter', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: currentColor;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    white-space: nowrap;
+    z-index: 2;
+  }
+
+  .nav-highlight-b {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-highlight-b::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    bottom: 0;
+    height: 6px;
+    background: #FFE134;
+    z-index: -1;
+    border-radius: 2px;
+  }
+
+  .nav-wavy-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-wavy-wrap svg {
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    overflow: visible;
+  }
+}
+
+/* ------------------------------------------------------------ блоки кода */
 @layer components {
   /* Обертка кода */
   .highlight {
@@ -48,7 +118,7 @@
     @apply dark:bg-white/5 dark:border-black/30; /* Темная тема */
 
     /* Три точки */
-    background-image: 
+    background-image:
       radial-gradient(circle, #ff5f56 50%, transparent 55%),
       radial-gradient(circle, #ffbd2e 50%, transparent 55%),
       radial-gradient(circle, #27c93f 50%, transparent 55%);
@@ -61,7 +131,7 @@
   .highlight pre {
     @apply p-4 overflow-x-auto text-sm leading-relaxed;
     margin: 0 !important;
-    background: transparent !important; 
+    background: transparent !important;
     /* Принудительно делаем базовый текст темным в светлой теме и белым в темной */
     @apply text-gray-800 dark:text-[#f8f8f2];
   }
@@ -73,24 +143,48 @@
     @apply bg-base-content/20 rounded-full hover:bg-base-content/40 transition-colors;
   }
 
-  /* Кнопка копирования */
+  /* Кнопка копирования.
+     Раньше половина классов приезжала из code-copy.js и переопределяла эти
+     правила — теперь весь стиль живёт здесь, а JS вешает только класс. */
   .copy-code-btn {
-    @apply absolute top-1.5 right-2 p-1.5 rounded-md text-base-content/50 hover:bg-base-content/10 hover:text-base-content transition-all opacity-0;
+    @apply absolute top-3 right-3 p-2 rounded-lg backdrop-blur-sm;
+    @apply bg-base-content/10 text-base-content/50;
+    @apply hover:bg-base-content/20 hover:text-base-content;
+    @apply transition-all opacity-0 cursor-pointer;
   }
-  
-  .highlight:hover .copy-code-btn {
+
+  .highlight:hover .copy-code-btn,
+  .copy-code-btn:focus-visible {
     @apply opacity-100;
+  }
+
+  .copy-code-btn.is-copied {
+    @apply bg-green-500/20 text-green-500;
   }
 }
 
+/* ------------------------------------------------------ результаты поиска */
+@layer components {
+  .search-result-item {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: cn-fade-in 0.3s ease forwards;
+  }
 
+  @keyframes cn-fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ----------------------------------------- картинки конспектов в темноте */
 @layer components {
   /* Плавный переход фильтров */
   .prose img {
     @apply transition-all duration-300;
   }
 
-  /* 
+  /*
     МАГИЯ: Инвертируем картинки ТОЛЬКО когда система в темном режиме!
     invert(1) делает черное белым.
     hue-rotate(180deg) возвращает правильные цветные оттенки (чтобы красный маркер остался красным).
@@ -100,7 +194,7 @@
     .prose img {
       filter: invert(1) hue-rotate(180deg) brightness(0.9);
     }
-    
+
     /* Класс-исключение: если фотку нельзя инвертировать (например, фото экрана) */
     .prose img.no-invert {
       filter: none;
