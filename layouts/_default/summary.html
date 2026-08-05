@@ -32,16 +32,6 @@
 {{ end }}
 {{ $color2 := index $palette $idx2 }}
 
-{{ $style := int (.Params.cover_style | default site.Params.coverStyle | default 1) }}
-
-{{- /* НУМЕРАЦИЯ.
-       Было: список брался как .CurrentSection.RegularPages.ByWeight, а номер
-       считался «с конца» ($total - $i) — из-за чего №01 доставался последней
-       лекции, а порядок карточек в list.html (ByWeight.Reverse) не совпадал
-       ни с сайдбаром (ByDate), ни с этой нумерацией.
-
-       Стало: один общий порядок из utils/section-pages.html, номер = позиция.
-       partialCached считает список один раз на секцию, а не на каждую карточку. */ -}}
 {{ $siblings := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink }}
 {{ $total := len $siblings }}
 {{ $n := 1 }}
@@ -57,66 +47,10 @@
         style="background: {{ $color }}"></span>
 
   <div class="hidden sm:block w-full">
-  {{ if eq $style 1 }}
     <div class="aspect-[16/10] relative overflow-hidden flex items-center justify-center" style="background: {{ $soft }}">
       <span class="absolute top-3 left-4 text-xs font-bold tracking-widest opacity-80" style="color: {{ $color }}; font-family: monospace;">№ {{ $nn }}</span>
       <span class="font-extrabold tracking-tighter text-2xl select-none" style="color: {{ $color }}">{{ .Title | default "?" }}</span>
     </div>
-
-  {{ else if eq $style 2 }}
-    <div class="aspect-[16/10] relative overflow-hidden flex items-center justify-center bg-base-200">
-      <span class="absolute select-none font-bold opacity-20 text-[140px] -rotate-6" style="color: {{ $color }};">{{ $n }}</span>
-      <div class="absolute inset-0 flex flex-col justify-end p-4">
-        <span class="text-xs uppercase tracking-widest font-bold opacity-80" style="color: {{ $color }};">Лекция · {{ .Date | time.Format "02 Jan" }}</span>
-      </div>
-      <div class="absolute inset-3 border-2 border-dashed rounded-lg pointer-events-none opacity-30" style="border-color: {{ $color }};"></div>
-    </div>
-
-  {{ else if eq $style 3 }}
-    <div class="aspect-[16/10] relative overflow-hidden bg-base-100" style="background-image: repeating-linear-gradient(45deg, {{ $color }}22 0 2px, transparent 2px 12px);">
-      <div class="absolute inset-0 flex flex-col justify-between p-4">
-        <span class="text-xs font-bold tracking-widest" style="color: {{ $color }}; font-family: monospace;">{{ $nn }} / {{ printf "%02d" $total }}</span>
-        {{ with .GetTerms "tags" }}
-          {{ with index . 0 }}
-            <div class="self-start px-3 py-1 rounded-full text-xs font-bold bg-base-100 border shadow-sm" style="border-color: {{ $color }}; color: {{ $color }}">#{{ .LinkTitle | lower }}</div>
-          {{ end }}
-        {{ end }}
-      </div>
-    </div>
-
-  {{ else if eq $style 4 }}
-    <div class="aspect-[16/10] relative overflow-hidden bg-base-200" style="background-image: radial-gradient({{ $color }}44 1.5px, transparent 1.5px); background-size: 16px 16px;">
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div class="px-5 py-3 bg-base-100 border-2 rounded-xl flex items-center gap-2" style="border-color: {{ $color }}; box-shadow: 4px 4px 0 0 {{ $color }};">
-          <span class="text-2xl font-bold" style="color: {{ $color }}; font-family: monospace;">{{ $nn }}</span>
-          <span class="text-xs uppercase tracking-widest opacity-60">lecture</span>
-        </div>
-      </div>
-    </div>
-
-  {{ else if eq $style 5 }}
-    <div class="aspect-[16/10] relative overflow-hidden bg-base-200/50">
-      <div class="absolute -top-10 -right-10 w-48 h-48 rounded-full blur-3xl opacity-50" style="background: {{ $color }};"></div>
-      <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full blur-3xl opacity-40" style="background: {{ $color2 }};"></div>
-      <div class="absolute inset-0 flex flex-col justify-between p-5">
-        <span class="text-xs font-bold tracking-widest" style="color: {{ $color }}; font-family: monospace;">№ {{ $nn }}</span>
-      </div>
-    </div>
-
-  {{ else }}
-    <div class="aspect-[16/10] relative overflow-hidden bg-base-100" style="background-image: linear-gradient(to right, transparent 38px, {{ $color }}55 38px 39px, transparent 39px), repeating-linear-gradient(0deg, transparent 0 23px, {{ $color }}22 23px 24px);">
-      <div class="absolute inset-0 flex items-center p-4 pl-14">
-        <span class="text-5xl font-black select-none" style="color: {{ $color }};">{{ $nn }}</span>
-        <div class="ml-4 flex flex-col">
-          <span class="text-xs uppercase tracking-widest font-bold" style="color: {{ $color }}">Лекция</span>
-          <span class="text-sm font-medium opacity-80" style="color: {{ $color }}">{{ .Date | time.Format "02 Jan" }}</span>
-        </div>
-      </div>
-      <div class="absolute left-4 top-6 w-2 h-2 rounded-full border border-base-300 bg-base-200"></div>
-      <div class="absolute left-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full border border-base-300 bg-base-200"></div>
-      <div class="absolute left-4 bottom-6 w-2 h-2 rounded-full border border-base-300 bg-base-200"></div>
-    </div>
-  {{ end }}
   </div>
 
   <div class="p-5 flex flex-col flex-1">
