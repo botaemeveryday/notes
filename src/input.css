@@ -13,11 +13,6 @@
 
 @import "./css/syntax.css";
 @import "./shortcodes.css";
-@import "./list.css"
-
-#disqus_thread iframe[src*='ads-iframe'] {
-  display: none;
-}
 
 #dream-global-bg {
   position: fixed;
@@ -30,95 +25,8 @@
   z-index: -1;
 }
 
-.flip-container {
-  width: 100vw;
-  /* The height of navbar is 112px (80px + 2rem). */
-  height: calc(100vh - 80px - 2rem);
-  max-width: 100%;
-  perspective: 1000px;
-}
-
-#TableOfContents {
-  @apply sticky top-24 overflow-y-auto;
-
-  /* 6 + 1 rem */
-  max-height: calc(100vh - 7rem);
-}
-
 #TableOfContents ul {
   @apply menu menu-sm;
-}
-
-.dream-alert {
-  > .heading {
-    @apply flex items-center gap-1 text-sm font-medium;
-  }
-
-  ion-icon {
-    font-size: 1rem;
-  }
-
-  &.note {
-    @apply border-s-blue-600 dark:border-s-blue-500;
-
-    .heading {
-      @apply text-blue-600 dark:text-blue-500;
-    }
-  }
-
-  &.tip {
-    @apply border-s-green-600 dark:border-s-green-500;
-
-    .heading {
-      @apply text-green-600 dark:text-green-500;
-    }
-  }
-
-  &.important {
-    @apply border-s-purple-600 dark:border-s-purple-500;
-
-    .heading {
-      @apply text-purple-600 dark:text-purple-500;
-    }
-  }
-
-  &.warning {
-    @apply border-s-yellow-600 dark:border-s-yellow-500;
-
-    .heading {
-      @apply text-yellow-600 dark:text-yellow-500;
-    }
-  }
-
-  &.caution {
-    @apply border-s-red-600 dark:border-s-red-500;
-
-    .heading {
-      @apply text-red-600 dark:text-red-500;
-    }
-  }
-}
-
-.custom-search-input {
-  color: var(--color-base-content);
-  background-color: var(--color-base-100);
-  border: 2px solid var(--color-base-300);
-  border-radius: 64px;
-  padding: 1rem 1.5rem 1rem 3rem;
-  font-size: 1.125rem;
-  width: 100%;
-  outline: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-}
-
-.custom-search-input::placeholder {
-  color: oklch(var(--color-base-content) / 0.6);
-}
-
-.custom-search-input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px oklch(var(--color-primary) / 0.2);
 }
 
 @layer components {
