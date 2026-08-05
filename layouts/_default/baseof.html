@@ -7,11 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-      {{ if .IsHome }}
-        {{ site.Params.motto }} | {{ site.Title }}
-      {{ else }}
-        {{ .Title }} | {{ site.Title }}
-      {{ end }}
+      {{- block "title" . -}}
+        {{- if .IsHome }}{{ site.Params.motto }} | {{ site.Title }}
+        {{- else }}{{ .Title }} | {{ site.Title }}{{ end -}}
+      {{- end -}}
     </title>
 
     {{ partial "core/head.html" . }}
@@ -22,24 +21,20 @@
   </head>
 
   <body>
-    <div id="dream-global-bg"></div>
+    {{ if or site.Params.backgroundImage site.Params.backgroundImageDark }}
+      <div id="dream-global-bg"></div>
+    {{ end }}
+
     {{ partial "header/nav.html" . }}
 
-    <div class="flip-container">
-      <div class="flipper">
-        <div class="front">
-          <div class="container">
-            {{ block "main" . }} {{ end }}
-
-            {{ partial "footer/footer.html" . }}
-          </div>
-        </div>
-      </div>
+    <div class="container">
+      {{ block "main" . }}{{ end }}
+      {{ partial "footer/footer.html" . }}
     </div>
 
 
     {{ partial "core/scripts.html" . }}
-    {{ block "js" . }} {{ end }}
+    {{ block "js" . }}{{ end }}
 
     {{ if .Store.Get "hasMermaid" }}
       <script type="module">
