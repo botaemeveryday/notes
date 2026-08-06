@@ -35,12 +35,16 @@
   <div class="flex items-center gap-2 min-w-0 max-w-full" data-cn-tip="{{ $full }}">
     <div class="flex items-center shrink-0">
       {{ range $i, $a := $head }}
-        {{ if $a.avatar }}
-          <img src="{{ $a.avatar }}" alt="{{ $a.name }}" loading="lazy" decoding="async" width="20" height="20"
-               class="w-5 h-5 rounded-full object-cover ring-2 ring-base-100 bg-base-300 m-0 {{ if $i }}-ml-2{{ end }}" />
-        {{ else }}
-          <span class="w-5 h-5 text-[9px] rounded-full ring-2 ring-base-100 bg-base-300 text-base-content/60 flex items-center justify-center font-bold uppercase {{ if $i }}-ml-2{{ end }}">{{ substr $a.name 0 1 }}</span>
-        {{ end }}
+        {{ $ring := "ring-2 ring-base-100" }}
+        {{ if $i }}{{ $ring = printf "%s -ml-2" $ring }}{{ end }}
+        {{ partialCached "ui/avatar.html" (dict
+              "src" $a.avatar
+              "alt" $a.name
+              "size" 20
+              "class" (printf "w-5 h-5 rounded-full object-cover bg-base-300 m-0 %s" $ring)
+              "fallbackClass" (printf "w-5 h-5 text-[9px] rounded-full bg-base-300 text-base-content/60 flex items-center justify-center font-bold uppercase %s" $ring)
+              "fallbackText" (substr $a.name 0 1)
+            ) $a.avatar $a.name $i }}
       {{ end }}
       {{ if gt $rest 0 }}
         <span class="w-5 h-5 text-[9px] rounded-full ring-2 ring-base-100 bg-base-200 text-base-content/60 flex items-center justify-center font-bold -ml-2">+{{ $rest }}</span>
@@ -83,12 +87,14 @@
 
 {{- define "cn-author-row" -}}
 <div class="flex items-center gap-2 min-w-0">
-  {{ if .avatar }}
-    <img src="{{ .avatar }}" alt="{{ .name }}" loading="lazy" decoding="async" width="24" height="24"
-         class="w-6 h-6 rounded-full object-cover shrink-0 shadow-sm bg-base-300 m-0" style="margin: 0px;" />
-  {{ else }}
-    <span class="w-6 h-6 text-[10px] rounded-full bg-base-300 text-base-content/60 flex items-center justify-center font-bold uppercase shrink-0">{{ substr .name 0 1 }}</span>
-  {{ end }}
+  {{ partialCached "ui/avatar.html" (dict
+        "src" .avatar
+        "alt" .name
+        "size" 24
+        "class" "w-6 h-6 rounded-full object-cover shrink-0 shadow-sm bg-base-300 m-0"
+        "fallbackClass" "w-6 h-6 text-[10px] rounded-full bg-base-300 text-base-content/60 flex items-center justify-center font-bold uppercase shrink-0"
+        "fallbackText" (substr .name 0 1)
+      ) .avatar }}
 
   <span itemprop="author" itemscope itemtype="https://schema.org/Person" class="font-medium text-base-content/80 truncate">
     {{ if .link }}
