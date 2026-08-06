@@ -1,12 +1,10 @@
 ---
-title: Лекция 6
+title: Исключения
+description: Механизм исключений в C++ и иерархия std::exception. Объясняется, почему бросать типизированные исключения информативнее, чем строки или числа, и как их правильно перехватывать.
 date: 2025-03-12
-
 tags:
   - 2 семестр
   - Основы программирования
-
-description: Лекция 6
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4
