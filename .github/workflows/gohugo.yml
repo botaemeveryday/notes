@@ -1,53 +1,66 @@
 name: Deploy Hugo site to Pages
+
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+      - ".gitignore"
+      - "docs/**"
   workflow_dispatch:
+    inputs:
+      force_regen:
+        description: "Пересобрать все артефакты, игнорируя кеш"
+        type: boolean
+        default: false
+
 permissions:
   contents: read
   pages: write
   id-token: write
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+
 defaults:
   run:
     shell: bash
+
+env:
+  HUGO_VERSION: "0.161.1"
+  PANDOC_VERSION: "3.10.1"
+  TECTONIC_VERSION: "0.15.0"
+
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
-    env:
-      HUGO_VERSION: 0.161.1
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages-${{ github.ref }}
+      cancel-in-progress: true
+
     steps:
-      - name: Install Hugo CLI
-        run: |
-          wget -O ${{ runner.temp }}/hugo.deb \
-            https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
-
-      - name: Install Dart Sass
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q sass
-
-      - name: Cache apt-пакеты
-        uses: actions/cache@v4
-        with:
-          path: /var/cache/apt/archives/*.deb
-          key: apt-xetex-v1-${{ runner.os }}
-
-      - name: Install pandoc + XeLaTeX
-        run: |
-          sudo apt-get install -y -q \
-            pandoc \
-            texlive-xetex \
-            texlive-lang-cyrillic \
-            fonts-dejavu
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 0
+
+      - name: Определить, нужна ли генерация артефактов
+        id: changes
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] \
+             || ! git rev-parse --verify -q HEAD^ >/dev/null; then
+            echo "content=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "Изменённые файлы:"; echo "$FILES"
+          if grep -qE '^(content/|scripts/|\.github/workflows/)' <<< "$FILES"; then
+            echo "content=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "content=false" >> "$GITHUB_OUTPUT"
+          fi
+
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -55,106 +68,125 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Restore артефактов генераторов
+        id: gen-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .cache
+            static/covers
+            static/posts
+          key: gen-${{ github.sha }}
+          restore-keys: gen-
+
+      - name: Решить, запускать ли генераторы
+        id: gen
+        run: |
+          NEED=false
+          [[ "${{ steps.changes.outputs.content }}" == "true" ]] && NEED=true
+          # кеш вообще не восстановился — артефактов нет, надо генерить
+          [[ -z "${{ steps.gen-cache.outputs.cache-matched-key }}" ]] && NEED=true
+          [[ "${{ inputs.force_regen }}" == "true" ]] && NEED=true
+          echo "run=$NEED" >> "$GITHUB_OUTPUT"
+          echo "Генераторы: $NEED"
+
+      - name: Cache CLI-бинарников
+        id: bins
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/bin
+          key: bins-${{ runner.os }}-h${{ env.HUGO_VERSION }}-p${{ env.PANDOC_VERSION }}-t${{ env.TECTONIC_VERSION }}
+
+      - name: Скачать hugo / pandoc / tectonic
+        if: steps.bins.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.local/bin && cd "$(mktemp -d)"
+
+          curl -sSL "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz" \
+            | tar xz hugo && mv hugo ~/.local/bin/
+
+          curl -sSL "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-amd64.tar.gz" \
+            | tar xz --strip-components=2 "pandoc-${PANDOC_VERSION}/bin/pandoc" && mv pandoc ~/.local/bin/
+
+          curl -sSL "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+            | tar xz tectonic && mv tectonic ~/.local/bin/
+
+          chmod +x ~/.local/bin/*
+
+      - name: PATH
+        run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Cache бандла tectonic
+        if: steps.gen.outputs.run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Tectonic
+          key: tectonic-bundle-${{ env.TECTONIC_VERSION }}-v1
+
       - name: Setup Python
+        if: steps.gen.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
 
-      - name: Install Python dependencies
-        run: pip install Pillow pyyaml genanki
+      - name: Python deps
+        if: steps.gen.outputs.run == 'true'
+        run: pip install -r scripts/requirements.txt
 
-      - name: Cache fonts
-        uses: actions/cache@v4
-        with:
-          path: .cache/fonts
-          key: covers-fonts-v1
+      - name: Генерация (covers / anki / merged / pdf)
+        if: steps.gen.outputs.run == 'true'
+        run: |
+          python scripts/generate-covers.py
+          python scripts/generate-anki.py
+          python scripts/merge-md-for-ai.py
+          python scripts/generate-pdf.py --jobs "$(nproc)"
 
-      - name: Cache cover markers
-        uses: actions/cache@v4
-        with:
-          path: .cache/covers
-          key: covers-markers-${{ github.sha }}
-          restore-keys: covers-markers-
-
-      - name: Cache PDF хеши
-        uses: actions/cache@v4
-        with:
-          path: |
-            .cache/pdf
-            static/posts/*/resources/*.pdf
-          key: pdf-v1-${{ hashFiles('content/posts/**/*.md') }}
-          restore-keys: pdf-v1-
-
-      - name: Cache AI merged хеши
-        uses: actions/cache@v4
+      - name: Save артефактов генераторов
+        if: steps.gen.outputs.run == 'true'
+        uses: actions/cache/save@v4
+        continue-on-error: true
         with:
           path: |
-            .cache/ai
-            static/posts/*/resources/*_merged.md
-          key: ai-v1-${{ hashFiles('content/posts/**/*.md') }}
-          restore-keys: ai-v1-
-
-      - name: Cache Anki хеши
-        uses: actions/cache@v4
-        with:
-          path: |
-            .cache/anki
-            static/posts/*/resources/*.apkg
-            static/posts/*/*/resources/*.apkg
-          key: anki-v1-${{ hashFiles('content/posts/**/*.md', 'content/posts/**/*.csv') }}
-          restore-keys: anki-v1-
-
-      - name: Generate OG covers
-        run: python scripts/generate-covers.py
-
-      - name: Generate Anki decks
-        run: python scripts/generate-anki.py
-
-      - name: Generate merged MD for AI
-        run: python scripts/merge-md-for-ai.py
-
-      - name: Generate PDF конспекты
-        run: python scripts/generate-pdf.py
+            .cache
+            static/covers
+            static/posts
+          key: gen-${{ github.sha }}
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
-      - name: Install Node.js dependencies and build CSS
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Build CSS
         run: |
-          npm ci
+          npm ci --prefer-offline --no-audit --fund=false
           npm run css
 
       - name: Build with Hugo
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
-        run: |
-          hugo \
-            --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+        run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Verify build
         run: |
-          [ -f public/index.html ] || exit 1
-          grep -q "<body" public/index.html || (echo "Index.html пустой!"; exit 1)
-          ls public/covers/*/*.png > /dev/null 2>&1 || \
-            (echo "Обложки не попали в public/covers/!"; exit 1)
-          echo "Содержимое index.html проверено."
-          echo "Обложки на месте."
+          [ -s public/index.html ] || { echo "index.html пустой"; exit 1; }
+          grep -q "<body" public/index.html || { echo "index.html без body"; exit 1; }
+          ls public/covers/*/*.png >/dev/null 2>&1 || { echo "Обложки не попали в public/covers/"; exit 1; }
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

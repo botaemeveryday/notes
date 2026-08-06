@@ -37,7 +37,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from cache_utils import compute_course_hash, is_cache_valid, write_cache, invalidate_cache
+from cache_utils import compute_anki_hash, is_cache_valid, write_cache, invalidate_cache
 
 # ──────────────────────────────────────────────
 # Попытка импорта genanki
@@ -275,9 +275,10 @@ def generate_course(
         print("  [SKIP] generate.anki: false в _index.md")
         return
 
-    # Хешируем .md + все CSV (карточки меняются независимо от лекций)
+    # Колоды зависят только от CSV-карточек и заголовков (имена колод).
+    # Правка текста лекции колоды не трогает.
     csv_files = list(course_dir.rglob("*.csv"))
-    course_hash = compute_course_hash(course_dir, extra_files=csv_files)
+    course_hash = compute_anki_hash(course_dir, csv_files)
 
     master_apkg = static_base / course_slug / "resources" / f"{course_slug}.apkg"
 
