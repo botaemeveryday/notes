@@ -1,7 +1,11 @@
 ---
 title: "Технологии программирования на Java"
-description: "Макаревич Роман Дмитриевич"
+teacher: "Макаревич Роман Дмитриевич"
 semester: 4
+accent: 1
+noteType: ai-pro
+aiModel:  "Claude Opus 4.8"
+aiSource: "презентации"
 ---
 
 Конспекты, составленные по презентациям...

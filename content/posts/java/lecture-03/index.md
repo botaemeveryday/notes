@@ -1,6 +1,6 @@
 ---
-title: Лекция 3
-description: Collection Framework и Stream API
+title: Коллекции
+description: Пакеты Java и организация классов, а также Collection Framework и Stream API. Разбирается, как устроены коллекции и потоковая обработка данных в Java.
 weight: 3
 tags:
   - Java
