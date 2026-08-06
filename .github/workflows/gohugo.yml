@@ -61,12 +61,17 @@ jobs:
             echo "content=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Собрать контрибьюторов
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/collect-contributors.py
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Снапшот контрибьюторов в артефакты прогона
+        uses: actions/upload-artifact@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          name: contributors-${{ github.run_number }}
+          path: data/contributors.json
+          retention-days: 90
 
       - name: Restore артефактов генераторов
         id: gen-cache
