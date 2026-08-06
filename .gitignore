@@ -7,6 +7,7 @@
 
 .hugo_build.lock
 output.css
+contributors.json
 
 /public
 /resources/
