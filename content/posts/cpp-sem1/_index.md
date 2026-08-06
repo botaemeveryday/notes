@@ -1,7 +1,8 @@
 ---
 title: "Основы Программирования"
-description: "Хвастунов Александр Павлович"
+teacher: "Хвастунов Александр Павлович"
 semester: 1
+accent: 1
 ---
 
 <a href="resources/cpp-sem1_gen.pdf" class="btn rounded-full no-underline">
