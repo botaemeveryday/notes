@@ -1,8 +1,10 @@
 ---
 title: "Операционные системы"
-description: "Маятин Александр Владимирович"
+teacher: "Маятин Александр Владимирович"
 semester: 4
 accent: 5
+noteType: human
+aiModel:  "Claude Opus 4.8"
 ---
 
 <a href="resources/operation-systems_gen.pdf" class="btn rounded-full no-underline">
