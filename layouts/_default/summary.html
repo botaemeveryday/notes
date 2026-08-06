@@ -34,9 +34,17 @@
 
 {{ $siblings := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink }}
 {{ $total := len $siblings }}
+{{ $maxWeight := 0 }}
+{{ range $siblings }}{{ if gt .Weight $maxWeight }}{{ $maxWeight = .Weight }}{{ end }}{{ end }}
+{{ if gt $maxWeight 0 }}{{ $total = $maxWeight }}{{ end }}
+
 {{ $n := 1 }}
+{{ if gt .Weight 0 }}
+  {{ $n = .Weight }}
+{{ else }}
 {{ range $i, $p := $siblings }}
   {{ if eq $p.RelPermalink $.RelPermalink }}{{ $n = add $i 1 }}{{ end }}
+  {{ end }}
 {{ end }}
 {{ $nn := printf "%02d" $n }}
 
