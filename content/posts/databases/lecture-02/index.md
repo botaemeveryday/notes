@@ -6,7 +6,7 @@ tags:
   - Базы Данных
   - 3 Семестр
 
-description: Лекция 2
+description: Базовые понятия баз данных — сама БД, модель данных, СУБД и ERD-диаграммы. Закладывается терминологический фундамент для дальнейшего изучения реляционной модели.
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4

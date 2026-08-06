@@ -6,7 +6,7 @@ tags:
   - Базы Данных
   - 3 Семестр
 
-description: Лекция 6
+description: Индексы как способ ускорить поиск и выборку данных из таблиц. Рассматриваются их устройство и роль в поддержании ограничений целостности вроде UNIQUE и PRIMARY KEY.
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4

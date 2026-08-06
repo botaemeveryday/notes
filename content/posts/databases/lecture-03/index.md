@@ -6,7 +6,7 @@ tags:
   - Базы Данных
   - 3 Семестр
 
-description: Лекция 3
+description: Термины отношения, кортежа и атрибута, а также виды ключей в реляционных таблицах. Объясняется разница между первичным, потенциальным и внешним ключом.
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4

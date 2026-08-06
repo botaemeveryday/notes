@@ -6,7 +6,7 @@ tags:
   - Базы Данных
   - 3 Семестр
 
-description: Лекция 9
+description: Этапы выполнения SQL-запроса — от лексического и синтаксического разбора до плана выполнения. Разбирается команда EXPLAIN как инструмент анализа работы запроса.
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4

@@ -6,7 +6,7 @@ tags:
   - Базы Данных
   - 3 Семестр
 
-description: Лекция 8
+description: Внутреннее устройство хранения данных на примере хеш-таблицы как движка с append-only логом. Показывается, как ключи отображаются на смещения в файле для быстрого доступа.
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4

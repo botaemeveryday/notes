@@ -4,7 +4,7 @@ date: 2025-11-07
 tags:
   - Базы Данных
   - 3 Семестр
-description: Лекция 10
+description: Понятие безопасной системы и модель CIA Triad — конфиденциальность, целостность и доступность. Разбираются угрозы и подходы к защите данных в СУБД.
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4
