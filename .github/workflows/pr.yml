@@ -1,0 +1,143 @@
+# Проверка Pull Request.
+#
+# Ничего не публикует — только говорит, соберётся ли сайт и не сломает ли
+# правка что-нибудь ещё. Деплой остаётся в отдельном workflow на main.
+#
+# Задачи разнесены намеренно: автор PR должен видеть, что именно не так,
+# а не «один красный крестик».
+
+name: PR
+
+on:
+  pull_request:
+    branches: [main]
+
+# Новый пуш в ту же ветку отменяет предыдущий прогон.
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  HUGO_VERSION: 0.148.1
+
+jobs:
+  # ── 1. Front matter и структура папок ──────────────────────────────────
+  content:
+    name: Конспекты
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install pyyaml
+
+      - name: Проверить структуру и front matter
+        run: python scripts/check-content.py
+
+  # ── 2. Собирается ли сайт ──────────────────────────────────────────────
+  build:
+    name: Сборка
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # нужна полная история для контрибьюторов
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Установить Hugo
+        run: |
+          wget -qO hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+          sudo dpkg -i hugo.deb
+
+      # Аватарки и пережатые картинки переживают прогоны — иначе каждая
+      # сборка заново ходит на github.com.
+      - name: Кеш ресурсов Hugo
+        uses: actions/cache@v4
+        with:
+          path: |
+            resources/_gen
+            /tmp/hugo_cache
+          key: hugo-${{ runner.os }}-${{ hashFiles('content/**/*.md', 'hugo.toml') }}
+          restore-keys: hugo-${{ runner.os }}-
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Собрать контрибьюторов
+        run: python scripts/collect-contributors.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # --printPathWarnings ловит коллизии адресов: две лекции с одним
+      # слагом молча перетирают друг друга, если на них не смотреть.
+      - name: Hugo build
+        run: hugo --gc --minify --printPathWarnings --baseURL "/"
+
+      - name: Отчёт о размере
+        run: |
+          echo "### Размер сборки" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          du -sh public >> $GITHUB_STEP_SUMMARY
+          find public -name '*.html' | wc -l | xargs echo "HTML страниц:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: public
+          retention-days: 7
+
+  # ── 3. Битые ссылки в собранном сайте ──────────────────────────────────
+  links:
+    name: Ссылки
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: public
+
+      # Внешние ссылки проверяем мягко: чужой сайт лежит — это не повод
+      # блокировать конспект. Внутренние битые ссылки роняют проверку.
+      - name: Внутренние ссылки
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --include-fragments --no-progress 'public/**/*.html'
+          fail: true
+
+      - name: Внешние ссылки (не блокирует)
+        uses: lycheeverse/lychee-action@v2
+        continue-on-error: true
+        with:
+          args: --scheme https --max-concurrency 8 --no-progress 'public/**/*.html'
+          fail: false
+
+  # ── 4. Conventional Commits в заголовке PR ─────────────────────────────
+  title:
+    name: Заголовок PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Проверить формат
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if ! echo "$TITLE" | grep -Eq '^(feat|fix|docs|style|refactor|chore)(\([a-z0-9._-]+\))?!?: .+'; then
+            echo "::error::Заголовок «$TITLE» не по Conventional Commits."
+            echo "Ожидается: feat(cpp): лекция про concepts"
+            echo "Типы: feat, fix, docs, style, refactor, chore"
+            exit 1
+          fi
