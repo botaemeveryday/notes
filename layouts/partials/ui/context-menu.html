@@ -1,26 +1,90 @@
-<div id="custom-context-menu" class="fixed z-[9999] hidden flex-col gap-1 p-2 bg-base-100/80 backdrop-blur-xl border border-base-300 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl w-60 origin-top-left transition-opacity duration-150 opacity-0 select-none">
+<template id="context-menu-tpl">
+  <div id="custom-context-menu" class="fixed z-[9999] hidden flex-col gap-1 p-2 bg-base-100/80 backdrop-blur-xl border border-base-300 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl w-60 origin-top-left transition-opacity duration-150 opacity-0 select-none">
 
-  <button type="button" id="ctx-copy-text" data-ctx="copy-text" class="hidden items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
-    <ion-icon name="copy-outline" class="text-lg opacity-70"></ion-icon> Копировать текст
-  </button>
+    <button type="button" id="ctx-copy-text" data-ctx="copy-text" class="hidden items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
+      <ion-icon name="copy-outline" class="text-lg opacity-70"></ion-icon> Копировать текст
+    </button>
 
-  <hr id="ctx-divider" class="hidden border-base-300 my-1">
+    <hr id="ctx-divider" class="hidden border-base-300 my-1">
 
-  <button type="button" data-ctx="copy-url" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
-    <ion-icon name="link-outline" class="text-lg opacity-70"></ion-icon> Скопировать ссылку
-  </button>
+    <button type="button" data-ctx="copy-url" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
+      <ion-icon name="link-outline" class="text-lg opacity-70"></ion-icon> Скопировать ссылку
+    </button>
 
-  <button type="button" data-ctx="share" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
-    <ion-icon name="share-social-outline" class="text-lg opacity-70"></ion-icon> Поделиться
-  </button>
+    <button type="button" data-ctx="share" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
+      <ion-icon name="share-social-outline" class="text-lg opacity-70"></ion-icon> Поделиться
+    </button>
 
-  <hr class="border-base-300 my-1">
+    <hr class="border-base-300 my-1">
 
-  <button type="button" data-ctx="top" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors">
-    <ion-icon name="arrow-up-outline" class="text-lg opacity-70"></ion-icon> Наверх страницы
-  </button>
+    <button type="button" data-ctx="top" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors">
+      <ion-icon name="arrow-up-outline" class="text-lg opacity-70"></ion-icon> Наверх страницы
+    </button>
 
-  <a href="{{ site.BaseURL }}" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors no-underline text-base-content">
-    <ion-icon name="home-outline" class="text-lg opacity-70"></ion-icon> На главную
-  </a>
-</div>
+    <a href="{{ site.BaseURL }}" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors no-underline text-base-content">
+      <ion-icon name="home-outline" class="text-lg opacity-70"></ion-icon> На главную
+    </a>
+
+  </div>
+</template>
+
+<script>
+(function () {
+  'use strict';
+
+  let ctxMenuEl = null;
+  let isMounted = false;
+
+  function mountContextMenu() {
+    if (isMounted) return;
+    const tpl = document.getElementById('context-menu-tpl');
+    if (!tpl) return;
+
+    document.body.appendChild(tpl.content.cloneNode(true));
+    ctxMenuEl = document.getElementById('custom-context-menu');
+    isMounted = true;
+
+    ctxMenuEl.addEventListener('click', function (e) {
+      const btn = e.target.closest('[data-ctx]');
+      if (!btn) return;
+      const action = btn.dataset.ctx;
+
+      if (action === 'copy-url') {
+        navigator.clipboard.writeText(window.location.href);
+      } else if (action === 'top') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (action === 'share' && navigator.share) {
+        navigator.share({ title: document.title, url: window.location.href }).catch(function(){});
+      }
+      hideMenu();
+    });
+  }
+
+  function showMenu(x, y) {
+    mountContextMenu();
+    if (!ctxMenuEl) return;
+
+    ctxMenuEl.classList.remove('hidden');
+    requestAnimationFrame(function () {
+      ctxMenuEl.style.left = Math.min(x, window.innerWidth - 250) + 'px';
+      ctxMenuEl.style.top = Math.min(y, window.innerHeight - 250) + 'px';
+      ctxMenuEl.classList.remove('opacity-0');
+    });
+  }
+
+  function hideMenu() {
+    if (!ctxMenuEl) return;
+    ctxMenuEl.classList.add('opacity-0');
+    setTimeout(function () { ctxMenuEl.classList.add('hidden'); }, 150);
+  }
+
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    showMenu(e.clientX, e.clientY);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (isMounted && !ctxMenuEl.contains(e.target)) hideMenu();
+  });
+})();
+</script>
