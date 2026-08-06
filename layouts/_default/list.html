@@ -1,12 +1,18 @@
 {{ define "main" }}
-{{- $pages := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink -}}
+{{- $pages := partialCached "utils/section-pages-display.html" . .CurrentSection.RelPermalink -}}
 {{- $count := len $pages -}}
 {{- $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "лекция" "лекции" "лекций")) -}}
+{{- $accent := partial "utils/accent.html" . -}}
+{{- $slug := path.Base (strings.TrimSuffix "/" .RelPermalink) -}}
+{{- $subject := string (.Params.subject | default $slug) -}}
+
+<div class="cn-accent cn-a{{ $accent }} container mx-auto px-4 py-6 md:py-8 max-w-7xl"
+     data-cn-course data-subject="{{ $subject }}" data-variant="{{ $slug }}">
 
 <div class="container mx-auto px-4 py-6 md:py-8 max-w-7xl">
 
   <nav class="flex items-center gap-2 text-xs md:text-sm text-base-content/50 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
-    <a href="{{ site.Home.RelPermalink }}" class="hover:text-primary transition-colors flex items-center gap-1">
+    <a href="{{ site.Home.RelPermalink }}" class="hover:cn-ink transition-colors flex items-center gap-1">
       <ion-icon name="home-outline"></ion-icon> Главная
     </a>
     {{ with .Params.semester }}
@@ -19,7 +25,8 @@
 
   <div class="bg-base-200/40 border border-base-300/50 rounded-3xl md:rounded-[2rem] p-6 md:p-10 mb-10 relative overflow-hidden shadow-sm">
 
-    <div class="absolute -top-20 -right-20 w-48 h-48 md:w-64 md:h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -top-20 -right-20 w-48 h-48 md:w-64 md:h-64 rounded-full blur-3xl pointer-events-none transform-gpu translate-z-0 backface-hidden"
+     style="background: var(--cn-ink-20)"></div>
 
     <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
 
@@ -60,7 +67,7 @@
 
         {{ with .Params.description }}
           <div class="flex items-start gap-3 bg-base-100/50 p-4 rounded-xl border border-base-300/50 max-w-2xl">
-            <ion-icon name="information-circle" class="text-primary text-xl shrink-0 mt-0.5"></ion-icon>
+            <ion-icon name="information-circle" class="cn-ink text-xl shrink-0 mt-0.5"></ion-icon>
             <p class="text-sm md:text-base text-base-content/80 m-0 leading-relaxed font-medium">
               {{ . }}
             </p>
@@ -70,12 +77,13 @@
 
       <div class="shrink-0 self-start md:self-auto w-full md:w-auto">
         <div class="flex items-center gap-3 px-5 py-3 rounded-2xl bg-base-100 border border-base-300 shadow-sm w-full md:w-auto justify-center md:justify-start">
-          <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl shrink-0">
+          <div class="w-10 h-10 rounded-full cn-tint-bg/10 cn-ink flex items-center justify-center text-xl shrink-0">
             <ion-icon name="library"></ion-icon>
           </div>
           <div class="flex flex-col text-left">
             <span class="text-[10px] text-base-content/50 uppercase tracking-widest leading-none mb-1">Всего</span>
-            <span class="text-sm font-bold text-base-content leading-none">{{ $count }} {{ $word }}</span>
+            <span id="lecture-count" data-forms="лекция|лекции|лекций"
+                  class="text-sm font-bold text-base-content leading-none">{{ $count }} {{ $word }}</span>
           </div>
         </div>
       </div>
@@ -85,7 +93,7 @@
 
   {{ with .Content }}
     <div class="mb-12 p-6 md:p-8 bg-base-100 border border-base-300 rounded-3xl shadow-sm relative overflow-hidden">
-      <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/50 to-secondary/50"></div>
+      <div class="absolute left-0 top-0 bottom-0 w-1 cn-ink-bg opacity-60"></div>
       <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none text-base-content/80 leading-relaxed prose-headings:mt-0">
         {{ . }}
       </div>
@@ -93,10 +101,14 @@
   {{ end }}
 
   {{ if gt $count 0 }}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="lecture-grid">
       {{ range $pages }}
         {{ .Render "summary" }}
       {{ end }}
+    </div>
+
+    <div id="lecture-empty" class="hidden py-16 text-center text-base-content/50 font-medium">
+      У этого лектора конспектов пока нет.
     </div>
   {{ else }}
     <div class="py-16 md:py-20 text-center flex flex-col items-center justify-center border border-dashed border-base-300 rounded-3xl bg-base-200/20 mx-2">

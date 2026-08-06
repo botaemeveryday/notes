@@ -11,36 +11,32 @@
   {{ if not $abbr }}{{ $abbr = "?" }}{{ end }}
 {{ end }}
 
-{{ $colors := dict
-  "1" "text-blue-500 bg-blue-500/10 border-blue-500 hover:shadow-blue-500/20"
-  "2" "text-emerald-500 bg-emerald-500/10 border-emerald-500 hover:shadow-emerald-500/20"
-  "3" "text-purple-500 bg-purple-500/10 border-purple-500 hover:shadow-purple-500/20"
-  "4" "text-rose-500 bg-rose-500/10 border-rose-500 hover:shadow-rose-500/20"
-  "5" "text-amber-500 bg-amber-500/10 border-amber-500 hover:shadow-amber-500/20"
-  "6" "text-cyan-500 bg-cyan-500/10 border-cyan-500 hover:shadow-cyan-500/20"
-}}
-{{ $accentClass := index $colors (string (.Params.accent | default 1)) | default (index $colors "1") }}
+{{- $accent := partial "utils/accent.html" . -}}
 
 {{ $count := len .RegularPages }}
 {{ $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "лекция" "лекции" "лекций")) }}
 
-<a href="{{ .RelPermalink }}" class="group relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-300 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden no-underline hover:-translate-y-1">
+<a href="{{ .RelPermalink }}" class="cn-accent cn-a{{ $accent }} group relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-300 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden no-underline hover:-translate-y-1">
 
-  <div class="absolute left-0 top-0 bottom-0 w-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 {{ $accentClass }} !bg-current !border-none"></div>
+  <div class="absolute left-0 top-0 bottom-0 w-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cn-ink-bg"></div>
 
   <div class="p-5 flex-1 flex flex-col z-10">
 
     <div class="flex justify-between items-start mb-4">
 
-      <div class="flex items-center justify-center w-10 h-10 rounded-xl font-black text-xs tracking-widest transition-colors duration-300 {{ $accentClass }} !border-transparent">
+      <div class="flex items-center justify-center w-10 h-10 rounded-xl font-black text-xs tracking-widest cn-tint-bg cn-ink">
         {{ $abbr }}
       </div>
 
-      {{ with .Params.tag }}
-        <span class="px-2 py-1 text-[9px] font-bold uppercase tracking-wider bg-base-200 text-base-content/50 rounded-md group-hover:bg-base-300 transition-colors">
-          {{ . }}
-        </span>
-      {{ end }}
+      <div class="flex items-center gap-2 shrink-0">
+        {{ partial "ui/note-badge.html" (dict "page" . "size" "sm") }}
+
+        {{ with .Params.tag }}
+          <span class="px-2 py-1 text-[9px] font-bold uppercase tracking-wider bg-base-200 text-base-content/50 rounded-md group-hover:bg-base-300 transition-colors">
+            {{ . }}
+          </span>
+        {{ end }}
+      </div>
     </div>
 
     <h3 class="text-lg md:text-xl font-bold text-base-content mb-2 group-hover:opacity-80 transition-opacity leading-tight line-clamp-2">
@@ -50,16 +46,31 @@
     {{ with .Params.description }}
       <p class="text-sm text-base-content/60 leading-relaxed m-0 line-clamp-3">{{ . }}</p>
     {{ end }}
+
+    {{ $teachers := .Params.teachers }}
+    {{ if not $teachers }}{{ with .Params.teacher }}{{ $teachers = slice . }}{{ end }}{{ end }}
+    {{ with $teachers }}
+      <div class="flex items-start gap-1.5 mt-3 text-sm text-base-content/70">
+        <ion-icon name="person-outline" class="shrink-0 mt-0.5"></ion-icon>
+        <div class="flex flex-col gap-0.5 min-w-0">
+          {{ range . }}
+            <span class="font-medium leading-snug">{{ . }}</span>
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
   </div>
 
   <div class="px-5 py-3 border-t border-base-300/50 bg-base-200/30 flex items-center justify-between text-xs text-base-content/50 z-10">
 
-    <div class="flex items-center">
-      {{ with .Params.author }}
-        <span class="font-medium text-base-content/70 flex items-center gap-1.5">
-          <ion-icon name="person-outline"></ion-icon>
-          {{ . }}
-        </span>
+    <div class="flex items-center min-w-0">
+      {{ if not $teachers }}
+        {{ with .Params.author }}
+          <span class="font-medium text-base-content/70 flex items-center gap-1.5 truncate">
+            <ion-icon name="person-outline"></ion-icon>
+            {{ . }}
+          </span>
+        {{ end }}
       {{ end }}
     </div>
 
