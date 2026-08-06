@@ -1,0 +1,55 @@
+{{- $data := site.Data.contributors -}}
+{{- if $data -}}
+
+  {{- $exclude := slice -}}
+  {{- range (site.Params.coreAuthors | default (slice "notakeith" "salt-caramel")) -}}
+    {{- $exclude = $exclude | append (lower (string .)) -}}
+  {{- end -}}
+
+  {{- $people := slice -}}
+  {{- range $data.people -}}
+    {{- $login := lower (string (.login | default .name)) -}}
+    {{- if not (in $exclude $login) -}}
+      {{- $people = $people | append . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- with $people -}}
+    {{- $limit := int (site.Params.contributorsLimit | default 16) -}}
+    {{- $shown := first (int (math.Min $limit (len .))) . -}}
+    {{- $rest := sub (len .) (len $shown) -}}
+    {{- $repo := site.Params.githubRepo | default "botaemeveryday/notes" -}}
+
+    <div class="cn-contributors">
+      <p class="cn-contributors__title">
+        thanks to &lt;3
+      </p>
+
+      <div class="cn-contributors__grid">
+        {{ range $shown }}
+          {{- $login := string (.login | default "") -}}
+          {{- $name := .name | default $login -}}
+          {{- $commits := .commits_total | default .commits | default 0 -}}
+          {{- $tip := printf "%s — %d %s" $name (int $commits) (partial "utils/plural.html" (dict "count" (int $commits) "forms" (slice "коммит" "коммита" "коммитов"))) -}}
+          {{- with .last_commit }}{{ $tip = printf "%s, последний %s" $tip (dateFormat "02.01.2006" .) }}{{ end -}}
+
+          <a class="cn-contributor" data-cn-tip="{{ $tip }}" data-cn-tip-pos="top"
+             href="{{ .url | default (cond (ne $login "") (printf "https://github.com/%s" $login) "#") }}"
+             target="_blank" rel="noopener noreferrer">
+            {{ if $login }}
+              {{ partialCached "ui/avatar.html" (dict "handle" $login "size" 24 "class" "cn-contributor__avatar" "alt" $name) $login 24 }}
+            {{ else }}
+              <span class="cn-contributor__fallback">{{ substr $name 0 1 }}</span>
+            {{ end }}
+            <span>{{ $name }}</span>
+          </a>
+        {{ end }}
+
+        {{ if gt $rest 0 }}
+          <a class="cn-contributors__more" href="https://github.com/{{ $repo }}/graphs/contributors"
+             target="_blank" rel="noopener noreferrer">и ещё {{ $rest }}</a>
+        {{ end }}
+      </div>
+    </div>
+  {{- end -}}
+{{- end -}}
