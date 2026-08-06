@@ -1,19 +1,14 @@
-<div class="my-10 p-5 rounded-2xl border border-base-content/10 bg-base-200/50 flex gap-4 md:gap-5 shadow-sm">
-  
-  <!-- Иконка предупреждения (Щит) -->
-  <div class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-base-content/10 text-base-content/70 text-xl">
+<div class="my-10 p-5 rounded-2xl border border-base-content/10 bg-base-200/50 flex gap-4 md:gap-5 shadow-sm text-sm">
+  <div class="w-8 h-8 shrink-0 flex items-center justify-center rounded-full bg-base-content/10 text-base-content/70 text-lg">
     <ion-icon name="shield-checkmark-outline"></ion-icon>
   </div>
   
-  <!-- Текстовая часть -->
   <div class="flex-1 min-w-0">
-    <!-- Заголовок -->
-    <div class="font-bold text-base-content/90 text-sm md:text-base mb-1.5 leading-tight uppercase tracking-widest text-[10px]">
+    <div class="font-bold text-base-content/90 text-xs md:text-sm mb-1 leading-tight uppercase tracking-widest">
       Отказ от ответственности
     </div>
     
-    <!-- Само содержимое. Если текст не передан, используется дефолтный -->
-    <div class="prose-p:my-0 prose-p:leading-relaxed text-sm md:text-base text-base-content/70 italic">
+    <div class="prose-p:my-0 prose-p:leading-relaxed text-[0.7rem] md:text-xs text-base-content/70 italic">
       {{ if .Inner }}
         {{ .Inner | markdownify }}
       {{ else }}
@@ -21,5 +16,4 @@
       {{ end }}
     </div>
   </div>
-  
 </div>

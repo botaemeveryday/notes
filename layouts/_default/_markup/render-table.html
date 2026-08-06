@@ -1,0 +1,28 @@
+{{/*
+  Таблицы в конспектах регулярно шире экрана телефона.
+  Обёртка даёт прокрутку самой таблице, не утаскивая страницу.
+  tabindex делает область доступной с клавиатуры.
+*/}}
+<div class="my-6 -mx-4 overflow-x-auto px-4 md:mx-0 md:px-0"
+     tabindex="0" role="region" aria-label="Таблица">
+  <table class="w-full min-w-max border-collapse text-sm md:text-base">
+    <thead>
+      <tr>
+        {{- range .THead }}{{- range . }}
+        <th class="border-b-2 border-base-300 px-4 py-2.5 text-left font-semibold text-base-content"
+            {{- with .Alignment }} style="text-align:{{ . }}"{{ end }}>{{ .Text }}</th>
+        {{- end }}{{- end }}
+      </tr>
+    </thead>
+    <tbody>
+      {{- range .TBody }}
+      <tr class="border-b border-base-300 last:border-0">
+        {{- range . }}
+        <td class="px-4 py-2.5 align-top text-base-content"
+            {{- with .Alignment }} style="text-align:{{ . }}"{{ end }}>{{ .Text }}</td>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </tbody>
+  </table>
+</div>
