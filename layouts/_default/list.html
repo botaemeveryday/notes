@@ -28,6 +28,36 @@
           {{ .Title }}
         </h1>
 
+        {{ with partial "ui/note-badge.html" (dict "page" . "size" "md") }}
+          <div class="mb-4">{{ . }}</div>
+        {{ end }}
+
+        {{ $teachers := .Params.teachers }}
+        {{ if not $teachers }}{{ with .Params.teacher }}{{ $teachers = slice . }}{{ end }}{{ end }}
+        {{ with $teachers }}
+          <div class="mb-4">
+            {{ if eq (len .) 1 }}
+              <div class="flex items-center gap-2 text-base font-semibold text-base-content/80">
+                <ion-icon name="person-outline" class="cn-ink text-xl shrink-0 mt-0.5"></ion-icon></ion-icon>
+                <span>{{ index . 0 }}</span>
+              </div>
+            {{ else }}
+              <div class="flex flex-wrap items-center gap-2" data-lecturer-filter data-lecturer-key="{{ $.RelPermalink }}">
+                <span class="text-[10px] font-semibold uppercase tracking-widest text-base-content/40 mr-1">Лектор</span>
+
+                <button type="button" data-lecturer="" data-lecturer-slug=""
+                        class="cn-lecturer-btn is-active">Все</button>
+
+                {{ range . }}
+                  {{ $surname := index (split . " ") 0 }}
+                  <button type="button" data-lecturer="{{ . }}" data-lecturer-slug="{{ $surname | lower }}" data-cn-tip="{{ . }}"
+                          class="cn-lecturer-btn">{{ $surname }}</button>
+                {{ end }}
+              </div>
+            {{ end }}
+          </div>
+        {{ end }}
+
         {{ with .Params.description }}
           <div class="flex items-start gap-3 bg-base-100/50 p-4 rounded-xl border border-base-300/50 max-w-2xl">
             <ion-icon name="information-circle" class="text-primary text-xl shrink-0 mt-0.5"></ion-icon>

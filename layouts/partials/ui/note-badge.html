@@ -1,0 +1,46 @@
+{{- $p := .page -}}
+
+{{- $src := $p -}}
+{{- if and (not ($p.Params.noteType | default $p.Params.notetype)) (not $p.IsSection) -}}
+  {{- $src = $p.CurrentSection -}}
+{{- end -}}
+
+{{- $type := lower (string ($src.Params.noteType | default $src.Params.notetype | default "human")) -}}
+{{- $model := $src.Params.aiModel | default $src.Params.aimodel -}}
+{{- $source := $src.Params.aiSource | default $src.Params.aisource -}}
+{{- $sm := ne (.size | default "sm") "md" -}}
+
+{{- $label := "" }}{{ $icon := "" }}{{ $style := "" }}{{ $tip := "" -}}
+
+{{- if eq $type "ai" -}}
+  {{- $label = "Нейроконспект" -}}
+  {{- $icon = "sparkles-outline" -}}
+  {{- $style = "background: var(--tint-4); color: var(--ink-4);" -}}
+  {{- $tip = "Нейроконспект — сгенерирован моделью ИИ." -}}
+  {{- with $model }}{{ $tip = printf "%s Модель: %s." $tip . }}{{ end -}}
+  {{- with $source }}{{ $tip = printf "%s Источник: %s." $tip . }}{{ end -}}
+
+{{- else if or (eq $type "ai-pro") (eq $type "aipro") -}}
+  {{- $label = "Нейроконспект" -}}
+  {{- $icon = "sparkles" -}}
+  {{- $style = "background: var(--tint-2); color: var(--ink-2);" -}}
+  {{- $tip = "Нейроконспект моделью повышенной точности." -}}
+  {{- with $model }}{{ $tip = printf "%s Модель: %s." $tip . }}{{ end -}}
+  {{- with $source }}{{ $tip = printf "%s Источник: %s." $tip . }}{{ end -}}
+
+{{- else -}}
+  {{- $label = "Авторский" -}}
+  {{- $icon = "create-outline" -}}
+  {{- $style = "" -}}
+  {{- if $model -}}
+    {{- $tip = printf "Авторский конспект. ИИ помогал только с оформлением и структурой. Модель: %s." $model -}}
+  {{- else -}}
+    {{- $tip = "Авторский конспект — написан человеком без использования ИИ." -}}
+  {{- end -}}
+{{- end -}}
+
+<span class="inline-flex items-center gap-1.5 rounded-full font-bold shrink-0 {{ if not $style }}bg-base-200 text-base-content/70{{ end }} {{ if $sm }}px-2.5 py-1 text-[11px]{{ else }}px-3.5 py-1.5 text-sm{{ end }}"
+      {{ with $style }}style="{{ . | safeCSS }}"{{ end }}
+      data-cn-tip="{{ $tip }}">
+  {{ $label }}
+</span>
