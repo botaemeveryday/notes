@@ -1,10 +1,15 @@
 {{ if site.Params.showTableOfContents }}
-<div class="sticky top-24"
+{{- /* Разметка намеренно совпадает с sidebar-left.html. Список внутри
+       рисует Hugo (.TableOfContents), поэтому его пункты подгоняются под
+       .cn-side__link селекторами в input.css. */ -}}
+<nav class="cn-side" aria-label="Содержание лекции"
      data-toc
-     data-active-class="menu-active text-primary font-bold">
-  <div class="text-sm font-bold text-base-content/50 uppercase tracking-wider mb-4 border-l-4 border-primary pl-2">Содержание</div>
-  <div class="text-sm text-base-content/70 custom-scrollbar max-h-[calc(100vh-10rem)] overflow-y-auto">
-    {{ .TableOfContents }}
+     data-active-class="cn-side__link--active">
+  <div class="cn-side__head">
+    <span class="cn-side__bar"></span>
+    <span class="cn-side__title">Содержание</span>
   </div>
-</div>
+
+  {{ .TableOfContents }}
+</nav>
 {{ end }}
