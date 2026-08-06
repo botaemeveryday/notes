@@ -1,0 +1,37 @@
+{{- $size := int (.size | default 40) -}}
+{{- $class := .class | default "rounded-full object-cover bg-base-300" -}}
+{{- $alt := .alt | default (.handle | default "") -}}
+{{- $tip := .tip | default "" -}}
+{{- $px := mul $size 2 -}}
+
+{{- $src := .src | default "" -}}
+{{- if and (not $src) .handle -}}
+  {{- $src = printf "https://github.com/%s.png?size=%d" .handle $px -}}
+{{- end -}}
+
+{{- $final := $src -}}
+
+{{- with $src -}}
+  {{- with try (resources.GetRemote .) -}}
+    {{- with .Err -}}
+      {{- warnf "ui/avatar: не скачалась %s (%s) — оставляю прямую ссылку" $src . -}}
+    {{- else with .Value -}}
+      {{- $img := . -}}
+      {{- /* Пережимаем только растр: svg Hugo ресайзить не умеет,
+             да и незачем. */ -}}
+      {{- if and (eq .MediaType.MainType "image") (ne .MediaType.SubType "svg") -}}
+        {{- $img = $img.Fill (printf "%dx%d webp q82 Center" $px $px) -}}
+      {{- end -}}
+      {{- $final = $img.RelPermalink -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if $final -}}
+<img src="{{ $final }}" alt="{{ $alt }}" width="{{ $size }}" height="{{ $size }}"
+     loading="lazy" decoding="async" class="{{ $class }} m-0"
+     {{ with $tip }}data-cn-tip="{{ . }}"{{ end }} />
+{{- else -}}
+<span class="{{ .fallbackClass | default $class }}"
+      {{ with $tip }}data-cn-tip="{{ . }}"{{ end }}>{{ .fallbackText | default (substr $alt 0 1) }}</span>
+{{- end -}}
