@@ -198,3 +198,110 @@
     initContextMenu();
   });
 })();
+
+(function () {
+  'use strict';
+
+  var GAP = 8;
+  var DELAY = 120;
+  var tip = null;
+  var target = null;
+  var showTimer = null;
+  var hideTimer = null;
+
+  function ensure() {
+    if (tip) return tip;
+    tip = document.createElement('div');
+    tip.className = 'cn-tip';
+    tip.setAttribute('role', 'tooltip');
+    tip.id = 'cn-tip';
+    document.body.appendChild(tip);
+    return tip;
+  }
+
+  function place(el) {
+    var box = el.getBoundingClientRect();
+    var w = tip.offsetWidth;
+    var h = tip.offsetHeight;
+    var prefersTop = el.dataset.cnTipPos === 'top';
+
+    var top = prefersTop ? box.top - h - GAP : box.bottom + GAP;
+    if (!prefersTop && top + h > window.innerHeight - 4) top = box.top - h - GAP;
+    if (top < 4) top = Math.min(box.bottom + GAP, window.innerHeight - h - 4);
+
+    var left = box.left;
+    if (left + w > window.innerWidth - 8) left = window.innerWidth - w - 8;
+    if (left < 8) left = 8;
+
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+
+  function show(el) {
+    var text = el.getAttribute('data-cn-tip');
+    if (!text) return;
+    ensure();
+    clearTimeout(hideTimer);
+    target = el;
+    tip.textContent = text;
+    tip.style.visibility = 'hidden';
+    tip.dataset.open = '0';
+    requestAnimationFrame(function () {
+      if (target !== el) return;
+      tip.style.visibility = '';
+      place(el);
+      tip.dataset.open = '1';
+      el.setAttribute('aria-describedby', 'cn-tip');
+    });
+  }
+
+  function hide() {
+    clearTimeout(showTimer);
+    if (!tip || !target) return;
+    target.removeAttribute('aria-describedby');
+    target = null;
+    tip.dataset.open = '0';
+    hideTimer = setTimeout(function () {
+      if (!target) tip.textContent = '';
+    }, 200);
+  }
+
+  function pick(node) {
+    return node && node.closest ? node.closest('[data-cn-tip]') : null;
+  }
+
+  function schedule(el) {
+    clearTimeout(showTimer);
+    if (!el || el === target) return;
+    if (el.title) { el.dataset.cnTitle = el.title; el.removeAttribute('title'); }
+    showTimer = setTimeout(function () { show(el); }, DELAY);
+  }
+
+  document.addEventListener('pointerover', function (e) {
+    if (e.pointerType === 'touch') return;
+    var el = pick(e.target);
+    if (el) schedule(el); else hide();
+  }, { passive: true });
+
+  document.addEventListener('pointerdown', function (e) {
+    var el = pick(e.target);
+    if (!el) { hide(); return; }
+    if (e.pointerType === 'touch') {
+      show(el);
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(hide, 2600);
+    }
+  }, { passive: true });
+
+  document.addEventListener('focusin', function (e) {
+    var el = pick(e.target);
+    if (el) schedule(el); else hide();
+  });
+
+  document.addEventListener('focusout', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide, { passive: true });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') hide();
+  });
+})();
