@@ -2,4 +2,9 @@
 {{- if not $section.IsSection -}}
   {{- $section = $section.CurrentSection -}}
 {{- end -}}
-{{- return $section.RegularPages.ByDate.ByWeight -}}
+
+{{- $byDate := sort $section.RegularPages "Date" "asc" -}}
+{{- $pages := sort (where $byDate "Weight" "!=" 0) "Weight" "asc" -}}
+{{- $pages = $pages | append (where $byDate "Weight" 0) -}}
+
+{{- return $pages -}}
