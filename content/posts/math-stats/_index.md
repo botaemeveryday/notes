@@ -1,11 +1,14 @@
 ---
 title: "Математическая статистика"
-description: "Лимар Иван Александрович"
+teacher: "Лимар Иван Александрович"
 semester: 4
 accent: 2
 generate:
   pdf: false
   ai: false
+noteType: ai-pro
+aiModel:  "Claude Opus 4.6"
+aiSource: "аудиозапись лекции"
 ---
 
 Конспекты лекций по Математической статистике **Ивана Александровича Лимара**.\
