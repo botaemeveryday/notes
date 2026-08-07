@@ -559,22 +559,106 @@ a[data-cn-tip], button[data-cn-tip], [data-cn-tip] a { cursor: pointer; }
          flex items-center justify-center text-sm font-bold uppercase;
 }
 
-.cn-teacher-list { @apply flex flex-col gap-1 min-w-0; }
+/* ── Карточка предмета на главной ─────────────────────────────────────
+   Одна карточка = один предмет. Внутри — варианты «преподаватель + автор»,
+   раскрываются нативным <details>. */
 
-.cn-teacher-list__row {
-  @apply flex items-center gap-1.5 text-sm text-base-content/70 leading-snug min-w-0;
+.cn-subject {
+  @apply relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-300
+         shadow-sm overflow-hidden transition-shadow duration-300;
 }
 
-.cn-teacher-list__row[data-remembered="1"] {
-  @apply font-semibold text-base-content;
-}
+.cn-subject:hover { @apply shadow-md; }
 
-.cn-teacher-list__dot {
-  @apply w-1.5 h-1.5 rounded-full shrink-0 opacity-0;
+.cn-subject__bar {
+  @apply absolute left-0 top-0 bottom-0 w-1.5 opacity-0 transition-opacity duration-300;
   background-color: var(--cn-ink);
 }
 
-.cn-teacher-list__row[data-remembered="1"] .cn-teacher-list__dot { @apply opacity-100; }
+.cn-subject:hover .cn-subject__bar { @apply opacity-100; }
+
+.cn-subject__body { @apply relative z-10 p-5 flex-1 flex flex-col; }
+
+.cn-subject__top { @apply flex justify-between items-start gap-3 mb-4; }
+
+.cn-subject__abbr {
+  @apply flex items-center justify-center w-10 h-10 rounded-xl shrink-0
+         font-black text-xs tracking-widest;
+}
+
+.cn-subject__teachers-count {
+  @apply text-sm font-bold text-base-content/70 whitespace-nowrap;
+}
+
+.cn-subject__tag {
+  @apply px-2 py-1 text-[9px] font-bold uppercase tracking-wider
+         bg-base-200 text-base-content/50 rounded-md;
+}
+
+.cn-subject__title { @apply text-lg md:text-xl font-bold leading-tight m-0 mb-2; }
+
+.cn-subject__title a {
+  @apply no-underline text-base-content line-clamp-2 transition-colors;
+}
+
+.cn-subject__title a:hover { color: var(--cn-ink); }
+
+.cn-subject__desc { @apply text-sm text-base-content/60 leading-relaxed m-0 line-clamp-3; }
+
+.cn-subject__single {
+  @apply flex items-start gap-1.5 mt-3 text-sm font-medium text-base-content/70;
+}
+
+.cn-subject__disc { @apply mt-4; }
+
+.cn-subject__summary {
+  @apply flex items-center justify-between gap-2 list-none cursor-pointer select-none
+         text-sm text-base-content/60 transition-colors;
+}
+
+.cn-subject__summary::-webkit-details-marker { display: none; }
+.cn-subject__summary:hover { @apply text-base-content; }
+
+.cn-subject__chev { @apply text-base opacity-50 transition-transform duration-200; }
+.cn-subject__disc[open] .cn-subject__chev { transform: rotate(180deg); }
+
+.cn-subject__rows { @apply flex flex-col gap-2 mt-3; }
+
+.cn-subject__row {
+  @apply grid items-center gap-x-3 gap-y-1 p-3 rounded-xl no-underline
+         bg-base-200/50 text-base-content transition-colors;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.cn-subject__row:hover { @apply bg-base-200; }
+
+.cn-subject__row[data-remembered="1"] {
+  background-color: var(--cn-ink-08);
+  box-shadow: inset 0 0 0 1px var(--cn-ink-20);
+}
+
+.cn-subject__row-name { @apply font-bold text-[15px] leading-snug truncate; }
+.cn-subject__row-badge { @apply justify-self-end; }
+
+.cn-subject__row-author {
+  @apply flex items-center gap-1.5 min-w-0 text-sm text-base-content/50;
+}
+
+.cn-subject__row-count {
+  @apply justify-self-end whitespace-nowrap text-sm text-base-content/50;
+}
+
+.cn-subject__foot {
+  @apply relative z-10 px-5 py-3 flex items-center justify-end
+         border-t border-base-300/50 bg-base-200/30
+         text-xs font-medium text-base-content/50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-subject,
+  .cn-subject__bar,
+  .cn-subject__chev { transition: none; }
+}
 
 .cn-contributors { @apply w-full mb-6; }
 
