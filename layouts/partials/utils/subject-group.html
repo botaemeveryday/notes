@@ -1,0 +1,13 @@
+{{- $sec := . -}}
+{{- if not $sec.IsSection }}{{ $sec = $sec.CurrentSection }}{{ end -}}
+
+{{- $slug := path.Base (strings.TrimSuffix "/" $sec.RelPermalink) -}}
+{{- $key := lower (string ($sec.Params.subject | default $slug)) -}}
+
+{{- $found := dict "key" $key "title" $sec.Title "primary" $sec "variants" slice "teachers" slice "total" 0 "semester" (int ($sec.Params.semester | default 0)) -}}
+
+{{- range partialCached "utils/subject-groups.html" $sec "cn-all-groups" -}}
+  {{- if eq .key $key }}{{ $found = . }}{{ end -}}
+{{- end -}}
+
+{{- return $found -}}

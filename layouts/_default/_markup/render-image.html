@@ -1,0 +1,18 @@
+{{- $alt := .Text -}}
+{{- $caption := .Title -}}
+{{- $src := .Destination | safeURL -}}
+{{- $isSvg := strings.Contains (lower .Destination) ".svg" -}}
+
+<figure class="my-8">
+  <img src="{{ $src }}"
+       alt="{{ $alt }}"
+       loading="lazy"
+       decoding="async"
+       class="mx-auto rounded-box{{ if $isSvg }} invert-dark{{ end }}">
+
+  {{- with $caption }}
+  <figcaption class="mt-3 text-center">
+    <span class="hand text-base text-neutral">{{ . }}</span>
+  </figcaption>
+  {{- end }}
+</figure>

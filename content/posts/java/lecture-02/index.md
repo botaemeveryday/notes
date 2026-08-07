@@ -1,6 +1,6 @@
 ---
-title: Лекция 2
-description: Сборка мусора (Garbage Collection)
+title: Garbage Collection
+description: Сборка мусора как автоматическое управление памятью в managed-языках. Объясняется проблема утечек памяти в языках вроде C/C++ и то, как GC решает её без ручного delete/free.
 weight: 2
 tags:
   - Java

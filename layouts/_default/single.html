@@ -1,25 +1,17 @@
-{{ define "title" }}{{ .Title }}{{ end }}
-{{ define "css" }}{{ end }}
-
 {{ define "main" }}
 <div class="lg:grid lg:grid-cols-4 gap-8 mt-4 px-4 container mx-auto">
 
-  {{ if not .Params.hideLeftSidebar }}
   <aside class="hidden lg:block lg:col-span-1">
-    {{ partial "post/sidebar-left.html" . }}
+    {{ if not .Params.hideLeftSidebar }}{{ partial "post/sidebar-left.html" . }}{{ end }}
   </aside>
-  {{ else }}
-  <aside class="hidden lg:block lg:col-span-1">
-  </aside>
-  {{ end }}
 
   <main class="lg:col-span-2">
-    <article class="mx-auto prose prose-quoteless dark:prose-invert max-w-none" id="dream-single-post-main" itemscope itemtype="http://schema.org/Article">
+    <article class="mx-auto prose prose-quoteless dark:prose-invert max-w-none" id="post-main" itemscope itemtype="http://schema.org/Article">
       {{ template "_internal/schema.html" . }}
 
       {{ partial "post/header.html" . }}
 
-      <section id="dream-single-post-content" itemprop="articleBody">
+      <section id="post-content" itemprop="articleBody">
         {{ .Content | emojify }}
       </section>
 

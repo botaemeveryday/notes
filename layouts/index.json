@@ -1,35 +1,31 @@
-{{- $searchIndex := slice -}}
+{{- $index := slice -}}
 
-{{- with site.GetPage "section" "posts" -}}
-  {{- range .Sections -}}
-    {{- if not .Draft -}}
-      {{- $html := partial "ui/section-card.html" . -}}
-      {{- $searchIndex = $searchIndex | append (dict
-        "id" .RelPermalink
-        "kind" "section"
-        "title" .Title
-        "content" (.Plain | default .Description)
-        "tags" (.Params.tags | default slice)
-        "html" $html
-      ) -}}
-    {{- end -}}
+{{- range partialCached "utils/subject-groups.html" . "cn-all-groups" -}}
+  {{- $g := . -}}
+  {{- $text := slice (delimit $g.teachers " ") -}}
+  {{- range $g.variants -}}
+    {{- $text = $text | append (delimit .authors " ") -}}
+    {{- $text = $text | append .year -}}
+    {{- $text = $text | append (replaceRE `\s+` " " (or .page.Plain (string .page.Description)) | chomp) -}}
   {{- end -}}
-{{- end -}}
 
-{{- $allPosts := where site.RegularPages "Type" "posts" -}}
-{{- $allPosts = where $allPosts "IsSection" false -}}
-{{- $allPosts = where $allPosts "Draft" false -}}
-
-{{- range $allPosts -}}
-  {{- $html := .Render "summary" -}}
-  {{- $searchIndex = $searchIndex | append (dict
-    "id" .RelPermalink
-    "kind" "post"
-    "title" .Title
-    "content" .Plain
-    "tags" (.Params.tags | default slice)
-    "html" $html
+  {{- $index = $index | append (dict
+    "id" $g.primary.RelPermalink
+    "title" $g.title
+    "content" (chomp (replaceRE `\s+` " " (delimit $text " ")))
+    "tags" ($g.primary.Params.tags | default slice)
+    "html" (partial "ui/section-card.html" $g)
   ) -}}
 {{- end -}}
 
-{{- $searchIndex | jsonify -}}
+{{- range where (where site.RegularPages "Type" "posts") "Draft" false -}}
+  {{- $index = $index | append (dict
+    "id" .RelPermalink
+    "title" .Title
+    "content" (replaceRE `\s+` " " .Plain | chomp)
+    "tags" (.Params.tags | default slice)
+    "html" (.Render "summary")
+  ) -}}
+{{- end -}}
+
+{{- $index | jsonify -}}

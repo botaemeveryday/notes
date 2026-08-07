@@ -1,6 +1,6 @@
 ---
-title: Лекция 7
-description: Spring AOP
+title: Spring AOP
+description: Аспектно-ориентированное программирование и выделение сквозной функциональности вроде логирования и транзакций. Разбираются ключевые понятия Spring AOP, включая join point.
 weight: 7
 tags:
   - Java

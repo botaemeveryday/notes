@@ -1,0 +1,59 @@
+{{- $g := .group -}}
+{{- $current := .current -}}
+{{- $variants := $g.variants -}}
+
+{{- if gt (len $variants) 1 -}}
+
+  {{- $cur := index $variants 0 -}}
+  {{- range $variants }}{{ if eq .url $current.RelPermalink }}{{ $cur = . }}{{ end }}{{ end -}}
+  {{- $curName := $cur.teacher | default $cur.page.Title -}}
+
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-base-content/40">Лектор</span>
+
+    <button type="button" class="cn-teacher-btn" data-teacher-open
+            aria-haspopup="dialog" aria-controls="cn-teacher-sheet">
+      <span class="cn-teacher-btn__fallback">{{ substr $curName 0 1 }}</span>
+      <span class="truncate max-w-[14rem]">{{ $curName }}</span>
+      {{ with $cur.year }}<span class="cn-year{{ if $cur.outdated }} cn-year--old{{ end }}">{{ . }}</span>{{ end }}
+      {{ partial "ui/icon.html" (dict "name" "chevron-down-outline" "class" "cn-teacher-btn__caret") }}
+    </button>
+  </div>
+
+  <dialog id="cn-teacher-sheet" class="cn-sheet" data-subject="{{ $g.key }}"
+          aria-label="Выбор преподавателя и автора">
+    <div class="cn-sheet__panel">
+      <p class="cn-sheet__title">Преподаватель и автор</p>
+
+      {{ range $variants }}
+        {{- $active := eq .url $current.RelPermalink -}}
+        {{- $name := .teacher | default .page.Title -}}
+        {{- $w := partial "utils/plural.html" (dict "count" .count "forms" (slice "лекция" "лекции" "лекций")) -}}
+
+        <a class="cn-sheet__item" href="{{ .url }}" data-variant="{{ .slug }}"
+           {{ if $active }}aria-current="true"{{ end }}>
+
+          <span class="cn-sheet__fallback">{{ substr $name 0 1 }}</span>
+
+          <span class="flex flex-col min-w-0 gap-0.5">
+            <span class="font-semibold truncate">{{ $name }}</span>
+            <span class="text-xs text-base-content/50 truncate">
+              Автор: {{ if .authors }}{{ delimit .authors ", " }}{{ else }}—{{ end }} · {{ .count }} {{ $w }}{{ with .year }} · {{ . }}{{ end }}
+            </span>
+          </span>
+
+          {{ partial "ui/note-badge.html" (dict "page" .page "size" "sm") }}
+
+          {{ partial "ui/icon.html" (dict "name" "checkmark-outline" "class" "cn-sheet__check") }}
+        </a>
+      {{ end }}
+
+      <form method="dialog" class="pt-2">
+        <button class="w-full py-2.5 rounded-xl text-sm font-semibold text-base-content/60 hover:bg-base-200 transition-colors">
+          Закрыть
+        </button>
+      </form>
+    </div>
+  </dialog>
+
+{{- end -}}

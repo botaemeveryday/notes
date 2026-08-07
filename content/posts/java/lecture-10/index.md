@@ -1,6 +1,6 @@
 ---
-title: Лекция 10
-description: Spring Data JPA
+title: Spring Data JPA
+description: Spring Data как удобный механизм работы с сущностями БД через репозитории. Показывается, как объявление интерфейса без реализации избавляет от написания шаблонного кода доступа к данным.
 weight: 10
 tags:
   - Java

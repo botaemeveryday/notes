@@ -1,6 +1,6 @@
 ---
-title: Лекция 9
-description: Spring Boot
+title: Spring Boot
+description: Spring Boot как надстройка, упрощающая настройку Spring за счёт автоматизации конфигураций. Объясняется, какие проблемы обычного Spring — обилие зависимостей и XML-конфигов — он решает.
 weight: 9
 tags:
   - Java

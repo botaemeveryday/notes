@@ -1,16 +1,20 @@
 ---
 title: "Операционные системы"
-description: "Маятин Александр Владимирович"
+teacher: "Маятин Александр Владимирович"
 semester: 4
 accent: 5
+noteType: human
+aiModel:  "Claude Opus 4.8"
+academicYear: 2025/26
+author: notakeith
 ---
 
 <a href="resources/operation-systems_gen.pdf" class="btn rounded-full no-underline">
-    <ion-icon name="cloud-download-outline"></ion-icon>
+    {{< icon "cloud-download-outline" >}}
     Лекции .pdf
 </a>
 <a href="resources/operation-systems_merged.txt" class="btn rounded-full no-underline">
-    <ion-icon name="code-slash-outline"></ion-icon>
+    {{< icon "code-slash-outline" >}}
     Контекст для LLM
 </a>
 

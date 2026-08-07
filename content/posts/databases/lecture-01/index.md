@@ -1,12 +1,10 @@
 ---
-title: Вводная лекция.
+title: Введение
+description: Знакомство с курсом баз данных и обоснование выбора PostgreSQL. Рассматриваются его преимущества — открытый код, нетребовательность к ресурсам и рост популярности после ухода MS SQL Server из России.
 date: 2025-09-05
-
 tags:
   - Базы Данных
   - 3 Семестр
-
-description: Лекция 1
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4
@@ -131,4 +129,4 @@ authors:
 
 > Избыточность приемлема ради оптимизации.
 
-![](images/Drawing%202025-09-05%2019.43.21.excalidraw.svg)
+![](images/image1.svg)

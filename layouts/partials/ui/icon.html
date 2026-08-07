@@ -1,0 +1,34 @@
+{{- $in := . -}}
+{{- if not (reflect.IsMap $in) }}{{ $in = dict "name" (string $in) }}{{ end -}}
+
+{{- $name := $in.name | default "" -}}
+{{- $class := $in.class | default "" -}}
+{{- $label := $in.label | default "" -}}
+
+{{- if $name -}}
+  {{- $res := resources.Get (printf "icons/%s.svg" $name) -}}
+
+  {{- if not $res -}}
+    {{- warnf "ui/icon: нет assets/icons/%s.svg — добавь имя в scripts/vendor-assets.sh и перезапусти" $name -}}
+    <span class="cn-icon {{ $class }}" aria-hidden="true"></span>
+
+  {{- else -}}
+    {{- $svg := trim $res.Content " \n\t" -}}
+    {{- $svg = replaceRE `(?s)<title>.*?</title>` "" $svg -}}
+
+    {{- $root := "" -}}
+    {{- with findRE `^<svg[^>]*>` $svg 1 }}{{ $root = index . 0 }}{{ end -}}
+
+    {{- if $root -}}
+      {{- $a11y := `aria-hidden="true" focusable="false"` -}}
+      {{- with $label }}{{ $a11y = printf `role="img" aria-label="%s"` . }}{{ end -}}
+
+      {{- $new := replaceRE `\s(width|height|class)="[^"]*"` "" $root -}}
+      {{- $new = printf `<svg class="cn-icon %s" %s%s` $class $a11y (strings.TrimPrefix "<svg" $new) -}}
+
+      {{- $svg = replace $svg $root $new 1 -}}
+    {{- end -}}
+
+    {{- $svg | safeHTML -}}
+  {{- end -}}
+{{- end -}}

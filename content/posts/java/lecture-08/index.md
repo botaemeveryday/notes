@@ -1,6 +1,6 @@
 ---
-title: Лекция 8
-description: Spring MVC
+title: Spring MVC
+description: Модуль Spring MVC и реализация паттерна Model-View-Controller через слабосвязанные компоненты. Разбирается назначение каждой части паттерна в веб-приложении.
 weight: 8
 tags:
   - Java

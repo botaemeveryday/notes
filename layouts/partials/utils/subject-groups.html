@@ -1,0 +1,96 @@
+{{- $byKey := dict -}}
+
+{{- with site.GetPage "section" "posts" -}}
+  {{- range .Sections -}}
+    {{- if and (not .Draft) (gt (len .RegularPages) 0) -}}
+      {{- $slug := path.Base (strings.TrimSuffix "/" .RelPermalink) -}}
+      {{- $key := lower (string (.Params.subject | default $slug)) -}}
+      {{- $prev := index $byKey $key | default slice -}}
+      {{- $byKey = merge $byKey (dict $key ($prev | append .)) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $groups := slice -}}
+
+{{- range $key, $sections := $byKey -}}
+
+  {{- $variants := slice -}}
+  {{- range $sections -}}
+    {{- $sec := . -}}
+
+    {{- $names := slice -}}
+    {{- with $sec.Params.teachers -}}
+      {{- range . -}}
+        {{- with trim (string .) " " }}{{ $names = $names | append . }}{{ end -}}
+      {{- end -}}
+    {{- else -}}
+      {{- with $sec.Params.teacher -}}
+        {{- with trim (string .) " " }}{{ $names = $names | append . }}{{ end -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $authorNames := slice -}}
+    {{- range partial "utils/authors.html" $sec.Params -}}
+      {{- $authorNames = $authorNames | append .name -}}
+    {{- end -}}
+
+    {{- $yr := partial "utils/academic-year.html" ($sec.Params.academicYear | default $sec.Params.year) -}}
+    {{- $w := int ($sec.Params.variantWeight | default $sec.Weight) -}}
+
+    {{- $variants = $variants | append (dict
+        "page"      $sec
+        "url"       $sec.RelPermalink
+        "slug"      (path.Base (strings.TrimSuffix "/" $sec.RelPermalink))
+        "teacher"   (delimit $names ", ")
+        "teachers"  $names
+        "authors"   $authorNames
+        "year"      $yr.label
+        "yearStart" $yr.start
+        "count"     (len $sec.RegularPages)
+        "sortKey"   (printf "%06d|%s|%04d|%s" $w (delimit $names ", ") (sub 9999 $yr.start) $sec.Title)
+      ) -}}
+  {{- end -}}
+
+  {{- $variants = sort $variants "sortKey" -}}
+
+  {{- $marked := slice -}}
+  {{- range $v := $variants -}}
+    {{- $latest := $v.yearStart -}}
+    {{- range $o := $variants -}}
+      {{- if and (eq $o.teacher $v.teacher) (gt $o.yearStart $latest) }}{{ $latest = $o.yearStart }}{{ end -}}
+    {{- end -}}
+    {{- $marked = $marked | append (merge $v (dict "outdated" (and (gt $v.yearStart 0) (lt $v.yearStart $latest)))) -}}
+  {{- end -}}
+  {{- $variants = $marked -}}
+  {{- $primary := (index $variants 0).page -}}
+
+  {{- $title := "" -}}
+  {{- range $variants -}}
+    {{- if not $title }}{{ with .page.Params.subjectTitle }}{{ $title = string . }}{{ end }}{{ end -}}
+  {{- end -}}
+  {{- if not $title }}{{ $title = $primary.Title }}{{ end -}}
+
+  {{- $teachers := slice -}}
+  {{- range $variants -}}
+    {{- range .teachers -}}
+      {{- if not (in $teachers .) }}{{ $teachers = $teachers | append . }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $total := 0 -}}
+  {{- range $variants }}{{ $total = add $total .count }}{{ end -}}
+
+  {{- $groups = $groups | append (dict
+      "key"      $key
+      "title"    $title
+      "primary"  $primary
+      "variants" $variants
+      "teachers" $teachers
+      "total"    $total
+      "semester" (int ($primary.Params.semester | default 0))
+      "sortKey"  (printf "%06d|%s" (int $primary.Weight) $title)
+    ) -}}
+{{- end -}}
+
+{{- return (sort $groups "sortKey") -}}

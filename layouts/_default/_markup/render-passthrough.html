@@ -1,0 +1,2 @@
+{{- $opts := dict "throwOnError" false "errorColor" "#c0392b" "displayMode" (eq .Type "block") -}}
+{{- transform.ToMath .Inner $opts -}}

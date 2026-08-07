@@ -1,0 +1,5 @@
+{{- $pages := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink -}}
+{{- if ne (site.Params.lecturesOrder | default "desc") "asc" -}}
+  {{- $pages = $pages.Reverse -}}
+{{- end -}}
+{{- return $pages -}}

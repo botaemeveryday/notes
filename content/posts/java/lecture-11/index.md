@@ -1,6 +1,6 @@
 ---
-title: Лекция 11
-description: Spring Security
+title: Spring Security
+description: Механизмы аутентификации и авторизации в Spring Security для корпоративных приложений. Разбирается архитектура цепочки фильтров, обрабатывающих каждый HTTP-запрос.
 weight: 11
 tags:
   - Java

@@ -6,7 +6,7 @@ tags:
   - Базы Данных
   - 3 Семестр
 
-description: Лекция 4
+description: Реляционная модель данных, её основы — реляционная алгебра и исчисление. Упоминается язык ISBL как один из первых, построенных на реляционной алгебре.
 authors:
   - name: notakeith
     avatar: https://avatars.githubusercontent.com/u/108391756?v=4

@@ -1,45 +1,32 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.Locale }}"
-  x-data
-  :class="$store.darkMode.class()"
-  :data-theme="$store.darkMode.theme()">
+<html lang="{{ .Language.Locale | default site.Language.Lang }}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
     <title>
-      {{ if .IsHome }}
-        {{ site.Params.motto }} | {{ site.Title }}
-      {{ else }}
-        {{ .Title }} | {{ site.Title }}
-      {{ end }}
+      {{- block "title" . -}}
+        {{- if .IsHome }}{{ site.Params.motto }} | {{ site.Title }}
+        {{- else }}{{ .Title }} | {{ site.Title }}{{ end -}}
+      {{- end -}}
     </title>
 
     {{ partial "core/head.html" . }}
-
-    {{ block "css" . }} {{ end }}
-
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js" integrity="sha256-PtHu0lJIiSHfZeNj1nFd6wTX+Squ255SGZ/fc8seCtM=" crossorigin="anonymous"></script>
+    {{ block "css" . }}{{ end }}
   </head>
 
   <body>
-    <div id="dream-global-bg"></div>
     {{ partial "header/nav.html" . }}
 
-    <div class="flip-container">
-      <div class="flipper">
-        <div class="front">
-          <div class="container">
-            {{ block "main" . }} {{ end }}
-
-            {{ partial "footer/footer.html" . }}
-          </div>
-        </div>
-      </div>
+    <div class="container">
+      {{ block "main" . }}{{ end }}
+      {{ partial "footer/footer.html" . }}
     </div>
 
-
+    {{ partial "ui/context-menu.html" . }}
     {{ partial "core/scripts.html" . }}
-    {{ block "js" . }} {{ end }}
+    {{ block "js" . }}{{ end }}
 
     {{ if .Store.Get "hasMermaid" }}
       <script type="module">
@@ -47,13 +34,6 @@
         mermaid.initialize({ startOnLoad: true });
       </script>
     {{ end }}
-
-    {{ partialCached "core/mathjax.html" . }}
-
-    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.4.0/dist/ionicons/ionicons.esm.js" integrity="sha256-/IFmi82bIhdYWctu0UddSlJqpnzWm7Vh2C4CM32wF/k=" crossorigin="anonymous"></script>
-    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@7.4.0/dist/ionicons/ionicons.js" integrity="sha256-mr7eJMX3VC3F7G32mk4oWp1C6a2tlMYxUdptfT7uKI8=" crossorigin="anonymous"></script>
-
-    {{ partial "ui/context-menu.html" . }}
 
   </body>
 </html>

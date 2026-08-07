@@ -1,0 +1,11 @@
+{{- $name := .Get "name" | default (.Get 0) -}}
+
+{{- if not $name -}}
+  {{- errorf "Шорткоду %q нужно имя иконки: {{< icon \"person-outline\" >}}. %s" .Name .Position -}}
+{{- end -}}
+
+{{- partial "ui/icon.html" (dict
+      "name" $name
+      "class" (printf "align-[-0.125em] %s" (.Get "class" | default ""))
+      "label" (.Get "label" | default "")
+    ) -}}

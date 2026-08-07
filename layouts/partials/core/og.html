@@ -1,10 +1,5 @@
 {{- $cover := "" -}}
 
-{{- /* Extract the course slug from the file path. We split File.Dir
-       on "/" and take index 1 (after "posts"). Works for:
-         posts/operation-systems/lecture-10/  → "operation-systems"
-         posts/operation-systems/             → "operation-systems"
-       Falls back to .Section for pages outside posts/. */ -}}
 {{- $course := "" -}}
 {{- with .File }}
   {{- $parts := split (trim .Dir "/") "/" -}}

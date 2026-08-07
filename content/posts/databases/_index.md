@@ -1,16 +1,18 @@
 ---
 title: "Базы Данных"
-description: "Мацнев Никита Игоревич"
+teacher: "Мацнев Никита Игоревич"
 semester: 3
 accent: 4
+academicYear: 2025/26
+author: notakeith, salt-caramel
 ---
 
 <a href="resources/databases_gen.pdf" class="btn rounded-full no-underline">
-    <ion-icon name="cloud-download-outline"></ion-icon>
+    {{< icon "cloud-download-outline" >}}
     Лекции .pdf
 </a>
 <a href="resources/databases_merged.txt" class="btn rounded-full no-underline">
-    <ion-icon name="code-slash-outline"></ion-icon>
+    {{< icon "code-slash-outline" >}}
     Контекст для LLM
 </a>
 

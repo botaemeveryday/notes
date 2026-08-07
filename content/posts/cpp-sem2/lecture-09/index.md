@@ -1,6 +1,6 @@
 ---
-title: Лекция 9
-description: Касты
+title: Касты
+description: Виды приведения типов в C++ — static_cast, dynamic_cast, const_cast и reinterpret_cast. Разбираются их отличия от C-style cast и ситуации, где каждый из них уместен.
 date: 2025-04-02
 tags:
   - 2 семестр

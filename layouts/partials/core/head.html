@@ -1,5 +1,8 @@
 {{ partial "core/og.html" . }}
 
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="{{ "fonts/inter-latin-900-normal.woff2" | relURL }}">
+
 {{ with site.Params.favicon }}
   {{ if hasPrefix . "<link" }}
     {{ . | safeHTML }}
@@ -11,49 +14,43 @@
 <link rel="canonical" href="{{ .Permalink }}" />
 
 {{ if eq .Type "posts" }}
-<meta name="author" content="{{ if isset .Params "author" }}{{ .Params.author }}{{ else }}{{ site.Params.author }}{{ end }}" />
-<meta name="description" content="{{ (or .Description .Summary) | plainify }}" />
+  <meta name="author" content="{{ .Params.author | default site.Params.author }}" />
+  <meta name="description" content="{{ (or .Description .Summary) | plainify }}" />
 
-{{- $keywords := slice }}
-{{- with .Keywords }}
-  {{- $keywords = . }}
-{{- else }}
-  {{- range .GetTerms "tags" }}
-    {{- $keywords = $keywords | append .Title }}
+  {{- $keywords := slice }}
+  {{- with .Keywords }}
+    {{- $keywords = . }}
   {{- else }}
-    {{- range $taxonomy, $_ := site.Taxonomies }}
-      {{- range $.GetTerms $taxonomy }}
-        {{- $keywords = $keywords | append .Title }}
+    {{- range .GetTerms "tags" }}
+      {{- $keywords = $keywords | append .Title }}
+    {{- else }}
+      {{- range $taxonomy, $_ := site.Taxonomies }}
+        {{- range $.GetTerms $taxonomy }}
+          {{- $keywords = $keywords | append .Title }}
+        {{- end }}
       {{- end }}
     {{- end }}
   {{- end }}
-{{- end }}
-<meta name="keywords" content="{{ delimit $keywords `,` }}">
+  <meta name="keywords" content="{{ delimit $keywords `,` }}">
 {{ else }}
-<meta name="author" content="{{ site.Params.author }}" />
-<meta name="description" content="{{ site.Params.description | plainify }}" />
+  <meta name="author" content="{{ site.Params.author }}" />
+  <meta name="description" content="{{ site.Params.description | plainify }}" />
 {{ end }}
 
 {{ hugo.Generator }}
 
-{{ $outputCss := resources.Get "css/output.css" }}
+{{ $css := resources.Get "css/output.css" }}
 {{ if hugo.IsProduction }}
-  {{ $outputCss = $outputCss | minify }}
+  {{ $css = $css | minify | fingerprint }}
 {{ end }}
-<link rel="stylesheet" href="{{ $outputCss.RelPermalink }}" />
+<link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }} />
 
-{{ if or site.Params.backgroundImage site.Params.backgroundImageDark }}
-<style>
-{{ if site.Params.backgroundImage }}
-#dream-global-bg {
-  background-image: url({{ site.Params.backgroundImage | relURL }});
-}
-{{ end }}
-
-{{ if site.Params.backgroundImageDark }}
-html.dark #dream-global-bg {
-  background-image: url({{ site.Params.backgroundImageDark | relURL }});
-}
-{{ end }}
-</style>
+{{- $hasMath := false -}}
+{{- with .RawContent -}}
+  {{- if or (findRE `\$|\\\(|\\\[` . 1) (in . "```math") -}}
+    {{- $hasMath = true -}}
+  {{- end -}}
+{{- end -}}
+{{ if $hasMath }}
+  <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">
 {{ end }}

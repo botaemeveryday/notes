@@ -1,6 +1,6 @@
 ---
-title: Лекция 6
-description: Spring Framework
+title: Spring Framework
+description: Введение в Spring Framework как open-source платформу для языков семейства JVM. Обозначены его основные возможности и место в экосистеме Java-разработки.
 weight: 6
 tags:
   - Java

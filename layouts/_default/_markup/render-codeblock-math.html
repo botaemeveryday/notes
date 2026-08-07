@@ -1,4 +1,1 @@
-<p class="mathjax">
-  {{- .Inner | safeHTML -}}
-</p>
-{{ .Page.Store.Set "hasMathjax" true }}
+{{- transform.ToMath .Inner (dict "throwOnError" false "errorColor" "#c0392b" "displayMode" true) -}}

@@ -1,6 +1,6 @@
 ---
-title: Лекция 12
-description: Keycloak
+title: Keycloak
+description: Современная аутентификация через Keycloak, OAuth 2.0 и OpenID Connect. Рассматривается интеграция со Spring Boot и автоконфигурация нужных бинов.
 weight: 12
 tags:
   - Java

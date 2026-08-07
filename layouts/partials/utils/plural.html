@@ -1,0 +1,13 @@
+{{- $n := .count -}}
+{{- $f := .forms -}}
+{{- $mod10 := mod $n 10 -}}
+{{- $mod100 := mod $n 100 -}}
+{{- $word := index $f 2 -}}
+{{- if and (ge $mod100 11) (le $mod100 14) -}}
+  {{- $word = index $f 2 -}}
+{{- else if eq $mod10 1 -}}
+  {{- $word = index $f 0 -}}
+{{- else if and (ge $mod10 2) (le $mod10 4) -}}
+  {{- $word = index $f 1 -}}
+{{- end -}}
+{{- return $word -}}

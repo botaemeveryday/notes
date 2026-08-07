@@ -1,15 +1,18 @@
 ---
 title: "Основы Программирования"
-description: "Хвастунов Александр Павлович"
+teacher: "Хвастунов Александр Павлович"
 semester: 1
+accent: 1
+academicYear: 2024/25
+author: salt-caramel
 ---
 
 <a href="resources/cpp-sem1_gen.pdf" class="btn rounded-full no-underline">
-    <ion-icon name="cloud-download-outline"></ion-icon>
+    {{< icon "cloud-download-outline" >}}
     Лекции .pdf
 </a>
 <a href="resources/cpp-sem1_merged.txt" class="btn rounded-full no-underline">
-    <ion-icon name="code-slash-outline"></ion-icon>
+    {{< icon "code-slash-outline" >}}
     Контекст для LLM
 </a>
 

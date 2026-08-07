@@ -1,0 +1,18 @@
+{{- $out := dict "label" "" "start" 0 -}}
+
+{{- with . -}}
+  {{- $s := trim (string .) " " -}}
+
+  {{- if findRE `^\d{4}$` $s -}}
+    {{- $y := int $s -}}
+    {{- $out = dict "label" (printf "%d/%02d" $y (mod (add $y 1) 100)) "start" $y -}}
+
+  {{- else if findRE `^\d{4}\s*/\s*\d{2,4}$` $s -}}
+    {{- $out = dict "label" (replaceRE `\s*/\s*` "/" $s) "start" (int (substr $s 0 4)) -}}
+
+  {{- else -}}
+    {{- $out = dict "label" $s "start" 0 -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $out -}}

@@ -1,0 +1,19 @@
+{{- $sec := . -}}
+{{- if not $sec.IsSection -}}
+  {{- $sec = $sec.CurrentSection -}}
+{{- end -}}
+
+{{- $n := $sec.Params.accent -}}
+
+{{- if not $n -}}
+  {{- $hash := 0 -}}
+  {{- range $char := split $sec.Title "" -}}
+    {{- $hash = add $hash (int (index $char 0)) -}}
+  {{- end -}}
+  {{- $n = add 1 (mod $hash 6) -}}
+{{- end -}}
+
+{{- $n = int $n -}}
+{{- if or (lt $n 1) (gt $n 6) }}{{ $n = 1 }}{{ end -}}
+
+{{- return $n -}}
