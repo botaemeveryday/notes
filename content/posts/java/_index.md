@@ -6,6 +6,7 @@ accent: 1
 noteType: ai-pro
 aiModel:  "Claude Opus 4.8"
 aiSource: "презентации"
+academicYear: 2025/26
 ---
 
 Конспекты, составленные по презентациям...

@@ -5,6 +5,7 @@ semester: 4
 accent: 5
 noteType: human
 aiModel:  "Claude Opus 4.8"
+academicYear: 2025/26
 ---
 
 <a href="resources/operation-systems_gen.pdf" class="btn rounded-full no-underline">
