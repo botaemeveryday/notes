@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode | default site.Language.Lang }}">
+<html lang="{{ .Language.Locale | default site.Language.Lang }}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,12 +39,7 @@
       </script>
     {{ end }}
 
-    {{- $hasMath := false -}}
-    {{- if .Store.Get "hasMathjax" -}}
-      {{- $hasMath = true -}}
-    {{- else if .IsPage -}}
-      {{- if findRE `\$|\\\(|\\\[` .RawContent 1 -}}{{- $hasMath = true -}}{{- end -}}
-    {{- end -}}
-    {{ if $hasMath }}{{ partialCached "core/mathjax.html" . }}{{ end }}
+    {{- /* MathJax убран: формулы рендерятся на сборке (KaTeX внутри Hugo),
+           а его таблица стилей подключается в <head>. */ -}}
   </body>
 </html>
