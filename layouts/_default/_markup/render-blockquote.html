@@ -1,6 +1,6 @@
 {{ $icons := dict
   "note" "information-circle"
-  "tip" "bulb"
+  "tip" "bulb-outline"
   "important" "sparkles"
   "warning" "warning"
   "caution" "alert-circle"
@@ -29,7 +29,7 @@
   <div class="my-8 p-5 rounded-2xl border {{ $boxClass }} flex gap-4 md:gap-5 shadow-sm">
     
     <div class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full {{ $iconClass }} text-xl">
-      <ion-icon name="{{ index $icons .AlertType | default "information-circle" }}"></ion-icon>
+      {{ partial "ui/icon.html" (dict "name" (index $icons .AlertType | default "information-circle")) }}
     </div>
     
     <div class="flex-1 min-w-0">

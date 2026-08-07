@@ -208,7 +208,7 @@
 
   <button id="ai-widget-btn" aria-label="Спросить ИИ по лекции" aria-expanded="false" title="Задать вопрос ИИ по этой лекции">
     <span class="ai-btn-icon">
-      <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      {{ partial "ui/icon.html" (dict "name" "chatbubble-ellipses-outline") }}
     </span>
   </button>
 
@@ -310,7 +310,7 @@ ${excerpt}
     navigator.clipboard.writeText(prompt).then(function () {
       btn.innerHTML = `
         <span class="ai-brand-icon">
-          <ion-icon name="checkmark-circle" style="color:var(--color-success);font-size:1.25rem"></ion-icon>
+          {{ partial "ui/icon.html" (dict "name" "checkmark-circle") }}
         </span>
         <span class="ai-status">Скопировано!</span>`;
 

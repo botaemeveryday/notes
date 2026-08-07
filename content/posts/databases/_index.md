@@ -6,11 +6,11 @@ accent: 4
 ---
 
 <a href="resources/databases_gen.pdf" class="btn rounded-full no-underline">
-    <ion-icon name="cloud-download-outline"></ion-icon>
+    {{< icon "cloud-download-outline" >}}
     Лекции .pdf
 </a>
 <a href="resources/databases_merged.txt" class="btn rounded-full no-underline">
-    <ion-icon name="code-slash-outline"></ion-icon>
+    {{< icon "code-slash-outline" >}}
     Контекст для LLM
 </a>
 

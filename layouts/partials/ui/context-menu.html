@@ -2,27 +2,27 @@
   <div id="custom-context-menu" class="fixed z-[9999] hidden flex-col gap-1 p-2 bg-base-100/80 backdrop-blur-xl border border-base-300 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl w-60 origin-top-left transition-opacity duration-150 opacity-0 select-none">
 
     <button type="button" id="ctx-copy-text" data-ctx="copy-text" class="hidden items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
-      <ion-icon name="copy-outline" class="text-lg opacity-70"></ion-icon> Копировать текст
+      {{ partial "ui/icon.html" (dict "name" "copy-outline" "class" "text-lg opacity-70") }} Копировать текст
     </button>
 
     <hr id="ctx-divider" class="hidden border-base-300 my-1">
 
     <button type="button" data-ctx="copy-url" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
-      <ion-icon name="link-outline" class="text-lg opacity-70"></ion-icon> Скопировать ссылку
+      {{ partial "ui/icon.html" (dict "name" "link-outline" "class" "text-lg opacity-70") }} Скопировать ссылку
     </button>
 
     <button type="button" data-ctx="share" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 hover:text-primary rounded-xl transition-colors">
-      <ion-icon name="share-social-outline" class="text-lg opacity-70"></ion-icon> Поделиться
+      {{ partial "ui/icon.html" (dict "name" "share-social-outline" "class" "text-lg opacity-70") }} Поделиться
     </button>
 
     <hr class="border-base-300 my-1">
 
     <button type="button" data-ctx="top" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors">
-      <ion-icon name="arrow-up-outline" class="text-lg opacity-70"></ion-icon> Наверх страницы
+      {{ partial "ui/icon.html" (dict "name" "arrow-up-outline" "class" "text-lg opacity-70") }} Наверх страницы
     </button>
 
     <a href="{{ site.BaseURL }}" class="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium hover:bg-base-200/80 rounded-xl transition-colors no-underline text-base-content">
-      <ion-icon name="home-outline" class="text-lg opacity-70"></ion-icon> На главную
+      {{ partial "ui/icon.html" (dict "name" "home-outline" "class" "text-lg opacity-70") }} На главную
     </a>
 
   </div>

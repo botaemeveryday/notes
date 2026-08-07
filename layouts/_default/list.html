@@ -12,7 +12,7 @@
 
   <nav class="flex items-center gap-2 text-xs md:text-sm text-base-content/50 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
     <a href="{{ site.Home.RelPermalink }}" class="hover:cn-ink transition-colors flex items-center gap-1">
-      <ion-icon name="home-outline"></ion-icon> Главная
+      {{ partial "ui/icon.html" (dict "name" "home-outline") }} Главная
     </a>
     {{ with .Params.semester }}
       <span class="opacity-40">/</span>
@@ -47,7 +47,7 @@
           {{ if not $teachers }}{{ with .Params.teacher }}{{ $teachers = slice . }}{{ end }}{{ end }}
           {{ with $teachers }}
             <div class="mb-4 flex items-start gap-2 text-base font-semibold text-base-content/80">
-              <ion-icon name="person-outline" class="cn-ink text-xl shrink-0 mt-0.5"></ion-icon>
+              {{ partial "ui/icon.html" (dict "name" "person-outline" "class" "cn-ink text-xl shrink-0 mt-0.5") }}
               <div class="flex flex-col gap-0.5 min-w-0">
                 {{ range . }}<span class="leading-snug">{{ . }}</span>{{ end }}
               </div>
@@ -57,7 +57,7 @@
 
         {{ with .Params.description }}
           <div class="flex items-start gap-3 bg-base-100/50 p-4 rounded-xl border border-base-300/50 max-w-2xl">
-            <ion-icon name="information-circle" class="cn-ink text-xl shrink-0 mt-0.5"></ion-icon>
+            {{ partial "ui/icon.html" (dict "name" "information-circle" "class" "cn-ink text-xl shrink-0 mt-0.5") }}
             <p class="text-sm md:text-base text-base-content/80 m-0 leading-relaxed font-medium">
               {{ . }}
             </p>
@@ -68,7 +68,7 @@
       <div class="shrink-0 self-start md:self-auto w-full md:w-auto">
         <div class="flex items-center gap-3 px-5 py-3 rounded-2xl bg-base-100 border border-base-300 shadow-sm w-full md:w-auto justify-center md:justify-start">
           <div class="w-10 h-10 rounded-full cn-tint-bg cn-ink flex items-center justify-center text-xl shrink-0">
-            <ion-icon name="library"></ion-icon>
+            {{ partial "ui/icon.html" (dict "name" "library") }}
           </div>
           <div class="flex flex-col text-left">
             <span class="text-[10px] text-base-content/50 uppercase tracking-widest leading-none mb-1">
@@ -99,7 +99,7 @@
     </div>
   {{ else }}
     <div class="py-16 md:py-20 text-center flex flex-col items-center justify-center border border-dashed border-base-300 rounded-3xl bg-base-200/20 mx-2">
-      <ion-icon name="folder-open-outline" class="text-5xl md:text-6xl text-base-content/20 mb-4"></ion-icon>
+      {{ partial "ui/icon.html" (dict "name" "folder-open-outline" "class" "text-5xl md:text-6xl text-base-content/20 mb-4") }}
       <span class="text-base md:text-lg font-bold text-base-content/60">Здесь пока пусто…</span>
     </div>
   {{ end }}

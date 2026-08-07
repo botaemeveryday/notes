@@ -11,11 +11,11 @@ aiSource: "презентации"
 Конспекты, составленные по презентациям...
 
 <a href="resources/java_gen.pdf" class="btn rounded-full no-underline">
-    <ion-icon name="cloud-download-outline"></ion-icon>
+    {{< icon "cloud-download-outline" >}}
     Лекции .pdf
 </a>
 <a href="resources/java_merged.txt" class="btn rounded-full no-underline">
-    <ion-icon name="code-slash-outline"></ion-icon>
+    {{< icon "code-slash-outline" >}}
     Контекст для LLM
 </a>
 

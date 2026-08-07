@@ -1,0 +1,25 @@
+{{- /*
+  icon — та же иконка, но из маркдауна.
+
+  Партиал из .md вызвать нельзя, поэтому для конспектов нужна обёртка:
+    Нажми {{< icon "download-outline" >}} чтобы скачать
+    {{< icon name="warning-outline" class="text-warning text-lg" >}}
+
+  Замена в существующих конспектах:
+    grep -rn "{{ partial "ui/icon.html" (dict "name" "\([a-z0-9-]*\)") }}|{{< icon "\1" >}}|g' <файл>
+
+  Проверь результат глазами: в маркдауне у ion-icon могли быть свои
+  классы и атрибуты, sed их потеряет.
+*/ -}}
+
+{{- $name := .Get "name" | default (.Get 0) -}}
+
+{{- if not $name -}}
+  {{- errorf "Шорткоду %q нужно имя иконки: {{< icon \"person-outline\" >}}. %s" .Name .Position -}}
+{{- end -}}
+
+{{- partial "ui/icon.html" (dict
+      "name" $name
+      "class" (printf "align-[-0.125em] %s" (.Get "class" | default ""))
+      "label" (.Get "label" | default "")
+    ) -}}

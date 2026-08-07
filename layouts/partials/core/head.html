@@ -1,10 +1,7 @@
 {{ partial "core/og.html" . }}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Pangolin&display=swap">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="{{ "fonts/inter-latin-900-normal.woff2" | relURL }}">
 
 {{ with site.Params.favicon }}
   {{ if hasPrefix . "<link" }}

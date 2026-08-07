@@ -1,0 +1,67 @@
+{{- /*
+  ui/icon.html — иконка инлайном вместо <ion-icon>.
+
+  Почему не ion-icon: веб-компонент грузит ~50 КБ рантайма с CDN и потом
+  на каждую иконку делает отдельный fetch за её SVG. То есть десяток
+  запросов на первый экран ради статичных картинок, плюс мигание, пока
+  компонент не определился.
+
+  Здесь SVG лежит в assets/icons/<name>.svg (кладутся один раз
+  scripts/vendor-assets.sh и коммитятся) и вставляется в разметку на
+  сборке: ноль запросов, ноль JS, цвет наследуется от currentColor.
+
+  Вызов:
+    {{ partial "ui/icon.html" "calendar-outline" }}
+    {{ partial "ui/icon.html" (dict "name" $icon "class" "text-lg opacity-60") }}
+    {{ partial "ui/icon.html" (dict "name" "close" "label" "Закрыть") }}
+
+  Без label иконка помечается aria-hidden — она декоративная и рядом
+  есть текст. label нужен там, где иконка сама себе кнопка.
+
+  Имя может быть динамическим (из front matter) — тогда иконку нужно
+  добавить в список в scripts/vendor-assets.sh, иначе в логе сборки
+  появится warning, а на месте иконки останется пустое место.
+*/ -}}
+
+{{- $in := . -}}
+{{- if not (reflect.IsMap $in) }}{{ $in = dict "name" (string $in) }}{{ end -}}
+
+{{- $name := $in.name | default "" -}}
+{{- $class := $in.class | default "" -}}
+{{- $label := $in.label | default "" -}}
+
+{{- if $name -}}
+  {{- $res := resources.Get (printf "icons/%s.svg" $name) -}}
+
+  {{- if not $res -}}
+    {{- warnf "ui/icon: нет assets/icons/%s.svg — добавь имя в scripts/vendor-assets.sh и перезапусти" $name -}}
+    <span class="cn-icon {{ $class }}" aria-hidden="true"></span>
+
+  {{- else -}}
+    {{- $svg := trim $res.Content " \n\t" -}}
+    {{- $svg = replaceRE `(?s)<title>.*?</title>` "" $svg -}}
+
+    {{- /* ВАЖНО: width/height/class чистим ТОЛЬКО в корневом теге.
+           Внутри иконок встречаются <rect width="416" height="384">
+           (calendar-outline, apps-outline, albums-outline и другие) —
+           если вырезать атрибуты по всему файлу, такие иконки
+           схлопнутся в пустоту. viewBox не трогаем: без него SVG
+           потеряет пропорции. */ -}}
+    {{- $root := "" -}}
+    {{- with findRE `^<svg[^>]*>` $svg 1 }}{{ $root = index . 0 }}{{ end -}}
+
+    {{- if $root -}}
+      {{- $a11y := `aria-hidden="true" focusable="false"` -}}
+      {{- with $label }}{{ $a11y = printf `role="img" aria-label="%s"` . }}{{ end -}}
+
+      {{- $new := replaceRE `\s(width|height|class)="[^"]*"` "" $root -}}
+      {{- $new = printf `<svg class="cn-icon %s" %s%s` $class $a11y (strings.TrimPrefix "<svg" $new) -}}
+
+      {{- /* replace, а не replaceRE: в строке замены $ означал бы
+             подстановку группы, а в классах он вполне может встретиться. */ -}}
+      {{- $svg = replace $svg $root $new 1 -}}
+    {{- end -}}
+
+    {{- $svg | safeHTML -}}
+  {{- end -}}
+{{- end -}}

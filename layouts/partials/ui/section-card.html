@@ -67,7 +67,7 @@
       <details class="cn-subject__disc">
         <summary class="cn-subject__summary">
           <span>Преподаватели и конспекты</span>
-          <ion-icon name="chevron-down-outline" class="cn-subject__chev"></ion-icon>
+          {{ partial "ui/icon.html" (dict "name" "chevron-down-outline" "class" "cn-subject__chev") }}
         </summary>
 
         <div class="cn-subject__rows">
@@ -85,7 +85,7 @@
               </span>
 
               <span class="cn-subject__row-author">
-                <ion-icon name="create-outline" class="shrink-0"></ion-icon>
+                {{ partial "ui/icon.html" (dict "name" "create-outline" "class" "shrink-0") }}
                 <span class="truncate">Автор: {{ if .authors }}{{ delimit .authors ", " }}{{ else }}—{{ end }}</span>
               </span>
 

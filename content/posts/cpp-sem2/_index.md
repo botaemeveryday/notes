@@ -10,11 +10,11 @@ accent: 3
 Если есть желание, можете помочь сделать конспекты еще лучше, отправив нам [issue](https://github.com/botaemeveryday/notes/issues/new?template=content-error.md) или [pull request](https://github.com/botaemeveryday/notes/pulls) с изменениями
 
 <a href="resources/cpp-sem2_gen.pdf" class="btn rounded-full no-underline">
-    <ion-icon name="cloud-download-outline"></ion-icon>
+    {{< icon "cloud-download-outline" >}}
     Лекции .pdf
 </a>
 <a href="resources/cpp-sem2_merged.txt" class="btn rounded-full no-underline">
-    <ion-icon name="code-slash-outline"></ion-icon>
+    {{< icon "code-slash-outline" >}}
     Контекст для LLM
 </a>
 

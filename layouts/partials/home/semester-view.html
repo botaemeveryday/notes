@@ -11,7 +11,7 @@
           <a href="{{ .Params.href | default .RelPermalink }}" class="group flex items-center pr-5 pl-1.5 py-1.5 bg-base-100 border border-base-300 rounded-full shadow-sm hover:border-primary/50 hover:-translate-y-1 hover:shadow-xl transition-all no-underline">
             {{ with .Params.icon }}
               <div class="w-8 h-8 rounded-full group-hover:text-primary flex items-center justify-center text-sm transition-colors shrink-0">
-                <ion-icon name="{{ . }}"></ion-icon>
+                {{ partial "ui/icon.html" (dict "name" .) }}
               </div>
             {{ end }}
 
