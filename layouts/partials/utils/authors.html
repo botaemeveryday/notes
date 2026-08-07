@@ -1,0 +1,48 @@
+{{- /*
+  utils/authors.html
+
+  Нормализует авторов из front matter. Раньше этот разбор жил внутри
+  post/author.html; вынесен, потому что теперь авторы нужны ещё и
+  карточке предмета, и шторке выбора преподавателя.
+
+  На входе: .Params страницы (или обычный dict с ключами author/authors).
+  На выходе: slice словарей {name, handle, avatar, link}.
+
+  Поддерживаются оба формата:
+    author: "Иванов, Петров"
+    authors: ["notakeith", {name: "Пётр", github: "petrov"}]
+*/ -}}
+
+{{- $p := . -}}
+{{- $raw := slice -}}
+
+{{- with $p.authors -}}
+  {{- $raw = . -}}
+{{- else -}}
+  {{- with $p.author -}}
+    {{- $s := replaceRE `\s+&\s+|\s+и\s+|\s*,\s*` "," (string .) -}}
+    {{- range split $s "," -}}
+      {{- with trim . " " }}{{ $raw = $raw | append (dict "name" .) }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $out := slice -}}
+{{- range $raw -}}
+  {{- $entry := . -}}
+  {{- if not (reflect.IsMap $entry) }}{{ $entry = dict "name" (trim (string $entry) " ") }}{{ end -}}
+
+  {{- $name := $entry.name -}}
+  {{- $handle := $entry.github | default "" -}}
+  {{- if and (not $handle) (findRE `^[A-Za-z0-9][A-Za-z0-9-]{0,38}$` $name) }}{{ $handle = $name }}{{ end -}}
+
+  {{- $avatar := $entry.avatar | default "" -}}
+  {{- if and (not $avatar) $handle }}{{ $avatar = printf "https://github.com/%s.png?size=64" $handle }}{{ end -}}
+
+  {{- $link := $entry.link | default "" -}}
+  {{- if and (not $link) $handle }}{{ $link = printf "https://github.com/%s" $handle }}{{ end -}}
+
+  {{- if $name }}{{ $out = $out | append (dict "name" $name "handle" $handle "avatar" $avatar "link" $link) }}{{ end -}}
+{{- end -}}
+
+{{- return $out -}}
