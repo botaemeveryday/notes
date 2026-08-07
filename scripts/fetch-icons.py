@@ -30,7 +30,6 @@ from pathlib import Path
 VERSION = "7.4.0"
 CDN = "https://cdn.jsdelivr.net/npm/ionicons@{v}/dist/svg/{name}.svg"
 
-# Иконки, которые выбираются в рантайме и по шаблонам не находятся.
 EXTRA = [
     "information-circle-outline",
     "alert-circle-outline",
@@ -117,7 +116,6 @@ def main() -> int:
         if download(n, out / f"{n}.svg"):
             ok += 1
 
-    # Лишнее не удаляем автоматически — только показываем.
     have = {p.stem for p in out.glob("*.svg")}
     extra = sorted(have - set(names))
     if extra:

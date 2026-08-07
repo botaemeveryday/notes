@@ -48,7 +48,6 @@ from cache_utils import (
 
 # ── настройки ─────────────────────────────────────────────────────────────────
 
-# Бампни, когда меняешь HEADER_TEX / структуру документа — форсит пересборку.
 RENDER_VERSION = "2"
 
 DEFAULTS = dict(
@@ -411,8 +410,6 @@ def main():
     def work(slug: str) -> tuple[str, bool]:
         return slug, generate_course_pdf(slug, content_base, static_base, args, args.dry_run)
 
-    # Первый курс — последовательно: на холодном кеше tectonic качает бандл
-    # пакетов, параллельный старт даёт гонку за ~/.cache/Tectonic.
     results = [work(courses[0])]
     rest = courses[1:]
     if rest and not args.dry_run:

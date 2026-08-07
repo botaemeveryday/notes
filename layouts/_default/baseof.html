@@ -17,10 +17,6 @@
   </head>
 
   <body>
-    {{ if or site.Params.backgroundImage site.Params.backgroundImageDark }}
-      <div id="dream-global-bg"></div>
-    {{ end }}
-
     {{ partial "header/nav.html" . }}
 
     <div class="container">
@@ -39,7 +35,5 @@
       </script>
     {{ end }}
 
-    {{- /* MathJax убран: формулы рендерятся на сборке (KaTeX внутри Hugo),
-           а его таблица стилей подключается в <head>. */ -}}
   </body>
 </html>

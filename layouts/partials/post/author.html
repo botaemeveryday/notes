@@ -46,7 +46,6 @@
       {{ range $head }}{{ template "cn-author-row" . }}{{ end }}
 
       {{ if gt $rest 0 }}
-        {{- /* <details> вместо JS: работает без скриптов и с клавиатуры */ -}}
         <details class="cn-authors-more">
           <summary>
             <span class="cn-more-label">ещё {{ $rest }}</span>

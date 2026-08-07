@@ -1,31 +1,3 @@
-{{- /*
-  utils/subject-groups.html
-
-  Собирает секции content/posts в группы «предметов».
-
-  Модель: одна папка = один вариант конспекта (преподаватель + автор + год).
-  Варианты одного предмета связываются ключом `subject` во front matter
-  _index.md. Если `subject` не задан — группой становится сама папка,
-  то есть старые курсы продолжают работать без правок.
-
-  Возвращает slice словарей:
-    key       — ключ группы (subject или slug папки, в нижнем регистре)
-    title     — заголовок предмета
-    primary   — Page основного варианта (accent / abbr / semester / description)
-    variants  — slice вариантов (см. ниже)
-    teachers  — уникальные имена преподавателей в порядке появления
-    total     — суммарное число лекций по всем вариантам
-    semester  — номер семестра (0 — «прочие материалы»)
-
-  Вариант:
-    page, url, slug, teacher (строкой), teachers (slice), authors (slice имён),
-    year (метка учебного года), yearStart (год числом), outdated, count
-
-  Порядок вариантов внутри группы — по weight из _index.md, затем по
-  фамилии преподавателя, затем по учебному году (свежий выше).
-  Первый вариант считается основным.
-*/ -}}
-
 {{- $byKey := dict -}}
 
 {{- with site.GetPage "section" "posts" -}}
@@ -66,8 +38,6 @@
     {{- $yr := partial "utils/academic-year.html" ($sec.Params.academicYear | default $sec.Params.year) -}}
     {{- $w := int ($sec.Params.variantWeight | default $sec.Weight) -}}
 
-    {{- /* Год в ключе сортировки идёт «наоборот» (9999 - год), чтобы у
-           одного лектора свежий учебный год оказывался выше старого. */ -}}
     {{- $variants = $variants | append (dict
         "page"      $sec
         "url"       $sec.RelPermalink
@@ -84,9 +54,6 @@
 
   {{- $variants = sort $variants "sortKey" -}}
 
-  {{- /* Помечаем варианты, у которых по ТОМУ ЖЕ лектору есть конспект за
-         более свежий год. Сравнение внутри лектора принципиально: у
-         разных преподавателей свои годы, и это не «устаревание». */ -}}
   {{- $marked := slice -}}
   {{- range $v := $variants -}}
     {{- $latest := $v.yearStart -}}

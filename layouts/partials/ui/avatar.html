@@ -17,8 +17,6 @@
       {{- warnf "ui/avatar: не скачалась %s (%s) — оставляю прямую ссылку" $src . -}}
     {{- else with .Value -}}
       {{- $img := . -}}
-      {{- /* Пережимаем только растр: svg Hugo ресайзить не умеет,
-             да и незачем. */ -}}
       {{- if and (eq .MediaType.MainType "image") (ne .MediaType.SubType "svg") -}}
         {{- $img = $img.Fill (printf "%dx%d webp q82 Center" $px $px) -}}
       {{- end -}}

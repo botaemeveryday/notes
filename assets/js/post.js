@@ -1,10 +1,3 @@
-/*
- * Подсветка активного пункта в оглавлении.
- *
- * Было: Alpine-компонент tocHighlighter() + слушатель scroll с debounce 300 мс,
- * который на каждый тик дёргал getBoundingClientRect() для всех заголовков.
- * Стало: IntersectionObserver — ноль работы при прокрутке и мгновенный отклик.
- */
 (function () {
   'use strict';
 
@@ -51,14 +44,12 @@
         return;
       }
 
-      // Ни один заголовок не в «активной зоне» — берём последний, что уже проехали.
       var last = 0;
       for (var i = 0; i < pairs.length; i++) {
         if (pairs[i].heading.getBoundingClientRect().top < 100) last = i;
       }
       setActive(last);
     }, {
-      // Активная зона: полоса от 100 px сверху до 30 % высоты экрана.
       rootMargin: '-100px 0px -70% 0px',
       threshold: 0
     });

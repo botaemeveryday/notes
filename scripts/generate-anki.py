@@ -39,9 +39,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from cache_utils import compute_anki_hash, is_cache_valid, write_cache, invalidate_cache
 
-# ──────────────────────────────────────────────
-# Попытка импорта genanki
-# ──────────────────────────────────────────────
 try:
     import genanki
 except ImportError:
@@ -227,7 +224,6 @@ def generate_lecture_deck(
         print(f"  [SKIP] {lecture_dir.name}: карточки пусты")
         return None, lecture_title
 
-    # Имя колоды: "Курс::Лекция N"
     deck_name = f"{course_title}::{lecture_title}"
     deck = genanki.Deck(stable_id(deck_name), deck_name)
 
@@ -239,7 +235,6 @@ def generate_lecture_deck(
         )
         deck.add_note(note)
 
-    # Сохраняем отдельный .apkg
     out_dir = static_base / course_name / lecture_dir.name / "resources"
     apkg_path = out_dir / f"{lecture_dir.name}.apkg"
 
@@ -275,8 +270,6 @@ def generate_course(
         print("  [SKIP] generate.anki: false в _index.md")
         return
 
-    # Колоды зависят только от CSV-карточек и заголовков (имена колод).
-    # Правка текста лекции колоды не трогает.
     csv_files = list(course_dir.rglob("*.csv"))
     course_hash = compute_anki_hash(course_dir, csv_files)
 
@@ -379,8 +372,6 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    # Корень проекта — директория, откуда запускается скрипт
-    # (предполагается: python scripts/generate_anki.py из корня Hugo-проекта)
     project_root = Path.cwd()
     content_base = project_root / args.content_dir
     static_base = project_root / args.static_dir

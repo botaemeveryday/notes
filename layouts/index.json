@@ -1,8 +1,5 @@
 {{- $index := slice -}}
 
-{{- /* Предметы: одна запись на группу, а не на каждую папку-вариант.
-       В content попадают ещё и фамилии преподавателей — чтобы поиск
-       по «Соколова» находил предмет. */ -}}
 {{- range partialCached "utils/subject-groups.html" . "cn-all-groups" -}}
   {{- $g := . -}}
   {{- $text := slice (delimit $g.teachers " ") -}}

@@ -23,7 +23,6 @@
       })
       .then(function (data) {
         index = data;
-        // Предрасчёт строки для поиска — иначе конкатенация на каждое нажатие.
         index.forEach(function (item) {
           item._haystack = [
             item.title || '',
@@ -156,8 +155,6 @@
     template = document.getElementById('search-item-template');
     highlightClass = input.dataset.highlightClass || highlightClass;
 
-    // Индекс начинаем тянуть заранее, но только когда человек явно
-    // собрался искать — по фокусу или наведению на поле.
     ['focus', 'pointerenter'].forEach(function (evt) {
       input.addEventListener(evt, function () { loadIndex().catch(function () {}); }, { once: true });
     });
@@ -178,7 +175,6 @@
       }
     });
 
-    // Подсказка ⌘K / Ctrl+K
     if (!/Mac|iPhone|iPad/i.test(navigator.platform || navigator.userAgent)) {
       var kbd = document.querySelector('[data-kbd-mod]');
       if (kbd) kbd.textContent = 'Ctrl';

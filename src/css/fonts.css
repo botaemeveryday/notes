@@ -1,24 +1,3 @@
-/*
- * Локальные шрифты вместо fonts.googleapis.com.
- *
- * Файлы .woff2 лежат в static/fonts/ и раздаются как есть — без Hugo
- * Pipes, поэтому этот CSS одинаково работает и при сборке Tailwind CLI,
- * и внутри Hugo. Обратная сторона — нет фингерпринта, но шрифты не
- * меняются, а Cache-Control хостинга это закрывает.
- *
- * Взято из npm-пакетов @fontsource/inter и @fontsource/pangolin
- * (те же файлы, что раздаёт Google, но версионируются и коммитятся).
- * Обновить: scripts/vendor-assets.sh
- *
- * unicode-range важен: браузер скачает кириллический сабсет только
- * если на странице реально есть кириллица в этом шрифте, и наоборот.
- *
- * Лицензии: Inter — SIL OFL 1.1, Pangolin — SIL OFL 1.1.
- * Хранить в репозитории и раздавать со своего домена можно.
- */
-
-/* ── Inter 900 — только логотип в шапке ─────────────────────────── */
-
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -49,8 +28,6 @@
   src: url('/fonts/inter-cyrillic-900-normal.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
-
-/* ── Pangolin — «рукописные» врезки, .hand, .margin-note, hr ─────── */
 
 @font-face {
   font-family: 'Pangolin';

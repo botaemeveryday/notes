@@ -53,7 +53,7 @@ except ImportError:
 # --- paths ---------------------------------------------------------------
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = SCRIPT_DIR.parent              # repo root (scripts/ sits in root)
+PROJECT_ROOT = SCRIPT_DIR.parent
 CONTENT_DIR = PROJECT_ROOT / "content" / "posts"
 STATIC_OUT = PROJECT_ROOT / "static" / "covers"
 CACHE_DIR = PROJECT_ROOT / ".cache" / "covers"
@@ -68,8 +68,6 @@ FG = "#f5f5f7"
 DIM = "#c8c8d0"
 META_DIM = "#9a9aa3"
 
-# Accent palette by index (matches a typical Hugo theme convention 1..8).
-# If your theme uses different colors, tweak this map.
 ACCENT_COLORS = {
     1: "#e85d75",
     2: "#f5a623",
@@ -82,16 +80,12 @@ ACCENT_COLORS = {
 }
 DEFAULT_ACCENT = 5
 
-# Inter has great cyrillic coverage. We grab static TTFs from Google Fonts'
-# GitHub repo (most reliable mirror). Multiple sources per font for resilience.
 FONTS = {
     "regular": ("Inter-Regular.ttf", [
         "https://github.com/google/fonts/raw/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf",
         "https://github.com/rsms/inter/raw/master/docs/font-files/Inter-Regular.ttf",
     ]),
     "bold": ("Inter-Bold.ttf", [
-        # Bold variant — we'll use the same variable file but render bold via the font.
-        # If you prefer a separate static Bold TTF, use the rsms mirror.
         "https://github.com/rsms/inter/raw/master/docs/font-files/Inter-Bold.ttf",
     ]),
     "mono": ("JetBrainsMono-Bold.ttf", [
@@ -100,7 +94,6 @@ FONTS = {
     ]),
 }
 
-# Fallback fonts shipped with most Linux distros, used if download fails.
 FALLBACK_FONTS = {
     "regular": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
@@ -119,9 +112,7 @@ def read_frontmatter(path: Path) -> Optional[dict]:
       - None if no frontmatter block was found at all
       - raises ValueError if frontmatter exists but YAML is broken
     """
-    # `utf-8-sig` transparently strips a BOM (\ufeff) if present.
     text = path.read_text(encoding="utf-8-sig")
-    # Also tolerate stray leading whitespace/blank lines before the opening ---.
     text = text.lstrip()
     m = FM_RE.match(text)
     if not m:
@@ -191,11 +182,11 @@ class Course:
 @dataclass
 class Lecture:
     course_slug: str
-    slug: str                 # e.g. "lecture-01"
-    number: str               # e.g. "01"
+    slug: str
+    number: str
     title: str
     description: str
-    path: Path                # path to index.md
+    path: Path
 
 
 def parse_lecture_number(slug: str) -> str:
@@ -274,7 +265,7 @@ def load_lectures(course: Course) -> list[Lecture]:
 
 def hex_to_rgb(h: str) -> tuple[int, int, int]:
     h = h.lstrip("#")
-    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))  # type: ignore[return-value]
+    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
 
 
 def font(path: str, size: int) -> ImageFont.FreeTypeFont:
@@ -304,7 +295,6 @@ def wrap_text(
             lines.append(cur)
             cur = w
             if len(lines) == max_lines:
-                # truncate remainder into last line with ellipsis
                 last = lines[-1]
                 while text_w(draw, last + "…", fnt) > max_width and last:
                     last = last[:-1].rstrip()
@@ -329,7 +319,6 @@ def fit_title(
 
     Returns (font, lines). Caller draws each line at line height.
     """
-    # 1) Try to fit on a single line.
     size = start_size
     while size >= min_size:
         f = font(font_path, size)
@@ -337,7 +326,6 @@ def fit_title(
             return f, [text]
         size -= 4
 
-    # 2) Try 2 lines at progressively smaller sizes.
     size = start_size - 16
     while size >= min_size:
         f = font(font_path, size)
@@ -346,7 +334,6 @@ def fit_title(
             return f, lines
         size -= 4
 
-    # 3) Last resort: smallest size with truncation.
     f = font(font_path, min_size)
     lines = wrap_text(draw, text, f, max_width, max_lines=2)
     return f, lines or [text]
@@ -357,7 +344,6 @@ def make_gradient(accent: str) -> Image.Image:
     ar, ag, ab = hex_to_rgb(accent)
     br, bg, bb = hex_to_rgb(BG)
 
-    # Build a small image then upscale — fast and smooth.
     small_w, small_h = 240, 126
     g = Image.new("RGB", (small_w, small_h), BG)
     px = g.load()
@@ -367,7 +353,7 @@ def make_gradient(accent: str) -> Image.Image:
             dx = (small_w - x) / small_w
             dy = (small_h - y) / small_h
             d = math.sqrt(dx * dx + dy * dy) / diag
-            t = max(0.0, 1.0 - d) * 0.38     # 38% accent blend at corner
+            t = max(0.0, 1.0 - d) * 0.38
             r = int(br * (1 - t) + ar * t)
             gg = int(bg * (1 - t) + ag * t)
             b = int(bb * (1 - t) + ab * t)
@@ -390,9 +376,9 @@ def render_cover(
 
     PAD_X = 80
     HEADER_Y = 80
-    FOOTER_Y = H - 90       # baseline-ish for footer text
-    CONTENT_TOP = 180       # top of the title/description block
-    CONTENT_BOTTOM = H - 130  # leave space above footer
+    FOOTER_Y = H - 90
+    CONTENT_TOP = 180
+    CONTENT_BOTTOM = H - 130
 
     # --- header row -----------------------------------------------------
     if lecture_num:
@@ -410,7 +396,6 @@ def render_cover(
     max_title_w = W - 2 * PAD_X
     f_title, title_lines = fit_title(draw, title, fonts["bold"], max_title_w)
 
-    # measure block height
     line_h_title = int(f_title.size * 1.05)
     title_block_h = line_h_title * len(title_lines)
 
@@ -440,7 +425,6 @@ def render_cover(
     sub_text = "/ by notakeith"
     bw = text_w(draw, brand_text, f_brand)
     draw.text((PAD_X, FOOTER_Y), brand_text, fill=FG, font=f_brand)
-    # vertically align sub_text with brand baseline-ish
     draw.text((PAD_X + bw + 20, FOOTER_Y + 10), sub_text, fill=accent, font=f_sub)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -455,7 +439,7 @@ def cache_key(payload: dict) -> str:
     return hashlib.sha256(blob).hexdigest()[:16]
 
 
-DESIGN_VERSION = "B-1"   # bump this when you tweak render_cover to force a rebuild
+DESIGN_VERSION = "B-1"
 
 
 def needs_regen(payload: dict, marker_path: Path, out_path: Path) -> bool:
@@ -501,7 +485,6 @@ def main() -> int:
         print("!! no courses found (need _index.md in content/posts/<course>/)", file=sys.stderr)
         return 1
 
-    # --preview is a one-off path: just render and dump to preview-out/, exit.
     if args.preview:
         return run_preview(args.preview, courses, fonts)
 
@@ -517,7 +500,6 @@ def main() -> int:
         if only_course and course.slug != only_course:
             continue
 
-        # 1. Course landing cover (acts as default share image for the course page).
         landing_payload = {
             "kind": "course",
             "title": course.title,
@@ -530,7 +512,7 @@ def main() -> int:
         landing_out = STATIC_OUT / course.slug / "index.png"
         landing_marker = CACHE_DIR / course.slug / "index.txt"
 
-        if not only_lecture:  # skip landing if user filtered to a specific lecture
+        if not only_lecture:
             total += 1
             if args.force or needs_regen(landing_payload, landing_marker, landing_out):
                 print(f"  render  {landing_out.relative_to(PROJECT_ROOT)}")
@@ -538,7 +520,7 @@ def main() -> int:
                     render_cover(
                         title=course.title,
                         description=course.description,
-                        subject="",          # would duplicate the title
+                        subject="",
                         lecture_num="",
                         accent_idx=course.accent,
                         fonts=fonts,
@@ -549,7 +531,6 @@ def main() -> int:
             else:
                 skipped += 1
 
-        # 2. Each lecture cover.
         for lec in load_lectures(course):
             if only_lecture and lec.slug != only_lecture:
                 continue

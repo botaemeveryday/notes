@@ -1,18 +1,3 @@
-{{- /*
-  utils/authors.html
-
-  Нормализует авторов из front matter. Раньше этот разбор жил внутри
-  post/author.html; вынесен, потому что теперь авторы нужны ещё и
-  карточке предмета, и шторке выбора преподавателя.
-
-  На входе: .Params страницы (или обычный dict с ключами author/authors).
-  На выходе: slice словарей {name, handle, avatar, link}.
-
-  Поддерживаются оба формата:
-    author: "Иванов, Петров"
-    authors: ["notakeith", {name: "Пётр", github: "petrov"}]
-*/ -}}
-
 {{- $p := . -}}
 {{- $raw := slice -}}
 

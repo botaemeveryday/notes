@@ -33,8 +33,8 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-RS = "\x01"   # разделитель записей
-FS = "\x1f"   # разделитель полей
+RS = "\x01"
+FS = "\x1f"
 
 NOREPLY_RE = re.compile(r"^(?:\d+\+)?([A-Za-z0-9-]+)@users\.noreply\.github\.com$", re.I)
 
@@ -154,7 +154,6 @@ def merge_api(people: dict, api: list[dict]) -> None:
         login = c["login"]
         p = by_login.get(login.lower())
         if p is None:
-            # Есть в API, но в content/ не коммитил — всё равно добавляем.
             p = people.setdefault(login.lower(), {
                 "id": login.lower(), "name": login, "login": login, "emails": [],
                 "commits": 0, "first_commit": None, "last_commit": None,

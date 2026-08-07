@@ -30,8 +30,6 @@ for f in latin latin-ext cyrillic; do
 done
 
 # ── KaTeX ───────────────────────────────────────────────────────────
-# Только woff2: браузер берёт первый поддерживаемый формат из @font-face
-# и до ttf/woff не доходит, так что тащить их в репозиторий незачем.
 echo "→ katex"
 rm -rf static/katex && mkdir -p static/katex/fonts
 fetch katex katex
@@ -42,9 +40,6 @@ cp "$TMP/katex"/dist/fonts/*.woff2 static/katex/fonts/
 echo "→ иконки"
 fetch ionicons ionicons
 
-# Имена, которые грепом не находятся: они вычисляются в шаблоне
-# (словарь $icons в render-blockquote.html) или приходят из front matter
-# (icon: у закреплённых страниц). Их приходится держать списком.
 EXTRA=(
   information-circle
   bulb
@@ -53,23 +48,14 @@ EXTRA=(
   alert-circle
 )
 
-# ВАЖНО: || true на каждом гребе.
-# grep без совпадений возвращает 1 — это его нормальный ответ, а не сбой.
-# Но при set -e + pipefail такой конвейер убивает весь скрипт, причём
-# молча. После перехода на partial первая форма перестаёт находиться,
-# и без || true до EXTRA дело уже не доходит.
 NAMES=$(
   {
-    # 1. старая форма, пока ещё осталась в контенте
     grep -rhoE '<ion-icon[^>]*name="[a-z0-9-]+"' layouts content 2>/dev/null \
       | grep -oE 'name="[a-z0-9-]+"' | cut -d'"' -f2 || true
-    # 2. шорткод в маркдауне: {{< icon "person-outline" >}}
     grep -rhoE '\{\{< *icon +"?[a-z0-9-]+' content 2>/dev/null \
       | grep -oE '[a-z0-9-]+$' || true
-    # 3. партиал строкой: partial "ui/icon.html" "person-outline"
     grep -rhoE 'partial "ui/icon\.html" "[a-z0-9-]+"' layouts 2>/dev/null \
       | grep -oE '"[a-z0-9-]+"$' | tr -d '"' || true
-    # 4. партиал словарём: (dict "name" "person-outline" ...)
     grep -rhoE '"name" "[a-z0-9-]+"' layouts 2>/dev/null \
       | grep -oE '"[a-z0-9-]+"$' | tr -d '"' || true
     printf '%s\n' "${EXTRA[@]}"

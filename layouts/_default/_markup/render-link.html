@@ -1,9 +1,6 @@
 {{- $u := urls.Parse .Destination -}}
 {{- $external := $u.IsAbs -}}
 
-{{/* rel="noopener noreferrer" был пропущен: без него открытая
-     вкладка получает доступ к window.opener и может подменить
-     исходную страницу */}}
 <a href="{{ .Destination | safeURL }}"
   {{- with .Title }} title="{{ . }}"{{ end }}
   {{- if $external }} target="_blank" rel="noopener noreferrer"{{ end }}

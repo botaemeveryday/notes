@@ -1,8 +1,6 @@
 {{ $pages := partialCached "utils/section-pages.html" . .CurrentSection.RelPermalink }}
 {{ $current := .RelPermalink }}
 
-{{- /* Разметка намеренно совпадает с sidebar-right.html: одна шапка,
-       один список, одни классы. Отличается только содержимое. */ -}}
 <nav class="cn-side" aria-label="Лекции курса">
   <div class="cn-side__head">
     <span class="cn-side__bar"></span>

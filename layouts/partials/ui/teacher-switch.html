@@ -1,15 +1,3 @@
-{{- /*
-  ui/teacher-switch.html — переключатель варианта конспекта внутри курса.
-
-  Вызов: {{ partial "ui/teacher-switch.html" (dict "group" $g "current" .) }}
-    group   — группа из utils/subject-groups.html
-    current — текущая секция (Page)
-
-  Ничего не рендерит, если вариант всего один.
-  Кнопка открывает <dialog>; выбор запоминается в localStorage (site.js),
-  но переход — обычная ссылка, так что всё работает и без JS.
-*/ -}}
-
 {{- $g := .group -}}
 {{- $current := .current -}}
 {{- $variants := $g.variants -}}

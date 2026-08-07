@@ -3,10 +3,8 @@
 {{ define "main" }}
 
 <style>
-  /* Анимация рисования SVG-линий */
   @keyframes cn-scribble  { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
   
-  /* Плавное "парение" (левитация) цифр 4 */
   @keyframes cn-float-a   { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-6px) rotate(-2deg); } }
   @keyframes cn-float-b   { 0%,100% { transform: translateY(0) rotate(3deg); }  50% { transform: translateY(-4px) rotate(5deg); } }
   

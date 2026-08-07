@@ -41,7 +41,7 @@
     if (!el || !el.dataset.repo) return;
 
     var CACHE_KEY = 'gh-stars:' + el.dataset.repo;
-    var TTL = 6 * 60 * 60 * 1000; // 6 часов
+    var TTL = 6 * 60 * 60 * 1000;
 
     var render = function (n) {
       el.style.transition = 'opacity 0.4s ease';
@@ -336,7 +336,6 @@
     try { return localStorage.getItem(PREFIX + subject); } catch (e) { return null; }
   }
 
-  // Мы внутри курса — значит этот вариант и есть «последний открытый».
   function trackCurrent() {
     var root = document.querySelector('[data-cn-course]');
     if (!root) return;
@@ -368,7 +367,6 @@
     });
   }
 
-  // Нужно поиску: карточки в выдаче вставляются через innerHTML уже после init.
   window.cnApplySubjectCards = applyToCards;
 
   function initSheet() {
@@ -390,13 +388,11 @@
       }
     });
 
-    // Клик по затемнению (сам <dialog> занимает весь экран) — закрыть.
     sheet.addEventListener('click', function (e) {
       if (e.target === sheet) sheet.close();
     });
   }
 
-  // Клик по строке варианта в карточке на главной — тоже выбор.
   function initCardRows() {
     document.addEventListener('click', function (e) {
       var row = e.target.closest('[data-subject-card] [data-variant]');

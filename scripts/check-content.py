@@ -50,11 +50,8 @@ RANGE_RE = re.compile(r"int(?::\s*(\d+)\.\.(\d+))?")
 
 ARCHETYPES = {"lecture": "default.md", "course": "course.md", "page": "page.md"}
 
-# Служебные разделы: там лежат страницы на любой вкус, и требовать от них
-# единообразия смысла нет — проверяем только то, что реально ломает сборку.
 LENIENT_DIRS = {"public"}
 
-# Служебные поля Hugo — они не в архетипах, но и не опечатки.
 HUGO_FIELDS = {"draft", "aliases", "slug", "url", "layout", "type", "lastmod",
                "keywords", "summary", "params", "series", "categories",
                "outputs", "sitemap", "expiryDate", "publishDate"}
@@ -159,8 +156,6 @@ def check_against(path: Path, fm: dict, schema: Schema, rep: Report,
             rep.err(path, f"нет обязательного поля {key}")
             continue
         if spec["recommended"] and is_empty(value) and strict_fields:
-            # recommended-with: поле нужно, только если заполнено другое.
-            # Курс без semester — это просто материалы, преподавателя у них нет.
             partner = spec["recommended_with"]
             if not partner or not is_empty(fm.get(partner)):
                 rep.warn(path, f"не заполнено {key} — стоит указать")
@@ -182,8 +177,6 @@ def check_against(path: Path, fm: dict, schema: Schema, rep: Report,
         if all(is_empty(fm.get(k)) for k in keys):
             rep.err(path, f"нужно хотя бы одно из полей: {', '.join(keys)} — {group}")
 
-    # Hugo не различает регистр в именах полей: hideBreadCrumbs и
-    # hideBreadcrumbs для него одно и то же, так что сравниваем в нижнем.
     if strict_fields:
         known = {k.lower() for k in set(schema.fields) | HUGO_FIELDS}
         for key in fm:
@@ -252,7 +245,6 @@ def main() -> int:
         has_lectures = any((sub / "index.md").exists() for sub in d.iterdir() if sub.is_dir())
 
         if not index.exists():
-            # Не курс, а просто папка со страницами — _index.md ей не нужен.
             if has_lectures and d.name not in lenient:
                 rep.err(d, "есть лекции, но нет _index.md — курс не появится на главной")
             strict = d.name not in lenient
@@ -284,7 +276,6 @@ def main() -> int:
             if not KEBAB_RE.match(sub.name):
                 rep.warn(sub, "имя папки лекции не в kebab-case")
 
-        # Лекция может лежать и плоским файлом рядом с _index.md.
         for md in sorted(d.glob("*.md")):
             if md.name == "_index.md":
                 continue
