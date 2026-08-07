@@ -4,6 +4,7 @@ teacher: "Хвастунов Александр Павлович"
 semester: 1
 accent: 1
 academicYear: 2024/25
+author: salt-caramel
 ---
 
 <a href="resources/cpp-sem1_gen.pdf" class="btn rounded-full no-underline">

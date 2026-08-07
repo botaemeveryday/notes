@@ -10,6 +10,7 @@ noteType: ai-pro
 aiModel:  "Claude Opus 4.6"
 aiSource: "аудиозапись лекции"
 academicYear: 2025/26
+author: notakeith
 ---
 
 Конспекты лекций по Математической статистике **Ивана Александровича Лимара**.\

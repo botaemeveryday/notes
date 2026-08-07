@@ -5,6 +5,10 @@ date: 2026-03-11
 tags:
   - Операционные-системы
   - 4 семестр
+authors:
+  - name: notakeith
+    avatar: https://avatars.githubusercontent.com/u/108391756?v=4
+    link: https://github.com/notakeith
 ---
 
 Ядро всегда работает в привилегированном режиме. Оно **резидентно** — находится в физической памяти, минуя виртуальную.

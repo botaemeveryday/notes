@@ -2,6 +2,7 @@
 title: "Строим интерпретатор"
 description: "Перевод статей Руслана Спивака"
 accent: 6
+author: notakeith
 generate:
   pdf: false
   ai: false

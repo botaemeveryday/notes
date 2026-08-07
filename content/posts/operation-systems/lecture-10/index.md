@@ -5,6 +5,10 @@ date: 2026-04-08
 tags:
   - Операционные-системы
   - 4 семестр
+authors:
+  - name: notakeith
+    avatar: https://avatars.githubusercontent.com/u/108391756?v=4
+    link: https://github.com/notakeith
 ---
 
 ### 4 требования к планировщику (исходно противоречивые)

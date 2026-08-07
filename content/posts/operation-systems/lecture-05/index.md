@@ -5,6 +5,10 @@ date: 2026-03-04
 tags:
   - Операционные-системы
   - 4 семестр
+authors:
+  - name: notakeith
+    avatar: https://avatars.githubusercontent.com/u/108391756?v=4
+    link: https://github.com/notakeith
 ---
 
 На прошлом занятии разобрали функциональную архитектуру.
