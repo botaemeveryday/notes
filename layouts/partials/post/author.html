@@ -1,26 +1,4 @@
-{{- $raw := slice -}}
-{{- if .Params.authors -}}
-  {{- $raw = .Params.authors -}}
-{{- else if .Params.author -}}
-  {{- $s := replaceRE `\s+&\s+|\s+и\s+|\s*,\s*` "," (string .Params.author) -}}
-  {{- range split $s "," -}}
-    {{- with trim . " " }}{{ $raw = $raw | append (dict "name" .) }}{{ end -}}
-  {{- end -}}
-{{- end -}}
-
-{{- $authors := slice -}}
-{{- range $raw -}}
-  {{- $entry := . -}}
-  {{- if not (reflect.IsMap $entry) }}{{ $entry = dict "name" (trim (string $entry) " ") }}{{ end -}}
-  {{- $name := $entry.name -}}
-  {{- $handle := $entry.github | default "" -}}
-  {{- if and (not $handle) (findRE `^[A-Za-z0-9][A-Za-z0-9-]{0,38}$` $name) }}{{ $handle = $name }}{{ end -}}
-  {{- $avatar := $entry.avatar | default "" -}}
-  {{- if and (not $avatar) $handle }}{{ $avatar = printf "https://github.com/%s.png?size=64" $handle }}{{ end -}}
-  {{- $link := $entry.link | default "" -}}
-  {{- if and (not $link) $handle }}{{ $link = printf "https://github.com/%s" $handle }}{{ end -}}
-  {{- if $name }}{{ $authors = $authors | append (dict "name" $name "avatar" $avatar "link" $link) }}{{ end -}}
-{{- end -}}
+{{- $authors := partial "utils/authors.html" .Params -}}
 
 {{- $n := len $authors -}}
 {{- if gt $n 0 -}}

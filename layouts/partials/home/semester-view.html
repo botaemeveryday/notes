@@ -28,14 +28,10 @@
   {{ end }}
 
   {{- $bySemester := dict -}}
-  {{- with site.GetPage "section" "posts" -}}
-    {{- range .Sections -}}
-      {{- if and (not .Draft) (gt (len .RegularPages) 0) -}}
-        {{- $key := string (.Params.semester | default 0) -}}
-        {{- $existing := index $bySemester $key | default slice -}}
-        {{- $bySemester = merge $bySemester (dict $key ($existing | append .)) -}}
-      {{- end -}}
-    {{- end -}}
+  {{- range partialCached "utils/subject-groups.html" . "cn-all-groups" -}}
+    {{- $key := string .semester -}}
+    {{- $existing := index $bySemester $key | default slice -}}
+    {{- $bySemester = merge $bySemester (dict $key ($existing | append .)) -}}
   {{- end -}}
 
   {{- $semesters := slice -}}
