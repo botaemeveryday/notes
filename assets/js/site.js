@@ -305,3 +305,117 @@
     if (e.key === 'Escape') hide();
   });
 })();
+
+
+/*
+ * Выбор варианта конспекта: преподаватель + автор.
+ *
+ * Модель: одна папка в content/posts — один вариант; варианты одного
+ * предмета связаны ключом `subject` во front matter.
+ *
+ * Что делает этот модуль:
+ *   1. запоминает, какой вариант человек открывал последним (localStorage);
+ *   2. на главной перевешивает ссылку заголовка карточки на этот вариант
+ *      и подсвечивает соответствующую строку;
+ *   3. открывает шторку выбора внутри курса.
+ *
+ * Всё это — прогрессивное улучшение: без JS ссылки ведут на основной
+ * вариант, а шторка не открывается (кнопка просто ничего не делает).
+ */
+(function () {
+  'use strict';
+
+  var PREFIX = 'cn:teacher:';
+
+  function remember(subject, variant) {
+    if (!subject || !variant) return;
+    try { localStorage.setItem(PREFIX + subject, variant); } catch (e) { }
+  }
+
+  function recall(subject) {
+    try { return localStorage.getItem(PREFIX + subject); } catch (e) { return null; }
+  }
+
+  // Мы внутри курса — значит этот вариант и есть «последний открытый».
+  function trackCurrent() {
+    var root = document.querySelector('[data-cn-course]');
+    if (!root) return;
+    remember(root.dataset.subject, root.dataset.variant);
+  }
+
+  function escapeAttr(value) {
+    if (window.CSS && CSS.escape) return CSS.escape(value);
+    return value.replace(/["\\]/g, '\\$&');
+  }
+
+  function applyToCards(scope) {
+    var root = scope || document;
+    root.querySelectorAll('[data-subject-card]').forEach(function (card) {
+      var saved = recall(card.dataset.subject);
+      if (!saved) return;
+
+      var row = card.querySelector('[data-variant="' + escapeAttr(saved) + '"]');
+      if (!row) return;
+
+      var url = row.dataset.url || row.getAttribute('href');
+      var link = card.querySelector('[data-subject-link]');
+      if (link && url) link.setAttribute('href', url);
+
+      card.querySelectorAll('[data-remembered]').forEach(function (el) {
+        el.removeAttribute('data-remembered');
+      });
+      row.dataset.remembered = '1';
+    });
+  }
+
+  // Нужно поиску: карточки в выдаче вставляются через innerHTML уже после init.
+  window.cnApplySubjectCards = applyToCards;
+
+  function initSheet() {
+    var sheet = document.getElementById('cn-teacher-sheet');
+    if (!sheet) return;
+
+    document.addEventListener('click', function (e) {
+      var opener = e.target.closest('[data-teacher-open]');
+      if (opener) {
+        e.preventDefault();
+        if (typeof sheet.showModal === 'function') sheet.showModal();
+        else sheet.setAttribute('open', '');
+        return;
+      }
+
+      var item = e.target.closest('.cn-sheet__item');
+      if (item && sheet.contains(item)) {
+        remember(sheet.dataset.subject, item.dataset.variant);
+      }
+    });
+
+    // Клик по затемнению (сам <dialog> занимает весь экран) — закрыть.
+    sheet.addEventListener('click', function (e) {
+      if (e.target === sheet) sheet.close();
+    });
+  }
+
+  // Клик по строке варианта в карточке на главной — тоже выбор.
+  function initCardRows() {
+    document.addEventListener('click', function (e) {
+      var row = e.target.closest('[data-subject-card] [data-variant]');
+      if (!row) return;
+      var card = row.closest('[data-subject-card]');
+      if (card) remember(card.dataset.subject, row.dataset.variant);
+    });
+  }
+
+  function init() {
+    trackCurrent();
+    applyToCards();
+    initCardRows();
+    initSheet();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
