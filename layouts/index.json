@@ -1,17 +1,23 @@
 {{- $index := slice -}}
 
-{{- with site.GetPage "section" "posts" -}}
-  {{- range .Sections -}}
-    {{- if and (not .Draft) (gt (len .RegularPages) 0) -}}
-      {{- $index = $index | append (dict
-        "id" .RelPermalink
-        "title" .Title
-        "content" (replaceRE `\s+` " " (or .Plain .Description) | chomp)
-        "tags" (.Params.tags | default slice)
-        "html" (partial "ui/section-card.html" .)
-      ) -}}
-    {{- end -}}
+{{- /* Предметы: одна запись на группу, а не на каждую папку-вариант.
+       В content попадают ещё и фамилии преподавателей — чтобы поиск
+       по «Соколова» находил предмет. */ -}}
+{{- range partialCached "utils/subject-groups.html" . "cn-all-groups" -}}
+  {{- $g := . -}}
+  {{- $text := slice (delimit $g.teachers " ") -}}
+  {{- range $g.variants -}}
+    {{- $text = $text | append (delimit .authors " ") -}}
+    {{- $text = $text | append (replaceRE `\s+` " " (or .page.Plain (string .page.Description)) | chomp) -}}
   {{- end -}}
+
+  {{- $index = $index | append (dict
+    "id" $g.primary.RelPermalink
+    "title" $g.title
+    "content" (chomp (replaceRE `\s+` " " (delimit $text " ")))
+    "tags" ($g.primary.Params.tags | default slice)
+    "html" (partial "ui/section-card.html" $g)
+  ) -}}
 {{- end -}}
 
 {{- range where (where site.RegularPages "Type" "posts") "Draft" false -}}
