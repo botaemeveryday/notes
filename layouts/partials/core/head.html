@@ -48,6 +48,16 @@
 {{ end }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }} />
 
+{{- $hasMath := false -}}
+{{- with .RawContent -}}
+  {{- if or (findRE `\$|\\\(|\\\[` . 1) (in . "```math") -}}
+    {{- $hasMath = true -}}
+  {{- end -}}
+{{- end -}}
+{{ if $hasMath }}
+  <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">
+{{ end }}
+
 {{ if or site.Params.backgroundImage site.Params.backgroundImageDark }}
 <style>
 {{ with site.Params.backgroundImage }}
