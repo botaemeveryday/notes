@@ -129,4 +129,4 @@ authors:
 
 > Избыточность приемлема ради оптимизации.
 
-![](images/Drawing%202025-09-05%2019.43.21.excalidraw.svg)
+![](images/image1.svg)

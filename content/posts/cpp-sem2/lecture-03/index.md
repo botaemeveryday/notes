@@ -94,12 +94,12 @@ const_reverse_iterator rend() const   { return const_reverse_iterator(begin()); 
 - `iterator` для `array` — это по сути просто указатель (поэтому `end()` = `data() + size`).
 - `reverse_iterator` смотрит на контейнер «с конца к началу»: `rbegin()` возвращает «обёртку» над `end()`, которая при разыменовании даёт последний элемент.
 
-![](images/73fe1ef4c55e213ba5fc63e2248d2c63.png)
+![](images/image1.png)
 - Классический фиксированный массив.
 
 ### `std::vector`
 
-![](images/6be4e44592b59074ff9b58eb8f0e1040.png)
+![](images/image2.png)
 
 - Один большой непрерывный кусок памяти. Выделяется с **запасом** (`capacity` ≥ `size`).
 - При вставке: если есть свободное место — добавляем, иначе делаем **реаллокацию** (обычно выделяется в ~2 раза больше памяти, всё копируется/перемещается). Реаллокация случается редко, поэтому амортизированная сложность вставки в конец — O(1).
@@ -110,7 +110,7 @@ const_reverse_iterator rend() const   { return const_reverse_iterator(begin()); 
 
 ### `std::deque`
 
-![](images/4e2aabb002f7440126cfbb63e17f3aa4.png)
+![](images/image3.png)
 
 - Похож на вектор, но память состоит из **нескольких непрерывных блоков** (массив массивов). Если не хватает — добавляется ещё один блок.
 - Компромисс между вектором и списком.
@@ -120,7 +120,7 @@ const_reverse_iterator rend() const   { return const_reverse_iterator(begin()); 
 
 ### `std::list`
 
-![](images/baf034f9aa0cf1ea20cadef0a7088554.png)
+![](images/image4.png)
 
 - Двусвязный список (циклический — у некоторых реализаций).
 - Эффективная вставка/удаление в любую позицию — O(1) (если есть итератор).
@@ -130,7 +130,7 @@ const_reverse_iterator rend() const   { return const_reverse_iterator(begin()); 
 
 ### `std::forward_list`
 
-![](images/f8d54d223f153287189669bde9913d91.png)
+![](images/image5.png)
 
 - Однонаправленный список.
 - Меньше памяти, чем у `list` (один указатель на ноду вместо двух).
@@ -142,7 +142,7 @@ const_reverse_iterator rend() const   { return const_reverse_iterator(begin()); 
 
 ## Ассоциативные контейнеры
 
-![](images/659ce5b874be2eeb1b8c7c5f46e8acd5.png)
+![](images/image6.png)
 
 Обычно реализованы как красно-чёрное дерево (но в стандарте конкретная реализация не зафиксирована — гарантируется только асимптотика).
 
