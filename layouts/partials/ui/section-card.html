@@ -1,81 +1,115 @@
-{{ $abbr := .Params.abbr }}
-{{ if not $abbr }}
-  {{ $clean := replaceRE `[^A-Za-zА-Яа-яЁё ]+` "" .Title }}
-  {{ $tmp := "" }}
-  {{ range first 4 (split $clean " ") }}
-    {{ if and . (lt (len $tmp) 4) }}
-      {{ $tmp = printf "%s%s" $tmp (substr . 0 1) }}
-    {{ end }}
-  {{ end }}
-  {{ $abbr = upper $tmp }}
-  {{ if not $abbr }}{{ $abbr = "?" }}{{ end }}
-{{ end }}
+{{- /*
+  ui/section-card.html — карточка предмета на главной.
 
-{{- $accent := partial "utils/accent.html" . -}}
+  На входе — группа из utils/subject-groups.html (НЕ Page, как раньше).
 
-{{ $count := len .RegularPages }}
-{{ $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "лекция" "лекции" "лекций")) }}
+  Один вариант  → карточка выглядит как прежде: преподаватель строкой.
+  Несколько     → раскрывающийся список «Преподаватели и конспекты»
+                  на нативном <details>, без JS.
 
-<a href="{{ .RelPermalink }}" class="cn-accent cn-a{{ $accent }} group relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-300 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden no-underline hover:-translate-y-1">
+  JS (site.js) только запоминает последний открытый вариант и
+  перевешивает ссылку заголовка на него — карточка работает и без скриптов.
+*/ -}}
 
-  <div class="absolute left-0 top-0 bottom-0 w-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cn-ink-bg"></div>
+{{- $g := . -}}
+{{- $primary := $g.primary -}}
+{{- $variants := $g.variants -}}
+{{- $multi := gt (len $variants) 1 -}}
+{{- $accent := partial "utils/accent.html" $primary -}}
 
-  <div class="p-5 flex-1 flex flex-col z-10">
+{{- $abbr := $primary.Params.abbr -}}
+{{- if not $abbr -}}
+  {{- $clean := replaceRE `[^A-Za-zА-Яа-яЁё ]+` "" $g.title -}}
+  {{- $tmp := "" -}}
+  {{- range first 4 (split $clean " ") -}}
+    {{- if and . (lt (len $tmp) 4) }}{{ $tmp = printf "%s%s" $tmp (substr . 0 1) }}{{ end -}}
+  {{- end -}}
+  {{- $abbr = upper $tmp -}}
+  {{- if not $abbr }}{{ $abbr = "?" }}{{ end -}}
+{{- end -}}
 
-    <div class="flex justify-between items-start mb-4">
+{{- $lecWord := partial "utils/plural.html" (dict "count" $g.total "forms" (slice "лекция" "лекции" "лекций")) -}}
+{{- $tCount := len $g.teachers -}}
+{{- $tWord := partial "utils/plural.html" (dict "count" $tCount "forms" (slice "преподаватель" "преподавателя" "преподавателей")) -}}
 
-      <div class="flex items-center justify-center w-10 h-10 rounded-xl font-black text-xs tracking-widest cn-tint-bg cn-ink">
-        {{ $abbr }}
-      </div>
+<div class="cn-subject cn-accent cn-a{{ $accent }}" data-subject-card data-subject="{{ $g.key }}">
+
+  <span class="cn-subject__bar"></span>
+
+  <div class="cn-subject__body">
+
+    <div class="cn-subject__top">
+      <span class="cn-subject__abbr cn-tint-bg cn-ink">{{ $abbr }}</span>
 
       <div class="flex items-center gap-2 shrink-0">
-        {{ partial "ui/note-badge.html" (dict "page" . "size" "sm") }}
+        {{ if and $multi (gt $tCount 1) }}
+          <span class="cn-subject__teachers-count">{{ $tCount }} {{ $tWord }}</span>
+        {{ else }}
+          {{ partial "ui/note-badge.html" (dict "page" $primary "size" "sm") }}
+        {{ end }}
 
-        {{ with .Params.tag }}
-          <span class="px-2 py-1 text-[9px] font-bold uppercase tracking-wider bg-base-200 text-base-content/50 rounded-md group-hover:bg-base-300 transition-colors">
-            {{ . }}
-          </span>
+        {{ with $primary.Params.tag }}
+          <span class="cn-subject__tag">{{ . }}</span>
         {{ end }}
       </div>
     </div>
 
-    <h3 class="text-lg md:text-xl font-bold text-base-content mb-2 group-hover:opacity-80 transition-opacity leading-tight line-clamp-2">
-      {{ .Title }}
+    <h3 class="cn-subject__title">
+      <a href="{{ $primary.RelPermalink }}" data-subject-link>{{ $g.title }}</a>
     </h3>
 
-    {{ with .Params.description }}
-      <p class="text-sm text-base-content/60 leading-relaxed m-0 line-clamp-3">{{ . }}</p>
+    {{ with $primary.Params.description }}
+      <p class="cn-subject__desc">{{ . }}</p>
     {{ end }}
 
-    {{ $teachers := .Params.teachers }}
-    {{ if not $teachers }}{{ with .Params.teacher }}{{ $teachers = slice . }}{{ end }}{{ end }}
-    {{ with $teachers }}
-      <div class="flex items-start gap-1.5 mt-3 text-sm text-base-content/70">
-        <ion-icon name="person-outline" class="shrink-0 mt-0.5"></ion-icon>
-        <div class="flex flex-col gap-0.5 min-w-0">
-          {{ range . }}
-            <span class="font-medium leading-snug">{{ . }}</span>
+    {{ if $multi }}
+
+      <details class="cn-subject__disc">
+        <summary class="cn-subject__summary">
+          <span>Преподаватели и конспекты</span>
+          <ion-icon name="chevron-down-outline" class="cn-subject__chev"></ion-icon>
+        </summary>
+
+        <div class="cn-subject__rows">
+          {{ range $variants }}
+            {{ $w := partial "utils/plural.html" (dict "count" .count "forms" (slice "лекция" "лекции" "лекций")) }}
+            <a class="cn-subject__row"
+               href="{{ .url }}"
+               data-variant="{{ .slug }}"
+               data-url="{{ .url }}">
+
+              <span class="cn-subject__row-name">{{ .teacher | default .page.Title }}</span>
+
+              <span class="cn-subject__row-badge">
+                {{ partial "ui/note-badge.html" (dict "page" .page "size" "sm") }}
+              </span>
+
+              <span class="cn-subject__row-author">
+                <ion-icon name="create-outline" class="shrink-0"></ion-icon>
+                <span class="truncate">Автор: {{ if .authors }}{{ delimit .authors ", " }}{{ else }}—{{ end }}</span>
+              </span>
+
+              <span class="cn-subject__row-count">{{ .count }} {{ $w }}</span>
+            </a>
           {{ end }}
         </div>
-      </div>
+      </details>
+
+    {{ else }}
+
+      {{ with (index $variants 0).teachers }}
+        <div class="cn-subject__single">
+          <ion-icon name="person-outline" class="shrink-0 mt-0.5"></ion-icon>
+          <div class="flex flex-col gap-0.5 min-w-0">
+            {{ range . }}<span class="leading-snug">{{ . }}</span>{{ end }}
+          </div>
+        </div>
+      {{ end }}
+
     {{ end }}
   </div>
 
-  <div class="px-5 py-3 border-t border-base-300/50 bg-base-200/30 flex items-center justify-between text-xs text-base-content/50 z-10">
-
-    <div class="flex items-center min-w-0">
-      {{ if not $teachers }}
-        {{ with .Params.author }}
-          <span class="font-medium text-base-content/70 flex items-center gap-1.5 truncate">
-            <ion-icon name="person-outline"></ion-icon>
-            {{ . }}
-          </span>
-        {{ end }}
-      {{ end }}
-    </div>
-
-    <div class="flex items-center gap-1.5 font-medium">
-      <span>{{ $count }} {{ $word }}</span>
-    </div>
+  <div class="cn-subject__foot">
+    <span>{{ $g.total }} {{ $lecWord }}{{ if $multi }} всего{{ end }}</span>
   </div>
-</a>
+</div>
