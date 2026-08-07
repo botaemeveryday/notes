@@ -33,10 +33,10 @@ hasCJKLanguage = false
 [params]
   author = "notakeith & salt-caramel"
   description = "botaemeveryday Конспектики"
-  avatar = "images/avatar.jpg"
+  avatar = "images/avatar.webp"
   headerTitle = "botaemeveryday"
   motto = "Конспектики"
-  favicon = "images/avatar.jpg"
+  favicon = "images/avatar.webp"
   stickyNav = false
   showTableOfContents = true
   showSummaryCoverInPost = true
