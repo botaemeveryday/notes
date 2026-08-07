@@ -54,16 +54,3 @@
 {{ if $hasMath }}
   <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">
 {{ end }}
-
-{{ if or site.Params.backgroundImage site.Params.backgroundImageDark }}
-<style>
-{{ with site.Params.backgroundImage }}
-#dream-global-bg { background-image: url({{ . | relURL }}); }
-{{ end }}
-{{ with site.Params.backgroundImageDark }}
-@media (prefers-color-scheme: dark) {
-  #dream-global-bg { background-image: url({{ . | relURL }}); }
-}
-{{ end }}
-</style>
-{{ end }}

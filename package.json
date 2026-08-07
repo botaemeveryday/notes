@@ -1,9 +1,9 @@
 {
-  "name": "hugo-theme-dream",
+  "name": "notes-theme",
   "version": "3.0.0",
-  "description": "A Hugo theme named Dream.",
-  "repository": "https://github.com/g1eny0ung/hugo-theme-dream.git",
-  "author": "Yue Yang <g1enyy0ung@gmail.com> (https://g1en.site)",
+    "description": "A custom Hugo theme for lecture notes.",
+  "repository": "https://github.com/botaemeveryday/notes",
+  "author": "notakeith (https://github.com/notakeith)",
   "license": "MIT",
   "private": true,
   "scripts": {

@@ -5,7 +5,7 @@
 {{ if site.Params.imageZoomableInPost }}
   <script type="module">
     import mediumZoom from 'https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/+esm';
-    mediumZoom('#dream-single-post-content img', {
+    mediumZoom('#post-content img', {
       background: getComputedStyle(document.documentElement).getPropertyValue('--color-base-100').trim() || '#fff',
       margin: 24,
     });
