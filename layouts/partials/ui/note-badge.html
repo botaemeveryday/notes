@@ -15,7 +15,7 @@
 {{- if eq $type "ai" -}}
   {{- $label = "Нейроконспект" -}}
   {{- $icon = "sparkles-outline" -}}
-  {{- $style = "background: var(--tint-4); color: var(--ink-4);" -}}
+  {{- $style = "background: var(--tint-2); color: var(--ink-2);" -}}
   {{- $tip = "Нейроконспект — сгенерирован моделью ИИ." -}}
   {{- with $model }}{{ $tip = printf "%s Модель: %s." $tip . }}{{ end -}}
   {{- with $source }}{{ $tip = printf "%s Источник: %s." $tip . }}{{ end -}}
@@ -23,7 +23,7 @@
 {{- else if or (eq $type "ai-pro") (eq $type "aipro") -}}
   {{- $label = "Нейроконспект" -}}
   {{- $icon = "sparkles" -}}
-  {{- $style = "background: var(--tint-2); color: var(--ink-2);" -}}
+  {{- $style = "background: var(--tint-5); color: var(--ink-5);" -}}
   {{- $tip = "Нейроконспект моделью повышенной точности." -}}
   {{- with $model }}{{ $tip = printf "%s Модель: %s." $tip . }}{{ end -}}
   {{- with $source }}{{ $tip = printf "%s Источник: %s." $tip . }}{{ end -}}
@@ -31,7 +31,7 @@
 {{- else -}}
   {{- $label = "Авторский" -}}
   {{- $icon = "create-outline" -}}
-  {{- $style = "" -}}
+  {{- $style = "background: var(--tint-1); color: var(--ink-1);" -}}
   {{- if $model -}}
     {{- $tip = printf "Авторский конспект. ИИ помогал только с оформлением и структурой. Модель: %s." $model -}}
   {{- else -}}
