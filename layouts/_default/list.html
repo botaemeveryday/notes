@@ -4,12 +4,11 @@
 {{- $word := partial "utils/plural.html" (dict "count" $count "forms" (slice "лекция" "лекции" "лекций")) -}}
 {{- $accent := partial "utils/accent.html" . -}}
 {{- $slug := path.Base (strings.TrimSuffix "/" .RelPermalink) -}}
-{{- $subject := string (.Params.subject | default $slug) -}}
+{{- $g := partial "utils/subject-group.html" . -}}
+{{- $multi := gt (len $g.variants) 1 -}}
 
 <div class="cn-accent cn-a{{ $accent }} container mx-auto px-4 py-6 md:py-8 max-w-7xl"
-     data-cn-course data-subject="{{ $subject }}" data-variant="{{ $slug }}">
-
-<div class="container mx-auto px-4 py-6 md:py-8 max-w-7xl">
+     data-cn-course data-subject="{{ $g.key }}" data-variant="{{ $slug }}">
 
   <nav class="flex items-center gap-2 text-xs md:text-sm text-base-content/50 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
     <a href="{{ site.Home.RelPermalink }}" class="hover:cn-ink transition-colors flex items-center gap-1">
@@ -39,30 +38,21 @@
           <div class="mb-4">{{ . }}</div>
         {{ end }}
 
-        {{ $teachers := .Params.teachers }}
-        {{ if not $teachers }}{{ with .Params.teacher }}{{ $teachers = slice . }}{{ end }}{{ end }}
-        {{ with $teachers }}
+        {{ if $multi }}
           <div class="mb-4">
-            {{ if eq (len .) 1 }}
-              <div class="flex items-center gap-2 text-base font-semibold text-base-content/80">
-                <ion-icon name="person-outline" class="cn-ink text-xl shrink-0 mt-0.5"></ion-icon></ion-icon>
-                <span>{{ index . 0 }}</span>
-              </div>
-            {{ else }}
-              <div class="flex flex-wrap items-center gap-2" data-lecturer-filter data-lecturer-key="{{ $.RelPermalink }}">
-                <span class="text-[10px] font-semibold uppercase tracking-widest text-base-content/40 mr-1">Лектор</span>
-
-                <button type="button" data-lecturer="" data-lecturer-slug=""
-                        class="cn-lecturer-btn is-active">Все</button>
-
-                {{ range . }}
-                  {{ $surname := index (split . " ") 0 }}
-                  <button type="button" data-lecturer="{{ . }}" data-lecturer-slug="{{ $surname | lower }}" data-cn-tip="{{ . }}"
-                          class="cn-lecturer-btn">{{ $surname }}</button>
-                {{ end }}
-              </div>
-            {{ end }}
+            {{ partial "ui/teacher-switch.html" (dict "group" $g "current" .) }}
           </div>
+        {{ else }}
+          {{ $teachers := .Params.teachers }}
+          {{ if not $teachers }}{{ with .Params.teacher }}{{ $teachers = slice . }}{{ end }}{{ end }}
+          {{ with $teachers }}
+            <div class="mb-4 flex items-start gap-2 text-base font-semibold text-base-content/80">
+              <ion-icon name="person-outline" class="cn-ink text-xl shrink-0 mt-0.5"></ion-icon>
+              <div class="flex flex-col gap-0.5 min-w-0">
+                {{ range . }}<span class="leading-snug">{{ . }}</span>{{ end }}
+              </div>
+            </div>
+          {{ end }}
         {{ end }}
 
         {{ with .Params.description }}
@@ -77,13 +67,14 @@
 
       <div class="shrink-0 self-start md:self-auto w-full md:w-auto">
         <div class="flex items-center gap-3 px-5 py-3 rounded-2xl bg-base-100 border border-base-300 shadow-sm w-full md:w-auto justify-center md:justify-start">
-          <div class="w-10 h-10 rounded-full cn-tint-bg/10 cn-ink flex items-center justify-center text-xl shrink-0">
+          <div class="w-10 h-10 rounded-full cn-tint-bg cn-ink flex items-center justify-center text-xl shrink-0">
             <ion-icon name="library"></ion-icon>
           </div>
           <div class="flex flex-col text-left">
-            <span class="text-[10px] text-base-content/50 uppercase tracking-widest leading-none mb-1">Всего</span>
-            <span id="lecture-count" data-forms="лекция|лекции|лекций"
-                  class="text-sm font-bold text-base-content leading-none">{{ $count }} {{ $word }}</span>
+            <span class="text-[10px] text-base-content/50 uppercase tracking-widest leading-none mb-1">
+              {{ if $multi }}У этого лектора{{ else }}Всего{{ end }}
+            </span>
+            <span class="text-sm font-bold text-base-content leading-none">{{ $count }} {{ $word }}</span>
           </div>
         </div>
       </div>
@@ -105,10 +96,6 @@
       {{ range $pages }}
         {{ .Render "summary" }}
       {{ end }}
-    </div>
-
-    <div id="lecture-empty" class="hidden py-16 text-center text-base-content/50 font-medium">
-      У этого лектора конспектов пока нет.
     </div>
   {{ else }}
     <div class="py-16 md:py-20 text-center flex flex-col items-center justify-center border border-dashed border-base-300 rounded-3xl bg-base-200/20 mx-2">
