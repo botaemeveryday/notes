@@ -108,6 +108,8 @@
 
     grid.replaceChildren(fragment);
 
+    if (window.cnApplySubjectCards) window.cnApplySubjectCards(grid);
+
     countEl.textContent = found;
     resultsBar.classList.toggle('hidden', found === 0);
     noResults.classList.toggle('hidden', found > 0);
