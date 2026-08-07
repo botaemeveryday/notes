@@ -73,12 +73,19 @@
         <div class="cn-subject__rows">
           {{ range $variants }}
             {{ $w := partial "utils/plural.html" (dict "count" .count "forms" (slice "лекция" "лекции" "лекций")) }}
+            {{ $old := .outdated }}
             <a class="cn-subject__row"
                href="{{ .url }}"
                data-variant="{{ .slug }}"
                data-url="{{ .url }}">
 
-              <span class="cn-subject__row-name">{{ .teacher | default .page.Title }}</span>
+              <span class="cn-subject__row-name">
+                <span class="truncate">{{ .teacher | default .page.Title }}</span>
+                {{ with .year }}
+                  <span class="cn-year{{ if $old }} cn-year--old{{ end }}"
+                        data-cn-tip="{{ . }} учебный год{{ if $old }} · у этого лектора есть конспект посвежее{{ end }}">{{ . }}</span>
+                {{ end }}
+              </span>
 
               <span class="cn-subject__row-badge">
                 {{ partial "ui/note-badge.html" (dict "page" .page "size" "sm") }}
@@ -97,11 +104,15 @@
 
     {{ else }}
 
-      {{ with (index $variants 0).teachers }}
+      {{ $only := index $variants 0 }}
+      {{ if or $only.teachers $only.year }}
         <div class="cn-subject__single">
-          <ion-icon name="person-outline" class="shrink-0 mt-0.5"></ion-icon>
-          <div class="flex flex-col gap-0.5 min-w-0">
-            {{ range . }}<span class="leading-snug">{{ . }}</span>{{ end }}
+          {{ partial "ui/icon.html" (dict "name" "person-outline" "class" "shrink-0 mt-0.5") }}
+          <div class="flex flex-col items-start gap-1 min-w-0">
+            {{ range $only.teachers }}<span class="leading-snug">{{ . }}</span>{{ end }}
+            {{ with $only.year }}
+              <span class="cn-year" data-cn-tip="{{ . }} учебный год">{{ . }}</span>
+            {{ end }}
           </div>
         </div>
       {{ end }}

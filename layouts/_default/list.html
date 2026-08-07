@@ -34,10 +34,16 @@
           {{ .Title }}
         </h1>
 
-        {{ with partial "ui/note-badge.html" (dict "page" . "size" "md") }}
-          <div class="mb-4">{{ . }}</div>
-        {{ end }}
+        {{- $yr := partial "utils/academic-year.html" (.Params.academicYear | default .Params.year) -}}
+        <div class="mb-4 flex flex-wrap items-center gap-2">
+          {{ partial "ui/note-badge.html" (dict "page" . "size" "md") }}
+          {{ with $yr.label }}
+            <span class="cn-year cn-year--lg" data-cn-tip="{{ . }} учебный год">{{ . }}</span>
+          {{ end }}
+        </div>
 
+        {{- /* Несколько вариантов (преподаватель + автор) — показываем
+               переключатель. Один — просто строку с преподавателем. */ -}}
         {{ if $multi }}
           <div class="mb-4">
             {{ partial "ui/teacher-switch.html" (dict "group" $g "current" .) }}
@@ -90,6 +96,28 @@
       </div>
     </div>
   {{ end }}
+
+  {{- /* Если у этого же лектора есть конспект за более свежий год —
+         честно говорим об этом и даём ссылку. */ -}}
+  {{- $newer := "" -}}
+  {{- range $g.variants -}}
+    {{- if eq .url $.RelPermalink }}{{ if .outdated }}{{ $newer = . }}{{ end }}{{ end -}}
+  {{- end -}}
+  {{- if $newer -}}
+    {{- $fresh := "" -}}
+    {{- range $g.variants -}}
+      {{- if and (eq .teacher $newer.teacher) (gt .yearStart $newer.yearStart) }}{{ $fresh = . }}{{ end -}}
+    {{- end -}}
+    {{- with $fresh }}
+      <div class="mb-8 flex items-start gap-3 p-4 rounded-2xl border border-warning/30 bg-warning/5">
+        {{ partial "ui/icon.html" (dict "name" "time-outline" "class" "text-warning text-xl shrink-0 mt-0.5") }}
+        <p class="text-sm text-base-content/80 m-0 leading-relaxed">
+          Это конспект за {{ $newer.year }} учебный год. У того же лектора есть
+          <a href="{{ .url }}" class="font-semibold underline decoration-warning/50 underline-offset-2">версия за {{ .year }}</a>.
+        </p>
+      </div>
+    {{ end -}}
+  {{- end }}
 
   {{ if gt $count 0 }}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="lecture-grid">

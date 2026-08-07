@@ -3,7 +3,7 @@
 
   Собирает секции content/posts в группы «предметов».
 
-  Модель: одна папка = один вариант конспекта (преподаватель + автор).
+  Модель: одна папка = один вариант конспекта (преподаватель + автор + год).
   Варианты одного предмета связываются ключом `subject` во front matter
   _index.md. Если `subject` не задан — группой становится сама папка,
   то есть старые курсы продолжают работать без правок.
@@ -18,10 +18,12 @@
     semester  — номер семестра (0 — «прочие материалы»)
 
   Вариант:
-    page, url, slug, teacher (строкой), teachers (slice), authors (slice имён), count
+    page, url, slug, teacher (строкой), teachers (slice), authors (slice имён),
+    year (метка учебного года), yearStart (год числом), outdated, count
 
   Порядок вариантов внутри группы — по weight из _index.md, затем по
-  фамилии преподавателя. Первый вариант считается основным.
+  фамилии преподавателя, затем по учебному году (свежий выше).
+  Первый вариант считается основным.
 */ -}}
 
 {{- $byKey := dict -}}
@@ -61,21 +63,39 @@
       {{- $authorNames = $authorNames | append .name -}}
     {{- end -}}
 
+    {{- $yr := partial "utils/academic-year.html" ($sec.Params.academicYear | default $sec.Params.year) -}}
     {{- $w := int ($sec.Params.variantWeight | default $sec.Weight) -}}
 
+    {{- /* Год в ключе сортировки идёт «наоборот» (9999 - год), чтобы у
+           одного лектора свежий учебный год оказывался выше старого. */ -}}
     {{- $variants = $variants | append (dict
-        "page"     $sec
-        "url"      $sec.RelPermalink
-        "slug"     (path.Base (strings.TrimSuffix "/" $sec.RelPermalink))
-        "teacher"  (delimit $names ", ")
-        "teachers" $names
-        "authors"  $authorNames
-        "count"    (len $sec.RegularPages)
-        "sortKey"  (printf "%06d|%s|%s" $w (delimit $names ", ") $sec.Title)
+        "page"      $sec
+        "url"       $sec.RelPermalink
+        "slug"      (path.Base (strings.TrimSuffix "/" $sec.RelPermalink))
+        "teacher"   (delimit $names ", ")
+        "teachers"  $names
+        "authors"   $authorNames
+        "year"      $yr.label
+        "yearStart" $yr.start
+        "count"     (len $sec.RegularPages)
+        "sortKey"   (printf "%06d|%s|%04d|%s" $w (delimit $names ", ") (sub 9999 $yr.start) $sec.Title)
       ) -}}
   {{- end -}}
 
   {{- $variants = sort $variants "sortKey" -}}
+
+  {{- /* Помечаем варианты, у которых по ТОМУ ЖЕ лектору есть конспект за
+         более свежий год. Сравнение внутри лектора принципиально: у
+         разных преподавателей свои годы, и это не «устаревание». */ -}}
+  {{- $marked := slice -}}
+  {{- range $v := $variants -}}
+    {{- $latest := $v.yearStart -}}
+    {{- range $o := $variants -}}
+      {{- if and (eq $o.teacher $v.teacher) (gt $o.yearStart $latest) }}{{ $latest = $o.yearStart }}{{ end -}}
+    {{- end -}}
+    {{- $marked = $marked | append (merge $v (dict "outdated" (and (gt $v.yearStart 0) (lt $v.yearStart $latest)))) -}}
+  {{- end -}}
+  {{- $variants = $marked -}}
   {{- $primary := (index $variants 0).page -}}
 
   {{- $title := "" -}}

@@ -1,0 +1,33 @@
+{{- /*
+  utils/academic-year.html — нормализует учебный год из front matter.
+
+  Принимает что угодно из:
+    academicYear: 2025         → 2025/26
+    academicYear: "2025/26"    → 2025/26
+    academicYear: "2025/2026"  → 2025/2026
+    academicYear: "весна 2026" → как есть
+
+  Возвращает dict:
+    label — что показывать
+    start — год начала числом (0, если распознать не удалось);
+            по нему определяется, какой конспект лектора свежее
+*/ -}}
+
+{{- $out := dict "label" "" "start" 0 -}}
+
+{{- with . -}}
+  {{- $s := trim (string .) " " -}}
+
+  {{- if findRE `^\d{4}$` $s -}}
+    {{- $y := int $s -}}
+    {{- $out = dict "label" (printf "%d/%02d" $y (mod (add $y 1) 100)) "start" $y -}}
+
+  {{- else if findRE `^\d{4}\s*/\s*\d{2,4}$` $s -}}
+    {{- $out = dict "label" (replaceRE `\s*/\s*` "/" $s) "start" (int (substr $s 0 4)) -}}
+
+  {{- else -}}
+    {{- $out = dict "label" $s "start" 0 -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $out -}}

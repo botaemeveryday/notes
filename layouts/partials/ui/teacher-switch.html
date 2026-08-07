@@ -27,7 +27,8 @@
             aria-haspopup="dialog" aria-controls="cn-teacher-sheet">
       <span class="cn-teacher-btn__fallback">{{ substr $curName 0 1 }}</span>
       <span class="truncate max-w-[14rem]">{{ $curName }}</span>
-      <ion-icon name="chevron-down-outline" class="cn-teacher-btn__caret"></ion-icon>
+      {{ with $cur.year }}<span class="cn-year{{ if $cur.outdated }} cn-year--old{{ end }}">{{ . }}</span>{{ end }}
+      {{ partial "ui/icon.html" (dict "name" "chevron-down-outline" "class" "cn-teacher-btn__caret") }}
     </button>
   </div>
 
@@ -49,13 +50,13 @@
           <span class="flex flex-col min-w-0 gap-0.5">
             <span class="font-semibold truncate">{{ $name }}</span>
             <span class="text-xs text-base-content/50 truncate">
-              Автор: {{ if .authors }}{{ delimit .authors ", " }}{{ else }}—{{ end }} · {{ .count }} {{ $w }}
+              Автор: {{ if .authors }}{{ delimit .authors ", " }}{{ else }}—{{ end }} · {{ .count }} {{ $w }}{{ with .year }} · {{ . }}{{ end }}
             </span>
           </span>
 
           {{ partial "ui/note-badge.html" (dict "page" .page "size" "sm") }}
 
-          <ion-icon name="checkmark-outline" class="cn-sheet__check"></ion-icon>
+          {{ partial "ui/icon.html" (dict "name" "checkmark-outline" "class" "cn-sheet__check") }}
         </a>
       {{ end }}
 

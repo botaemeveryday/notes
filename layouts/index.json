@@ -8,6 +8,7 @@
   {{- $text := slice (delimit $g.teachers " ") -}}
   {{- range $g.variants -}}
     {{- $text = $text | append (delimit .authors " ") -}}
+    {{- $text = $text | append .year -}}
     {{- $text = $text | append (replaceRE `\s+` " " (or .page.Plain (string .page.Description)) | chomp) -}}
   {{- end -}}
 

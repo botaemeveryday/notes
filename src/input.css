@@ -7,6 +7,7 @@
 
 @config '../tailwind.config.js';
 
+@import "./css/fonts.css";
 @import "./css/syntax.css";
 @import "./shortcodes.css";
 
@@ -121,8 +122,6 @@
   margin-inline: auto;
   padding-inline: 1rem;
 }
-
-[x-cloak] { display: none !important; }
 
 .cn-side {
   @apply sticky top-24 block overflow-y-auto pr-1;
@@ -637,7 +636,9 @@ a[data-cn-tip], button[data-cn-tip], [data-cn-tip] a { cursor: pointer; }
   box-shadow: inset 0 0 0 1px var(--cn-ink-20);
 }
 
-.cn-subject__row-name { @apply font-bold text-[15px] leading-snug truncate; }
+.cn-subject__row-name {
+  @apply flex items-center gap-2 min-w-0 font-bold text-[15px] leading-snug;
+}
 .cn-subject__row-badge { @apply justify-self-end; }
 
 .cn-subject__row-author {
@@ -647,6 +648,19 @@ a[data-cn-tip], button[data-cn-tip], [data-cn-tip] a { cursor: pointer; }
 .cn-subject__row-count {
   @apply justify-self-end whitespace-nowrap text-sm text-base-content/50;
 }
+
+/* Учебный год: «2025/26» рядом с преподавателем. */
+
+.cn-year {
+  @apply inline-flex items-center shrink-0 rounded-full px-2 py-0.5
+         text-[11px] font-semibold whitespace-nowrap tabular-nums
+         bg-base-200 text-base-content/60;
+}
+
+.cn-year--lg { @apply px-2.5 py-1 text-xs; }
+
+/* Есть конспект того же лектора за более свежий год. */
+.cn-year--old { @apply bg-transparent text-base-content/35 ring-1 ring-base-300; }
 
 .cn-subject__foot {
   @apply relative z-10 px-5 py-3 flex items-center justify-end
