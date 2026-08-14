@@ -69,6 +69,11 @@ DIM = "#c8c8d0"
 META_DIM = "#9a9aa3"
 
 ACCENT_COLORS = {
+    # Держим в синхроне с input.css (--ink-1..6, тёмный вариант) и с
+    # partials/utils/accent.html на сайте — там же диапазон 1..6,
+    # значения вне него клэмпятся к 1. Обложка тёмная, поэтому берём
+    # именно тёмную (более светлую/пастельную) версию инков — они и
+    # задуманы для тёмного фона.
     1: "#6fc494",
     2: "#d3a862",
     3: "#dd8ba0",
@@ -83,14 +88,19 @@ FONTS = {
         "https://github.com/google/fonts/raw/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf",
         "https://github.com/rsms/inter/raw/master/docs/font-files/Inter-Regular.ttf",
     ]),
-    "bold": ("Inter-Bold.ttf", [
-        "https://github.com/rsms/inter/raw/master/docs/font-files/Inter-Bold.ttf",
-    ]),
     "mono": ("JetBrainsMono-Bold.ttf", [
         "https://github.com/JetBrains/JetBrainsMono/raw/master/fonts/ttf/JetBrainsMono-Bold.ttf",
         "https://github.com/google/fonts/raw/main/ofl/jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf",
     ]),
 }
+# There is no separate 'bold' entry: the first "regular" URL is Inter's
+# variable font (axes opsz/wght) and already contains a "Bold" named
+# instance, so ensure_fonts() reuses that same file for bold text instead
+# of downloading a dedicated Inter-Bold.ttf. (The old dedicated URL —
+# rsms/inter's docs/font-files/Inter-Bold.ttf — 404s: that repo now only
+# publishes .woff2 there, not .ttf, so it was silently falling back to
+# system DejaVu-Bold on every single run.)
+BOLD_VARIATION_NAME = "Bold"
 
 FALLBACK_FONTS = {
     "regular": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
@@ -127,13 +137,19 @@ def ensure_fonts() -> dict[str, str]:
     """Download Inter + JetBrainsMono if missing, return paths.
 
     Tries multiple URLs per font, falls back to system DejaVu if all fail.
+    'bold' isn't downloaded separately — see BOLD_VARIATION_NAME above —
+    it rides on 'regular' when that's the real variable font, or on the
+    static DejaVu fallback when it isn't.
     """
     FONT_CACHE.mkdir(parents=True, exist_ok=True)
     paths: dict[str, str] = {}
+    regular_is_variable = False
     for key, (fname, urls) in FONTS.items():
         target = FONT_CACHE / fname
         if target.exists() and target.stat().st_size > 1000:
             paths[key] = str(target)
+            if key == "regular":
+                regular_is_variable = True
             continue
 
         import urllib.request
@@ -155,6 +171,8 @@ def ensure_fonts() -> dict[str, str]:
 
         if got:
             paths[key] = str(target)
+            if key == "regular":
+                regular_is_variable = True
         else:
             fb = FALLBACK_FONTS[key]
             if not Path(fb).exists():
@@ -164,6 +182,8 @@ def ensure_fonts() -> dict[str, str]:
                 )
             print(f"  !! using fallback {fb} for {key}", file=sys.stderr)
             paths[key] = fb
+
+    paths["bold"] = paths["regular"] if regular_is_variable else FALLBACK_FONTS["bold"]
     return paths
 
 
@@ -277,8 +297,14 @@ def hex_to_rgb(h: str) -> tuple[int, int, int]:
     return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
 
 
-def font(path: str, size: int) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(path, size)
+def font(path: str, size: int, variation: Optional[str] = None) -> ImageFont.FreeTypeFont:
+    f = ImageFont.truetype(path, size)
+    if variation:
+        try:
+            f.set_variation_by_name(variation)
+        except Exception:
+            pass  # not a variable font (e.g. the DejaVu fallback) — already the right weight
+    return f
 
 
 def text_w(draw: ImageDraw.ImageDraw, text: str, fnt: ImageFont.FreeTypeFont) -> int:
@@ -323,6 +349,7 @@ def fit_title(
     max_width: int,
     start_size: int = 120,
     min_size: int = 56,
+    variation: Optional[str] = None,
 ) -> tuple[ImageFont.FreeTypeFont, list[str]]:
     """Find largest size where title fits in 1 line, else in 2 lines, else truncate.
 
@@ -330,20 +357,20 @@ def fit_title(
     """
     size = start_size
     while size >= min_size:
-        f = font(font_path, size)
+        f = font(font_path, size, variation)
         if text_w(draw, text, f) <= max_width:
             return f, [text]
         size -= 4
 
     size = start_size - 16
     while size >= min_size:
-        f = font(font_path, size)
+        f = font(font_path, size, variation)
         lines = wrap_text(draw, text, f, max_width, max_lines=2)
         if lines and all(text_w(draw, ln, f) <= max_width for ln in lines):
             return f, lines
         size -= 4
 
-    f = font(font_path, min_size)
+    f = font(font_path, min_size, variation)
     lines = wrap_text(draw, text, f, max_width, max_lines=2)
     return f, lines or [text]
 
@@ -395,7 +422,7 @@ def render_cover(
         draw.text((PAD_X, HEADER_Y), f"L.{lecture_num}", fill=accent, font=f_num)
 
     if subject:
-        f_subj = font(fonts["bold"], 24)
+        f_subj = font(fonts["bold"], 24, BOLD_VARIATION_NAME)
         sw = text_w(draw, subject, f_subj)
         sx = W - PAD_X - sw
         draw.text((sx, HEADER_Y + 6), subject, fill=FG, font=f_subj)
@@ -403,7 +430,7 @@ def render_cover(
 
     # --- title (with optional wrap) -------------------------------------
     max_title_w = W - 2 * PAD_X
-    f_title, title_lines = fit_title(draw, title, fonts["bold"], max_title_w)
+    f_title, title_lines = fit_title(draw, title, fonts["bold"], max_title_w, variation=BOLD_VARIATION_NAME)
 
     line_h_title = int(f_title.size * 1.05)
     title_block_h = line_h_title * len(title_lines)
@@ -428,7 +455,7 @@ def render_cover(
         y += line_h_desc
 
     # --- footer ---------------------------------------------------------
-    f_brand = font(fonts["bold"], 32)
+    f_brand = font(fonts["bold"], 32, BOLD_VARIATION_NAME)
     f_sub = font(fonts["regular"], 22)
     brand_text = "botaemeveryday"
     sub_text = "/ by notakeith"

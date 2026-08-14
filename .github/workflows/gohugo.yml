@@ -143,8 +143,12 @@ jobs:
 
       - name: Генерация (covers / anki / merged / pdf)
         if: steps.gen.outputs.run == 'true'
+        env:
+          FORCE_REGEN: ${{ inputs.force_regen }}
         run: |
-          python scripts/generate-covers.py
+          COVERS_ARGS=()
+          [[ "$FORCE_REGEN" == "true" ]] && COVERS_ARGS+=(--force)
+          python scripts/generate-covers.py "${COVERS_ARGS[@]}"
           python scripts/generate-anki.py
           python scripts/merge-md-for-ai.py
           python scripts/generate-pdf.py --jobs "$(nproc)"
