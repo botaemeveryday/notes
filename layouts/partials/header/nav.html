@@ -11,7 +11,7 @@
     <section class="flex items-center gap-4 whitespace-nowrap">
       <div class="avatar">
         <div class="w-10 h-10 rounded-full overflow-hidden">
-          <a href="{{ site.BaseURL }}" class="cursor-pointer hover:opacity-80 transition-opacity">
+          <a href="{{ site.BaseURL }}" class="cursor-pointer">
             <img src="{{ site.Params.avatar | relURL }}" alt="{{ site.Params.headerTitle }}" width="40" height="40"
                  class="w-full h-full object-cover" style="width: 40px; height: 40px;" />
           </a>
@@ -19,7 +19,7 @@
       </div>
 
       <div class="-ml-2 mt-1">
-        <a href="{{ site.BaseURL }}" class="cursor-pointer hover:opacity-80 transition-opacity flex flex-col justify-center">
+        <a href="{{ site.BaseURL }}" class="cursor-pointer flex flex-col justify-center">
           {{ partialCached "header/logo.html" . }}
         </a>
         {{ with site.Params.motto }}
