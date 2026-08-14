@@ -16,8 +16,8 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
 
   {{ with $prev }}
-  <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-start p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-primary/40 hover:bg-primary/5 hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
-    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors group-hover:text-primary">
+  <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-start p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-[var(--cn-ink-33)] hover:bg-[var(--cn-ink-08)] hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
+    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors cn-group-ink">
       {{ partial "ui/icon.html" (dict "name" "arrow-back" "class" "text-sm transition-transform duration-300 group-hover:-translate-x-1") }}
       Предыдущая
     </span>
@@ -28,8 +28,8 @@
   {{ end }}
 
   {{ with $next }}
-  <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-end text-right p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-primary/40 hover:bg-primary/5 hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
-    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors group-hover:text-primary">
+  <a href="{{ .RelPermalink }}" class="group relative flex flex-col items-end text-right p-6 rounded-2xl border border-base-300 bg-base-100 hover:border-[var(--cn-ink-33)] hover:bg-[var(--cn-ink-08)] hover:shadow-lg transition-all duration-300 no-underline overflow-hidden">
+    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors cn-group-ink">
       Следующая
       {{ partial "ui/icon.html" (dict "name" "arrow-forward" "class" "text-sm transition-transform duration-300 group-hover:translate-x-1") }}
     </span>

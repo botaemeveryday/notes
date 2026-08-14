@@ -1,10 +1,2 @@
-{{/*
-  Выделение маркером.
-
-      {{< marker >}}ключевая мысль{{< /marker >}}
-      {{< marker color="blue" >}}…{{< /marker >}}
-
-  Цвета: yellow (по умолчанию), green, blue, pink.
-*/}}
 {{- $color := .Get "color" | default "yellow" -}}
 <mark class="marker marker--{{ $color }}">{{- .Inner | .Page.RenderString -}}</mark>

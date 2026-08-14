@@ -8,15 +8,15 @@
 
       <div class="flex flex-wrap gap-3 pl-1">
         {{ range . }}
-          <a href="{{ .Params.href | default .RelPermalink }}" class="group flex items-center pr-5 pl-1.5 py-1.5 bg-base-100 border border-base-300 rounded-full shadow-sm hover:border-primary/50 hover:-translate-y-1 hover:shadow-xl transition-all no-underline">
+          <a href="{{ .Params.href | default .RelPermalink }}" class="group flex items-center pr-5 pl-1.5 py-1.5 bg-base-100 border border-base-300 rounded-full shadow-sm hover:border-[var(--cn-ink-33)] hover:-translate-y-1 hover:shadow-xl transition-all no-underline">
             {{ with .Params.icon }}
-              <div class="w-8 h-8 rounded-full group-hover:text-primary flex items-center justify-center text-sm transition-colors shrink-0">
+              <div class="w-8 h-8 rounded-full cn-group-ink flex items-center justify-center text-sm transition-colors shrink-0">
                 {{ partial "ui/icon.html" (dict "name" .) }}
               </div>
             {{ end }}
 
             <div class="flex flex-col justify-center">
-              <span class="text-sm text-base-content group-hover:text-primary transition-colors leading-none">{{ .Title }}</span>
+              <span class="text-sm text-base-content cn-group-ink transition-colors leading-none">{{ .Title }}</span>
               {{ with .Params.pinned_text }}
                 <span class="text-[10px] text-base-content/50 uppercase tracking-wider mt-1 leading-none">{{ . }}</span>
               {{ end }}
@@ -48,7 +48,7 @@
 
     <div class="mt-6 mb-6 bg-base-200/40 rounded-xl p-3 md:px-5 border border-base-300/50 flex items-center justify-between shadow-sm">
       <h2 class="text-lg md:text-xl font-bold text-base-content flex items-center gap-3 m-0">
-        <div class="w-2 h-6 rounded-full bg-primary/50"></div>
+        <div class="w-2 h-6 rounded-full bg-[var(--cn-ink-50)]"></div>
         {{ if gt $semNum 0 }}{{ $semNum }} Семестр{{ else }}Прочие материалы{{ end }}
       </h2>
 

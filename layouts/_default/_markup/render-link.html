@@ -4,7 +4,7 @@
 <a href="{{ .Destination | safeURL }}"
   {{- with .Title }} title="{{ . }}"{{ end }}
   {{- if $external }} target="_blank" rel="noopener noreferrer"{{ end }}
-  class="underline decoration-base-300 underline-offset-2 transition-colors hover:text-primary hover:decoration-primary">
+  class="underline decoration-base-300 underline-offset-2 transition-colors hover:text-[var(--cn-ink)]">
   {{- with .Text }}{{ . }}{{ end -}}
   {{- if $external }}<svg class="ml-0.5 inline-block h-3 w-3 align-baseline text-neutral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>{{- end -}}
 </a>

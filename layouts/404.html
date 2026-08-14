@@ -22,7 +22,7 @@
   <span class="absolute top-6 right-8 text-[11px] uppercase tracking-[0.18em] font-semibold text-base-content/30">404</span>
   <span class="absolute top-6 left-8 text-[11px] uppercase tracking-[0.18em] font-semibold text-base-content/30 hidden sm:inline">страница пропала</span>
 
-  <svg class="absolute top-4 left-1/2 -translate-x-1/2 w-[280px] h-[60px] text-primary opacity-30" viewBox="0 0 280 80" fill="none" aria-hidden="true">
+  <svg class="absolute top-4 left-1/2 -translate-x-1/2 w-[280px] h-[60px] cn-ink opacity-30" viewBox="0 0 280 80" fill="none" aria-hidden="true">
     <path class="cn-draw" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
           d="M 5 70 C 20 30, 60 50, 70 30 C 75 18, 90 25, 95 50 C 100 70, 130 60, 140 35 C 150 12, 180 28, 175 55 C 172 75, 200 75, 215 50 C 230 25, 260 35, 275 18"/>
   </svg>
@@ -30,7 +30,7 @@
   <div class="flex items-center gap-3 md:gap-6 leading-none select-none">
     <span class="text-[140px] md:text-[220px] font-black tracking-tighter text-base-content opacity-90 cn-float-a">4</span>
 
-    <svg viewBox="0 0 200 200" class="w-[120px] md:w-[200px] h-[120px] md:h-[200px] shrink-0 overflow-visible text-primary" fill="none" aria-hidden="true">
+    <svg viewBox="0 0 200 200" class="w-[120px] md:w-[200px] h-[120px] md:h-[200px] shrink-0 overflow-visible cn-ink" fill="none" aria-hidden="true">
       <circle cx="100" cy="100" r="84" stroke="currentColor" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="4 8" fill="none"/>
       <path class="cn-draw" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"
             d="M 70 60
@@ -46,7 +46,7 @@
     <span class="text-[140px] md:text-[220px] font-black tracking-tighter text-base-content opacity-90 cn-float-b">4</span>
   </div>
 
-  <span class="mt-6 text-[28px] -rotate-3 select-none text-primary opacity-80" style="font-family:'Pangolin',cursive;">
+  <span class="mt-6 text-[28px] -rotate-3 select-none cn-ink opacity-80" style="font-family:'Pangolin',cursive;">
     хмм…
   </span>
 
@@ -82,7 +82,8 @@
         а может ты искал:
       </span>
       {{ range $sections }}
-        <a href="{{ .RelPermalink }}" class="px-4 py-1.5 rounded-full text-xs font-semibold no-underline transition-all duration-200 border border-base-300 bg-base-100 text-base-content/70 hover:border-primary/50 hover:text-primary hover:bg-primary/5">
+        {{ $secAccent := partial "utils/accent.html" . }}
+        <a href="{{ .RelPermalink }}" class="cn-accent cn-a{{ $secAccent }} px-4 py-1.5 rounded-full text-xs font-semibold no-underline transition-all duration-200 border border-base-300 bg-base-100 text-base-content/70 hover:border-[var(--cn-ink-33)] hover:text-[var(--cn-ink)] hover:bg-[var(--cn-ink-08)]">
           {{ .Title }}
         </a>
       {{ end }}

@@ -83,6 +83,7 @@
 
 :root {
   --accent-subtle: #eef4f0;
+  --logo-marker: #ffe98a;
 
   --tint-1: #d7f0e2;  --ink-1: #1d7a4d;
   --tint-2: #fbe9cf;  --ink-2: #96610f;
@@ -95,6 +96,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
   --accent-subtle: #1c2b23;
+  --logo-marker: #6b5a1f;
 
   --tint-1: #163023;  --ink-1: #6fc494;
   --tint-2: #302617;  --ink-2: #d3a862;
@@ -167,7 +169,9 @@ a.cn-side__title:hover { color: var(--cn-ink); }
 
 .cn-side__link--active,
 #TableOfContents a.cn-side__link--active {
-  @apply bg-primary/10 font-bold
+  @apply font-bold;
+  background-color: var(--cn-ink-13);
+  color: var(--cn-ink);
 }
 
 .cn-side__dot {
@@ -366,6 +370,7 @@ a.cn-side__title:hover { color: var(--cn-ink); }
 .nav-logo-text {
   position: relative;
   z-index: 2;
+  display: inline-block;
   font-family: "Inter", "Arial Black", sans-serif;
   font-weight: 900;
   font-size: 18px;
@@ -374,34 +379,65 @@ a.cn-side__title:hover { color: var(--cn-ink); }
   white-space: nowrap;
   color: currentColor;
 }
-
+ 
 .nav-highlight-b {
   position: relative;
   display: inline-block;
 }
-
-.nav-highlight-b::after {
+ 
+.nav-highlight-b::after,
+.nav-logo-text::after {
   content: "";
   position: absolute;
-  inset-inline: -1px;
-  bottom: 0;
-  height: 6px;
+  top: 42%;
+  bottom: -6%;
+  left: -2px;
+  right: -2px;
   z-index: -1;
-  border-radius: 2px;
-  background: #ffe134;
+  border-radius: 1px;
+  background: var(--logo-marker);
+  clip-path: polygon(
+    0% 18%, 20% 8%, 45% 14%, 70% 4%, 88% 11%, 100% 2%,
+    100% 88%, 84% 97%, 58% 88%, 34% 96%, 12% 86%, 0% 94%
+  );
 }
-
+ 
+.nav-logo-text::after {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+ 
+.nav-logo-inner:hover .nav-logo-text::after,
+.nav-logo-inner:focus-visible .nav-logo-text::after,
+a:focus-visible .nav-logo-text::after {
+  transform: scaleX(1);
+}
+ 
 .nav-wavy-wrap {
   position: relative;
   display: inline-block;
 }
-
+ 
 .nav-wavy-wrap svg {
   position: absolute;
   left: 0;
   bottom: -3px;
   width: 100%;
   overflow: visible;
+  transition: opacity 0.25s ease 0.12s;
+}
+ 
+.nav-logo-inner:hover .nav-wavy-wrap svg,
+a:focus-visible .nav-wavy-wrap svg {
+  opacity: 0.35;
+}
+ 
+@media (prefers-reduced-motion: reduce) {
+  .nav-logo-text::after,
+  .nav-wavy-wrap svg {
+    transition: none;
+  }
 }
 
 .cn-accent {
@@ -425,6 +461,8 @@ a.cn-side__title:hover { color: var(--cn-ink); }
   --cn-ink-20: color-mix(in srgb, var(--cn-ink) 20%, transparent);
   --cn-ink-27: color-mix(in srgb, var(--cn-ink) 27%, transparent);
   --cn-ink-33: color-mix(in srgb, var(--cn-ink) 33%, transparent);
+  --cn-ink-50: color-mix(in srgb, var(--cn-ink) 50%, transparent);
+  --cn-ink-60: color-mix(in srgb, var(--cn-ink) 60%, transparent);
 }
 
 .cn-ink        { color: var(--cn-ink); }

@@ -1,5 +1,6 @@
 {{ define "main" }}
-<div class="lg:grid lg:grid-cols-4 gap-8 mt-4 px-4 container mx-auto">
+{{- $accent := partial "utils/accent.html" . -}}
+<div class="cn-accent cn-a{{ $accent }} lg:grid lg:grid-cols-4 gap-8 mt-4 px-4 container mx-auto">
 
   <aside class="hidden lg:block lg:col-span-1">
     {{ if not .Params.hideLeftSidebar }}{{ partial "post/sidebar-left.html" . }}{{ end }}

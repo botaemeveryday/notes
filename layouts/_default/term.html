@@ -9,9 +9,9 @@
       {{ $title := .Title }}
       {{ range (index site.Taxonomies .Data.Plural).Alphabetical }}
         {{ if eq .Page.Title $title }}
-          <span class="badge h-6 badge-primary">{{ .Page.Title }}</span>
+          <span class="badge h-6 bg-[var(--cn-ink-13)] text-[var(--cn-ink)] border-[var(--cn-ink-33)]">{{ .Page.Title }}</span>
         {{ else }}
-          <a href="{{ .Page.RelPermalink }}" class="badge h-6 no-underline hover:badge-primary">{{ .Page.Title }}</a>
+          <a href="{{ .Page.RelPermalink }}" class="badge h-6 no-underline hover:bg-[var(--cn-ink-13)] hover:text-[var(--cn-ink)] hover:border-[var(--cn-ink-33)] transition-colors">{{ .Page.Title }}</a>
         {{ end }}
       {{ end }}
     </div>

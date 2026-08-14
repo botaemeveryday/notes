@@ -14,7 +14,7 @@
 
     <div class="flex flex-wrap gap-2">
       {{ range .Data.Terms.Alphabetical }}
-        <a href="{{ .Page.RelPermalink }}" class="badge badge-outline font-medium hover:badge-primary hover:bg-primary/10 transition-colors py-3">
+        <a href="{{ .Page.RelPermalink }}" class="badge badge-outline font-medium hover:border-[var(--cn-ink-33)] hover:text-[var(--cn-ink)] hover:bg-[var(--cn-ink-13)] transition-colors py-3">
           #{{ .Page.LinkTitle | lower }}
           <span class="ml-1.5 text-xs opacity-50">({{ .Count }})</span>
         </a>
