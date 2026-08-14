@@ -69,16 +69,14 @@ DIM = "#c8c8d0"
 META_DIM = "#9a9aa3"
 
 ACCENT_COLORS = {
-    1: "#e85d75",
-    2: "#f5a623",
-    3: "#f8d57e",
-    4: "#7ed957",
-    5: "#5b8def",
-    6: "#9b6dff",
-    7: "#ff6dc4",
-    8: "#4ecdc4",
+    1: "#6fc494",
+    2: "#d3a862",
+    3: "#dd8ba0",
+    4: "#7fa9e0",
+    5: "#a992e0",
+    6: "#6bb9cf",
 }
-DEFAULT_ACCENT = 5
+DEFAULT_ACCENT = 1
 
 FONTS = {
     "regular": ("Inter-Regular.ttf", [
@@ -189,6 +187,17 @@ class Lecture:
     path: Path
 
 
+def clamp_accent(value) -> int:
+    """Same clamp as partials/utils/accent.html on the site: out-of-range
+    (or unparsable) values fall back to 1, never to a color that doesn't
+    exist anywhere else on the site."""
+    try:
+        n = int(value)
+    except (TypeError, ValueError):
+        return 1
+    return n if 1 <= n <= 6 else 1
+
+
 def parse_lecture_number(slug: str) -> str:
     """Extract numeric part from slug like 'lecture-01' or 'interpreter-3'."""
     m = re.search(r"(\d+)$", slug)
@@ -222,7 +231,7 @@ def load_course(course_dir: Path) -> Optional[Course]:
         slug=course_dir.name,
         title=str(fm.get("title", course_dir.name)),
         description=str(fm.get("description", "")),
-        accent=int(fm.get("accent", DEFAULT_ACCENT)),
+        accent=clamp_accent(fm.get("accent", DEFAULT_ACCENT)),
     )
 
 
