@@ -21,7 +21,7 @@
 {{- end -}}
 
 {{- $absCover := $cover | absURL -}}
-{{- $title := .Title | default site.Title -}}
+{{- $title := .Title -}}
 {{- $desc := or .Description .Summary site.Params.description -}}
 {{- $desc = $desc | plainify -}}
 

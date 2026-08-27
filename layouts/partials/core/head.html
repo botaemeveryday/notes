@@ -11,6 +11,18 @@
   {{ end }}
 {{ end }}
 
+{{ if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "botaemeveryday notes",
+  "alternateName": "botaemeveryday",
+  "url": "{{ .Site.BaseURL }}"
+}
+</script>
+{{ end }}
+
 <link rel="canonical" href="{{ .Permalink }}" />
 
 {{ if eq .Type "posts" }}

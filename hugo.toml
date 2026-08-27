@@ -28,14 +28,13 @@ hasCJKLanguage = false
 
 [taxonomies]
   tag = "tags"
-  category = "categories"
 
 [params]
   author = "notakeith & salt-caramel"
-  description = "botaemeveryday Конспектики"
+  description = "Конспекты лекций ИТМО: операционные системы, математическая статистика, базы данных, C++ и Java. Открытые материалы для студентов направления ИС."
   avatar = "images/avatar.webp"
   headerTitle = "botaemeveryday"
-  motto = "Конспектики"
+  motto = "notes"
   favicon = "images/avatar.webp"
   stickyNav = false
   showTableOfContents = true
@@ -45,3 +44,9 @@ hasCJKLanguage = false
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
+
+[[cascade]]
+  [cascade.build]
+    list = "never"
+  [cascade.target]
+    path = "/posts/public/pins/**"

@@ -7,8 +7,8 @@
 
     <title>
       {{- block "title" . -}}
-        {{- if .IsHome }}{{ site.Params.motto }} | {{ site.Title }}
-        {{- else }}{{ .Title }} | {{ site.Title }}{{ end -}}
+        {{- if .IsHome }}{{ site.Title }}
+        {{- else }}{{ .Title }}{{ end -}}
       {{- end -}}
     </title>
 
