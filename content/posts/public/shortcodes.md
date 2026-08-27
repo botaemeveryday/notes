@@ -11,6 +11,8 @@ hideLeftSidebar: true
 hideTOC: true
 hidePrevNext: true
 hideBreadCrumbs: true
+build:
+  list: never
 ---
 
 # Шорткоды проекта

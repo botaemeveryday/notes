@@ -12,6 +12,8 @@ hideLeftSidebar: true
 hideTOC: true
 hidePrevNext: true
 hideBreadCrumbs: true
+build:
+  list: never
 ---
 
 Ты читаешь конспект. Всё понятно. Закрываешь — и через три дня не можешь вспомнить половину.
