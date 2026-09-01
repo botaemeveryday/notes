@@ -11,9 +11,6 @@ authors:
     link: https://github.com/notakeith
 ---
 
-
-# Лекция 12. Современная аутентификация и авторизация: Keycloak
-
 ## План лекции
 
 1. **Keycloak** — что это и зачем

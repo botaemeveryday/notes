@@ -11,8 +11,6 @@ authors:
     link: https://github.com/notakeith
 ---
 
-# Лекция 3. Collection Framework и Stream API
-
 ## Packages — пакеты в Java
 
 Классы в Java объединяются в **пакеты**. Пакеты позволяют логически организовать классы и избежать конфликтов имён. Java имеет встроенные пакеты: `java.lang`, `java.util`, `java.io` и т.д.

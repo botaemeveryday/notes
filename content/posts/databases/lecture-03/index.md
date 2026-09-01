@@ -15,8 +15,6 @@ authors:
     avatar: https://avatars.githubusercontent.com/u/180561221?v=4
     link: https://github.com/salt-caramel
 ---
-# Лекция 3. Атрибуты и ключи
-
 ## Термины
 
 - **Отношение** — таблица в БД.

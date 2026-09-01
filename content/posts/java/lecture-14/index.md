@@ -11,8 +11,6 @@ authors:
     link: https://github.com/notakeith
 ---
 
-# Лекция 14. Apache Kafka
-
 ## Что такое Kafka
 
 **Apache Kafka** — distributed event streaming platform (распределённая платформа потоковой обработки событий).

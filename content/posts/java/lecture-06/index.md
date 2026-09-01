@@ -11,8 +11,6 @@ authors:
     link: https://github.com/notakeith
 ---
 
-# Лекция 6. Spring Framework
-
 ## Что такое Spring Framework
 
 **Spring Framework** — open-source фреймворк (платформа) для языков семейства JVM:

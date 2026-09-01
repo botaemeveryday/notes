@@ -11,8 +11,6 @@ authors:
     link: https://github.com/notakeith
 ---
 
-# Лекция 1. Вводная лекция: Java и JVM
-
 ## О чём курс
 
 Курс охватывает следующие темы:

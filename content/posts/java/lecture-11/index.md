@@ -11,8 +11,6 @@ authors:
     link: https://github.com/notakeith
 ---
 
-# Лекция 11. Spring Security
-
 ## Что такое Spring Security
 
 **Spring Security** — Java/Java EE фреймворк, предоставляющий механизмы построения систем **аутентификации и авторизации**, а также другие возможности обеспечения безопасности для корпоративных приложений на Spring Framework.

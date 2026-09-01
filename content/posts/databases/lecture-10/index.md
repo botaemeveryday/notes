@@ -13,7 +13,6 @@ authors:
     avatar: https://avatars.githubusercontent.com/u/180561221?v=4
     link: https://github.com/salt-caramel
 ---
-# Лекция 10. Безопасная система
 
 ## Что такое безопасная система?
 

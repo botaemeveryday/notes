@@ -11,8 +11,6 @@ authors:
     link: https://github.com/notakeith
 ---
 
-# Лекция 8. Spring MVC
-
 ## Что такое Spring MVC
 
 **Spring MVC** — модуль, обеспечивающий архитектуру паттерна **Model — View — Controller** при помощи слабосвязанных готовых компонентов.
