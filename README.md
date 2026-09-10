@@ -17,6 +17,9 @@
 
 | Дисциплина | Преподаватель |
 |---|---|
+| [Машинное Обучение](https://botaemeveryday.github.io/notes/posts/ml/) | Власова Е. К. |
+| [Философия](https://botaemeveryday.github.io/notes/posts/philosophy/) | Дурнев А. Д. |
+| [Физика](https://botaemeveryday.github.io/notes/posts/physics-sem5/) | Зинчик А. А. |
 | [Математическая статистика](https://botaemeveryday.github.io/notes/posts/math-stats/) | Лимар И. А. |
 | [Операционные системы](https://botaemeveryday.github.io/notes/posts/operation-systems/) | Маятин А. В. |
 | [Технологии программирования на Java](https://botaemeveryday.github.io/notes/posts/java/) | Макаревич Р. Д. |
