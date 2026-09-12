@@ -1,7 +1,7 @@
 ---
 title: EDA и уменьшение размерности
 description: Устойчивые статистики и масштабирование признаков, повторение статистического вывода — доверительные интервалы, p-value, ошибки I и II рода, критерий хи-квадрат. Корреляции Пирсона и Спирмена, проклятие размерности и разбор PCA от центрирования до объяснённой дисперсии.
-weight: 2
+date: 2026-09-08
 tags:
   - Матстат и работа с данными
   - 5 Семестр
@@ -10,6 +10,12 @@ authors:
     avatar: https://avatars.githubusercontent.com/notakeith
     link: https://github.com/notakeith
 ---
+
+
+<a href="https://storage.yandexcloud.net/notakeith/ml/ML_Lecture_2_2026.pdf" class="btn rounded-full center flex">
+    {{< icon "cloud-download-outline" >}}
+    Презентация
+</a>
 
 ## Устойчивые статистики
 
