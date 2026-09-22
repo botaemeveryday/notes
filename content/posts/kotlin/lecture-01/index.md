@@ -1,7 +1,7 @@
 ---
 title: Вводная лекция
 description: Организация курса по Kotlin — структура лекций, проект, CI/CD, оценивание — и быстрый проход по синтаксису языка val/var, null-safety, data-классы, scope-функции, extension-функции, sealed и value классы.
-date: 2026-09-11
+date: 2026-09-10
 tags:
   - Kotlin
   - 5 Семестр
